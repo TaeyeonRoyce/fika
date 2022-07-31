@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wefly.fika.config.response.ApiResponse;
+import com.wefly.fika.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class OAuthController {
 
 	private final KakaoOAuthService oAuthService;
+	private final MemberService memberService;
 
 
 
@@ -29,8 +31,10 @@ public class OAuthController {
 		}
 
 		log.debug("[ACCESS TOKEN] : {}", accessToken);
-		oAuthService.requestToKakao(accessToken);
+		String userEmail = oAuthService.requestToKakao(accessToken);
 
-		return new ApiResponse<>("Hello");
+		String token = memberService.saveMemberByEmail(userEmail);
+
+		return new ApiResponse<>(token);
 	}
 }
