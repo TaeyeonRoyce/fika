@@ -26,15 +26,12 @@ public class MemberService {
 					.build()
 			);
 
-		Member member = memberRepository.save(memberByEmail);
-		String memberAccessToken = jwtService.createMemberAccessToken(member.getId(), member.getMemberEmail());
-
-		memberRepository.save(
-			Member.builder()
-				.memberEmail(member.getMemberEmail())
-				.memberAccessToken(memberAccessToken)
-				.build()
-		);
+		String memberAccessToken = jwtService.createMemberAccessToken(memberByEmail.getId(), memberByEmail.getMemberEmail());
+		memberByEmail = Member.builder()
+			.memberEmail(memberByEmail.getMemberEmail())
+			.memberAccessToken(memberAccessToken)
+			.build();
+		memberRepository.save(memberByEmail);
 
 		return memberAccessToken;
 	}
