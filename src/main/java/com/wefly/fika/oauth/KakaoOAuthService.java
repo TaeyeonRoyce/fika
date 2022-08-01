@@ -1,12 +1,20 @@
 package com.wefly.fika.oauth;
 
+import static com.wefly.fika.config.response.ApiResponseStatus.*;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import com.wefly.fika.config.response.ApiException;
+import com.wefly.fika.config.response.ApiResponseStatus;
 import com.wefly.fika.utils.KakaoInfoParser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -15,7 +23,7 @@ public class KakaoOAuthService {
 
 	private final KakaoInfoParser kakaoInfoParser;
 
-	public String requestToKakao(String accessToken) {
+	public String requestToKakao(String accessToken) throws WebClientResponseException {
 		String result = WebClient.builder()
 			.baseUrl("https://kapi.kakao.com/v2/user/me")
 			.defaultHeader("Authorization", "Bearer " + accessToken)
