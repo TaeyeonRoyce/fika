@@ -63,7 +63,7 @@ public class JwtService {
 				.getBody()
 				.get("memberEmail", String.class);
 			return false;
-		}  catch (JwtException | NullPointerException exception) {
+		} catch (JwtException | NullPointerException exception) {
 			return true;
 		}
 	}

@@ -6,10 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClientException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
-import com.wefly.fika.config.response.ApiException;
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.service.MemberService;
 
@@ -25,8 +23,6 @@ public class OAuthController {
 	private final KakaoOAuthService oAuthService;
 	private final MemberService memberService;
 
-
-
 	@PostMapping("/login/kakao")
 	public ApiResponse<String> loginByKakao(
 		@RequestHeader(value = "Access-Token") String accessToken
@@ -38,7 +34,7 @@ public class OAuthController {
 		log.debug("[ACCESS TOKEN] : {}", accessToken);
 		String userEmail;
 		try {
-			 userEmail = oAuthService.requestToKakao(accessToken);
+			userEmail = oAuthService.requestToKakao(accessToken);
 		} catch (WebClientResponseException e) {
 			return new ApiResponse<>(ACCESS_TOKEN_INVALID);
 		}

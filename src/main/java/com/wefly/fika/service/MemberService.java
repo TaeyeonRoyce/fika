@@ -15,7 +15,6 @@ public class MemberService {
 	private final JwtService jwtService;
 
 	private final MemberRepository memberRepository;
-	
 
 	public String saveMemberByEmail(String memberEmail) {
 
@@ -26,7 +25,8 @@ public class MemberService {
 					.build()
 			);
 
-		String memberAccessToken = jwtService.createMemberAccessToken(memberByEmail.getId(), memberByEmail.getMemberEmail());
+		String memberAccessToken = jwtService.createMemberAccessToken(memberByEmail.getId(),
+			memberByEmail.getMemberEmail());
 		memberByEmail = Member.builder()
 			.memberEmail(memberByEmail.getMemberEmail())
 			.memberAccessToken(memberAccessToken)
