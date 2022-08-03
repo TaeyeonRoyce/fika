@@ -2,6 +2,8 @@ package com.wefly.fika.oauth;
 
 import static com.wefly.fika.config.response.ApiResponseStatus.*;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,11 +26,11 @@ public class OAuthController {
 	private final MemberService memberService;
 
 	@PostMapping("/login/kakao")
-	public ApiResponse<String> loginByKakao(
+	public ResponseEntity<ApiResponse> loginByKakao(
 		@RequestHeader(value = "Access-Token") String accessToken
 	) {
 		if (accessToken.isEmpty()) {
-			return new ApiResponse<>(ACCESS_TOKEN_NULL);
+			return new ResponseEntity<>(new ApiResponse<>(ACCESS_TOKEN_INVALID), HttpStatus.UNAUTHORIZED);
 		}
 
 		log.debug("[ACCESS TOKEN] : {}", accessToken);
@@ -36,11 +38,11 @@ public class OAuthController {
 		try {
 			userEmail = oAuthService.requestToKakao(accessToken);
 		} catch (WebClientResponseException e) {
-			return new ApiResponse<>(ACCESS_TOKEN_INVALID);
+			return new ResponseEntity<>(new ApiResponse<>(ACCESS_TOKEN_INVALID), HttpStatus.UNAUTHORIZED);
 		}
 
 		String token = memberService.saveMemberByEmail(userEmail);
 
-		return new ApiResponse<>(token);
+		return new ResponseEntity<>(new ApiResponse<>(token), HttpStatus.OK);
 	}
 }
