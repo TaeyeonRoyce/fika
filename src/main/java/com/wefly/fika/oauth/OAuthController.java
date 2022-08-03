@@ -37,8 +37,9 @@ public class OAuthController {
 		}
 
 		log.debug("[ACCESS TOKEN] : {}", accessToken);
+		String userEmail = null;
 		try {
-			String userEmail = oAuthService.requestToKakao(accessToken);
+			userEmail = oAuthService.requestToKakao(accessToken);
 			Member member = memberService.getMemberByEmail(userEmail);
 			String token = memberService.getAccessTokenByMember(member);
 			return new ResponseEntity<>(new ApiResponse<>(token), HttpStatus.OK);
@@ -49,7 +50,7 @@ public class OAuthController {
 			);
 		} catch (NoSuchMember noSuchMember) {
 			return new ResponseEntity<>(
-				new ApiResponse<>(NO_SUCH_MEMBER),
+				new ApiResponse<>(userEmail),
 				HttpStatus.TEMPORARY_REDIRECT
 			);
 		}

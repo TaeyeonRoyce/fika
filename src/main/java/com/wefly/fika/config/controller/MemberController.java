@@ -40,9 +40,20 @@ public class MemberController {
 			return new ResponseEntity<>(new ApiResponse<>(REQUEST_FIELD_NULL), HttpStatus.BAD_REQUEST);
 		}
 
-		boolean existNickname = memberService.isExistNickname(nickname);
+		boolean validNickname = !memberService.isExistNickname(nickname);
 
-		return new ResponseEntity<>(new ApiResponse<>(existNickname), HttpStatus.OK);
+		return new ResponseEntity<>(new ApiResponse<>(validNickname), HttpStatus.OK);
+	}
+
+	@GetMapping("/valid/email")
+	public ResponseEntity<ApiResponse> checkEmail(@RequestParam String email) {
+		if (email == null) {
+			return new ResponseEntity<>(new ApiResponse<>(REQUEST_FIELD_NULL), HttpStatus.BAD_REQUEST);
+		}
+
+		boolean validEmail = !memberService.isExistEmail(email);
+
+		return new ResponseEntity<>(new ApiResponse<>(validEmail), HttpStatus.OK);
 	}
 
 	@PostMapping
@@ -57,7 +68,7 @@ public class MemberController {
 		String userPassword = saveDto.getPassword();
 		if (!StringFormatValidation.isEmailRegex(userEmail)) {
 			return new ResponseEntity<>(new ApiResponse<>(NOT_EMAIL_REGEX), HttpStatus.BAD_REQUEST);
-		} else if (memberService.isExistNickname(userEmail)) {
+		} else if (memberService.isExistEmail(userEmail)) {
 			return new ResponseEntity<>(new ApiResponse<>(MEMBER_EMAIL_DUPLICATE), HttpStatus.BAD_REQUEST);
 		} else if (!StringFormatValidation.isPasswordRegex(userPassword)) {
 			return new ResponseEntity<>(new ApiResponse<>(NOT_PASSWORD_REGEX), HttpStatus.BAD_REQUEST);
