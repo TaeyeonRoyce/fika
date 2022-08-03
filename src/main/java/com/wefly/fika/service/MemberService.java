@@ -3,6 +3,7 @@ package com.wefly.fika.service;
 import org.springframework.stereotype.Service;
 
 import com.wefly.fika.domain.member.model.Member;
+import com.wefly.fika.exception.NoSuchMember;
 import com.wefly.fika.jwt.JwtService;
 import com.wefly.fika.repository.MemberRepository;
 
@@ -16,15 +17,12 @@ public class MemberService {
 
 	private final MemberRepository memberRepository;
 
-	public String saveMemberByEmail(String memberEmail) {
+	public Member getMemberByEmail(String memberEmail) throws NoSuchMember {
+		return memberRepository.findByMemberEmail(memberEmail)
+			.orElseThrow(NoSuchMember::new);
+	}
 
-		Member memberByEmail = memberRepository.findByMemberEmail(memberEmail)
-			.orElse(
-				Member.builder()
-					.memberEmail(memberEmail)
-					.build()
-			);
-
+	public String getAccessTokenByMember(Member memberByEmail) {
 		String memberAccessToken = jwtService.createMemberAccessToken(memberByEmail.getId(),
 			memberByEmail.getMemberEmail());
 		memberByEmail = Member.builder()
@@ -32,7 +30,6 @@ public class MemberService {
 			.memberAccessToken(memberAccessToken)
 			.build();
 		memberRepository.save(memberByEmail);
-
 		return memberAccessToken;
 	}
 
