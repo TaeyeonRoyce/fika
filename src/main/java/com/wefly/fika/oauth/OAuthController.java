@@ -13,6 +13,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.domain.member.model.Member;
 import com.wefly.fika.exception.NoSuchMember;
+import com.wefly.fika.service.IMemberService;
 import com.wefly.fika.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class OAuthController {
 
 	private final KakaoOAuthService oAuthService;
-	private final MemberService memberService;
+	private final IMemberService memberService;
 
 	@PostMapping("/login/kakao")
 	public ResponseEntity<ApiResponse> loginByKakao(
