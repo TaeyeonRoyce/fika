@@ -2,6 +2,10 @@ package com.wefly.fika.config.response;
 
 import static com.wefly.fika.config.response.ApiResponseStatus.*;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -19,6 +23,7 @@ public class ApiResponse<T> {
 
 	private final int code;
 	private final String message;
+	private final HttpStatus httpStatus;
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private T result;
@@ -28,11 +33,21 @@ public class ApiResponse<T> {
 		this.message = SUCCESS.getMessage();
 		this.code = SUCCESS.getCode();
 		this.result = result;
+		this.httpStatus = HttpStatus.OK;
 	}
 
 	public ApiResponse(ApiResponseStatus status) {
 		this.isSuccess = status.isSuccess();
 		this.message = status.getMessage();
 		this.code = status.getCode();
+		this.httpStatus = status.getHttpStatus();
+	}
+
+	public ResponseEntity<ApiResponse> toResponseEntity() {
+		return new ResponseEntity<>(this, this.httpStatus);
+	}
+
+	public ResponseEntity<ApiResponse> toResponseEntity(HttpHeaders httpHeaders) {
+		return new ResponseEntity<>(this, httpHeaders, this.httpStatus);
 	}
 }

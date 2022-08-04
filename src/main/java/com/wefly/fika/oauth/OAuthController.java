@@ -30,7 +30,7 @@ public class OAuthController {
 		@RequestHeader(value = "Access-Token") String accessToken
 	) {
 		if (accessToken.isEmpty()) {
-			return new ResponseEntity<>(new ApiResponse<>(ACCESS_TOKEN_INVALID), HttpStatus.UNAUTHORIZED);
+			return new ApiResponse<>(ACCESS_TOKEN_INVALID).toResponseEntity();
 		}
 
 		log.debug("[ACCESS TOKEN] : {}", accessToken);
@@ -38,11 +38,11 @@ public class OAuthController {
 		try {
 			userEmail = oAuthService.requestToKakao(accessToken);
 		} catch (WebClientResponseException e) {
-			return new ResponseEntity<>(new ApiResponse<>(ACCESS_TOKEN_INVALID), HttpStatus.UNAUTHORIZED);
+			return new ApiResponse<>(ACCESS_TOKEN_INVALID).toResponseEntity();
 		}
 
 		String token = memberService.saveMemberByEmail(userEmail);
 
-		return new ResponseEntity<>(new ApiResponse<>(token), HttpStatus.OK);
+		return new ApiResponse<>(token).toResponseEntity();
 	}
 }
