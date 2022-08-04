@@ -1,6 +1,8 @@
 package com.wefly.fika.service;
 
+import com.wefly.fika.config.response.ApiException;
 import com.wefly.fika.domain.member.model.Member;
+import com.wefly.fika.dto.member.MemberLoginDto;
 import com.wefly.fika.dto.member.MemberSignUpDto;
 import com.wefly.fika.exception.NoSuchMember;
 
@@ -13,4 +15,6 @@ public interface IMemberService {
 	String getAccessTokenByMember(Member memberByEmail);
 
 	Member joinMember(MemberSignUpDto saveDto);
+
+	String loginByPassword(MemberLoginDto requestDto) throws Exception;
 }

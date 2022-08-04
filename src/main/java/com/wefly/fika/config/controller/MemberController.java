@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.domain.member.model.Member;
+import com.wefly.fika.dto.member.MemberLoginDto;
 import com.wefly.fika.dto.member.MemberSignUpDto;
 import com.wefly.fika.dto.member.MemberSignUpResponse;
 import com.wefly.fika.service.IMemberService;
@@ -83,6 +84,28 @@ public class MemberController {
 			member.getMemberAccessToken());
 
 		return new ResponseEntity<>(new ApiResponse<>(response), HttpStatus.OK);
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity<ApiResponse> memberLogin(
+		@Valid @RequestBody MemberLoginDto loginDto,
+		BindingResult bindingResult
+	) {
+		if (bindingResult.hasErrors()) {
+			return new ResponseEntity<>(new ApiResponse<>(REQUEST_FIELD_NULL), HttpStatus.BAD_REQUEST);
+		}
+
+		try {
+			memberService.loginByPassword(loginDto);
+			Member member = memberService.getMemberByEmail(loginDto.getEmail());
+			MemberSignUpResponse response = new MemberSignUpResponse(member.getMemberEmail(),
+				member.getMemberAccessToken());
+			return new ResponseEntity<>(new ApiResponse<>(response), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ApiResponse<>(LOGIN_REQUEST_ERROR), HttpStatus.BAD_REQUEST);
+		}
+
+
 	}
 
 }

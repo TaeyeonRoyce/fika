@@ -16,6 +16,7 @@ public enum ApiResponseStatus {
 	NOT_PASSWORD_EXACT(false, 4023, "비밀번호와 비밀번호 확인이 일치하지 않습니다"),
 	MEMBER_NICKNAME_DUPLICATE(false, 4024, "이미 존재하는 닉네임 입니다"),
 	MEMBER_EMAIL_DUPLICATE(false, 4025, "이미 가입되어 있는 이메일 입니다"),
+	LOGIN_REQUEST_ERROR(false, 4040, "로그인에 실패하였습니다"),
 
 
 	NO_SUCH_MEMBER(false, 5000, "해당하는 Member가 존재하지 않습니다");
