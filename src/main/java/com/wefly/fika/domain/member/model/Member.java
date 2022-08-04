@@ -23,12 +23,21 @@ public class Member extends BaseTimeEntity {
 	private String memberEmail;
 	private String memberAccessToken;
 
+	private String memberNickname;
+	private String memberPassword;
+
 	@Builder
-	public Member(String memberEmail, String memberAccessToken) {
+	public Member(String memberEmail, String memberAccessToken, String memberNickname, String memberPassword) {
 		this.memberEmail = memberEmail;
 		this.memberAccessToken = memberAccessToken;
+		this.memberNickname = memberNickname;
+		this.memberPassword = memberPassword;
 	}
 
 	protected Member() {
+	}
+
+	public void updateMemberAccessToken(String memberAccessToken) {
+		this.memberAccessToken = memberAccessToken;
 	}
 }

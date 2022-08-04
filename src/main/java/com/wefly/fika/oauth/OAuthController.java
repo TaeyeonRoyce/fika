@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import com.wefly.fika.config.response.ApiResponse;
-import com.wefly.fika.service.MemberService;
+import com.wefly.fika.domain.member.model.Member;
+import com.wefly.fika.exception.NoSuchMember;
+import com.wefly.fika.service.IMemberService;
+
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,26 +26,34 @@ import lombok.extern.slf4j.Slf4j;
 public class OAuthController {
 
 	private final KakaoOAuthService oAuthService;
-	private final MemberService memberService;
+	private final IMemberService memberService;
 
 	@PostMapping("/login/kakao")
 	public ResponseEntity<ApiResponse> loginByKakao(
 		@RequestHeader(value = "Access-Token") String accessToken
 	) {
 		if (accessToken.isEmpty()) {
-			return new ResponseEntity<>(new ApiResponse<>(ACCESS_TOKEN_INVALID), HttpStatus.UNAUTHORIZED);
+			return new ApiResponse<>(ACCESS_TOKEN_INVALID).toResponseEntity();
 		}
 
 		log.debug("[ACCESS TOKEN] : {}", accessToken);
-		String userEmail;
+
+		String userEmail = null;
 		try {
 			userEmail = oAuthService.requestToKakao(accessToken);
+			Member member = memberService.getMemberByEmail(userEmail);
+			String token = memberService.getAccessTokenByMember(member);
+			return new ResponseEntity<>(new ApiResponse<>(token), HttpStatus.OK);
 		} catch (WebClientResponseException e) {
-			return new ResponseEntity<>(new ApiResponse<>(ACCESS_TOKEN_INVALID), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(
+				new ApiResponse<>(ACCESS_TOKEN_INVALID),
+				HttpStatus.UNAUTHORIZED
+			);
+		} catch (NoSuchMember noSuchMember) {
+			return new ResponseEntity<>(
+				new ApiResponse<>(userEmail),
+				HttpStatus.TEMPORARY_REDIRECT
+			);
 		}
-
-		String token = memberService.saveMemberByEmail(userEmail);
-
-		return new ResponseEntity<>(new ApiResponse<>(token), HttpStatus.OK);
 	}
 }
