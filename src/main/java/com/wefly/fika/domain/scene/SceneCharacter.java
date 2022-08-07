@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 
 import com.wefly.fika.domain.character.Characters;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -30,5 +31,12 @@ public class SceneCharacter {
 	@JoinColumn(name = "character_id")
 	private Characters character;
 
+	@Builder
+	public SceneCharacter(Scene scene, Characters character) {
+		this.scene = scene;
+		this.character = character;
 
+		character.getCharactersScenes().add(this);
+		scene.getSceneCharacters().add(this);
+	}
 }

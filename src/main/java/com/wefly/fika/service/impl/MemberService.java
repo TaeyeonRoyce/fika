@@ -1,4 +1,4 @@
-package com.wefly.fika.service;
+package com.wefly.fika.service.impl;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -7,9 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wefly.fika.domain.member.model.Member;
 import com.wefly.fika.dto.member.MemberLoginDto;
 import com.wefly.fika.dto.member.MemberSignUpDto;
-import com.wefly.fika.exception.NoSuchMember;
+import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.jwt.JwtService;
 import com.wefly.fika.repository.MemberRepository;
+import com.wefly.fika.service.IMemberService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,9 +34,9 @@ public class MemberService implements IMemberService {
 		return memberRepository.existsByMemberNickname(nickname);
 	}
 	@Override
-	public Member getMemberByEmail(String memberEmail) throws NoSuchMember {
+	public Member getMemberByEmail(String memberEmail) throws NoSuchDataFound {
 		return memberRepository.findByMemberEmail(memberEmail)
-			.orElseThrow(NoSuchMember::new);
+			.orElseThrow(NoSuchDataFound::new);
 	}
 	@Override
 	public String getAccessTokenByMember(Member memberByEmail) {

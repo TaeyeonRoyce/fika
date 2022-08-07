@@ -11,9 +11,13 @@ import javax.persistence.ManyToOne;
 
 import com.wefly.fika.domain.actor.Actor;
 
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class DramaActor {
 
@@ -30,5 +34,11 @@ public class DramaActor {
 	@JoinColumn(name = "actor_id")
 	private Actor actor;
 
+	@Builder
+	public DramaActor(Drama drama, Actor actor) {
+		this.drama = drama;
+		this.actor = actor;
 
+		actor.getDramaActors().add(this);
+	}
 }

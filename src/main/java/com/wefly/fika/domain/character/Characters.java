@@ -1,5 +1,6 @@
 package com.wefly.fika.domain.character;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -17,9 +18,13 @@ import com.wefly.fika.domain.actor.Actor;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.scene.SceneCharacter;
 
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Characters {
 
@@ -27,6 +32,8 @@ public class Characters {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "character_id")
 	private Long id;
+
+	private String characterName;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "drama_id")
@@ -37,5 +44,14 @@ public class Characters {
 	private Actor actor;
 
 	@OneToMany(mappedBy = "character")
-	private List<SceneCharacter> sceneCharacters;
+	private List<SceneCharacter> charactersScenes = new ArrayList<>();
+
+	@Builder
+	public Characters(String characterName, Drama drama, Actor actor) {
+		this.characterName = characterName;
+		this.drama = drama;
+		this.actor = actor;
+
+		drama.getCharacters().add(this);
+	}
 }

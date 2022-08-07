@@ -15,9 +15,13 @@ import com.wefly.fika.domain.base.BaseTimeEntity;
 import com.wefly.fika.domain.character.Characters;
 import com.wefly.fika.domain.scene.Scene;
 
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Drama extends BaseTimeEntity {
 
@@ -34,4 +38,11 @@ public class Drama extends BaseTimeEntity {
 
 	@OneToMany(mappedBy = "drama", cascade = CascadeType.ALL)
 	private List<Scene> scenes = new ArrayList<>();
+
+	@Builder
+	public Drama(String title, String thumbnailUrl) {
+		this.title = title;
+		this.thumbnailUrl = thumbnailUrl;
+	}
+
 }

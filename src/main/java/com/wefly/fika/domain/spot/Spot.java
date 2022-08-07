@@ -8,9 +8,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Spot {
 
@@ -26,6 +30,15 @@ public class Spot {
 	private String mapY;
 
 	@Enumerated(EnumType.STRING)
-	private Category category;
+	private PlaceCategory category;
 
+	@Builder
+	public Spot(String spotName, String address, String imageUrl, String mapX, String mapY, PlaceCategory category) {
+		this.spotName = spotName;
+		this.address = address;
+		this.imageUrl = imageUrl;
+		this.mapX = mapX;
+		this.mapY = mapY;
+		this.category = category;
+	}
 }

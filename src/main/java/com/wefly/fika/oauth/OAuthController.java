@@ -12,7 +12,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.domain.member.model.Member;
-import com.wefly.fika.exception.NoSuchMember;
+import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.service.IMemberService;
 
 
@@ -49,7 +49,7 @@ public class OAuthController {
 				new ApiResponse<>(ACCESS_TOKEN_INVALID),
 				HttpStatus.UNAUTHORIZED
 			);
-		} catch (NoSuchMember noSuchMember) {
+		} catch (NoSuchDataFound noSuchMember) {
 			return new ResponseEntity<>(
 				new ApiResponse<>(userEmail),
 				HttpStatus.TEMPORARY_REDIRECT

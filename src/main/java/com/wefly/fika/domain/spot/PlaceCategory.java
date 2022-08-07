@@ -1,6 +1,6 @@
 package com.wefly.fika.domain.spot;
 
-public enum Category {
+public enum PlaceCategory {
 	RESTAURANT,
 	CAFETERIA,
 	PLAYGROUND,

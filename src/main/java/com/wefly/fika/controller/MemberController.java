@@ -1,4 +1,4 @@
-package com.wefly.fika.config.controller;
+package com.wefly.fika.controller;
 
 import static com.wefly.fika.config.response.ApiResponseStatus.*;
 

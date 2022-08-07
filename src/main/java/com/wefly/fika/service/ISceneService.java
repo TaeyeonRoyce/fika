@@ -1,0 +1,12 @@
+package com.wefly.fika.service;
+
+import com.wefly.fika.domain.character.Characters;
+import com.wefly.fika.domain.scene.Scene;
+import com.wefly.fika.dto.character.CharacterSaveDto;
+import com.wefly.fika.dto.scene.SceneSaveDto;
+import com.wefly.fika.exception.NoSuchDataFound;
+
+public interface ISceneService {
+
+	Scene saveScene(SceneSaveDto saveDto) throws NoSuchDataFound;
+}
