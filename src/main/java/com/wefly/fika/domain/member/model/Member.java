@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.wefly.fika.domain.member.BaseTimeEntity;
+import com.wefly.fika.domain.base.BaseTimeEntity;
 
 import lombok.Builder;
 import lombok.Getter;

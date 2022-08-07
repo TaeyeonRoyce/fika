@@ -1,4 +1,4 @@
-package com.wefly.fika.config.response;
+package com.wefly.fika.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

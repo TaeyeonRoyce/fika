@@ -1,12 +1,9 @@
 package com.wefly.fika.service;
 
-import static com.wefly.fika.config.response.ApiResponseStatus.*;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wefly.fika.config.response.ApiException;
 import com.wefly.fika.domain.member.model.Member;
 import com.wefly.fika.dto.member.MemberLoginDto;
 import com.wefly.fika.dto.member.MemberSignUpDto;

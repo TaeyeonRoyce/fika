@@ -1,6 +1,5 @@
 package com.wefly.fika.service;
 
-import com.wefly.fika.config.response.ApiException;
 import com.wefly.fika.domain.member.model.Member;
 import com.wefly.fika.dto.member.MemberLoginDto;
 import com.wefly.fika.dto.member.MemberSignUpDto;
