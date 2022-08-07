@@ -6,5 +6,8 @@ public enum PlaceCategory {
 	PLAYGROUND,
 	SHOP,
 	FESTIVAL,
-	LANDMARK
+	LANDMARK,
+	ACTIVITY,
+	ACCOMMODATION,
+	ETC
 }

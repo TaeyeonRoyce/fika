@@ -36,23 +36,23 @@ public class MemberController {
 	@GetMapping("/valid/nickname")
 	public ResponseEntity<ApiResponse> checkNickname(@RequestParam String nickname) {
 		if (nickname == null) {
-			return new ResponseEntity<>(new ApiResponse<>(REQUEST_FIELD_NULL), HttpStatus.BAD_REQUEST);
+			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
 		}
 
 		boolean validNickname = !memberService.isExistNickname(nickname);
 
-		return new ResponseEntity<>(new ApiResponse<>(validNickname), HttpStatus.OK);
+		return new ApiResponse<>(validNickname).toResponseEntity();
 	}
 
 	@GetMapping("/valid/email")
 	public ResponseEntity<ApiResponse> checkEmail(@RequestParam String email) {
 		if (email == null) {
-			return new ResponseEntity<>(new ApiResponse<>(REQUEST_FIELD_NULL), HttpStatus.BAD_REQUEST);
+			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
 		}
 
 		boolean validEmail = !memberService.isExistEmail(email);
 
-		return new ResponseEntity<>(new ApiResponse<>(validEmail), HttpStatus.OK);
+		return new ApiResponse<>(validEmail).toResponseEntity();
 	}
 
 	@PostMapping
@@ -61,27 +61,27 @@ public class MemberController {
 		BindingResult bindingResult
 	) {
 		if (bindingResult.hasErrors()) {
-			return new ResponseEntity<>(new ApiResponse<>(REQUEST_FIELD_NULL), HttpStatus.BAD_REQUEST);
+			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
 		}
 		String userEmail = saveDto.getEmail();
 		String userPassword = saveDto.getPassword();
 		if (!StringFormatValidation.isEmailRegex(userEmail)) {
-			return new ResponseEntity<>(new ApiResponse<>(NOT_EMAIL_REGEX), HttpStatus.BAD_REQUEST);
+			return new ApiResponse<>(NOT_EMAIL_REGEX).toResponseEntity();
 		} else if (memberService.isExistEmail(userEmail)) {
-			return new ResponseEntity<>(new ApiResponse<>(MEMBER_EMAIL_DUPLICATE), HttpStatus.BAD_REQUEST);
+			return new ApiResponse<>(MEMBER_EMAIL_DUPLICATE).toResponseEntity();
 		} else if (!StringFormatValidation.isPasswordRegex(userPassword)) {
-			return new ResponseEntity<>(new ApiResponse<>(NOT_PASSWORD_REGEX), HttpStatus.BAD_REQUEST);
+			return new ApiResponse<>(NOT_PASSWORD_REGEX).toResponseEntity();
 		} else if (!saveDto.getPasswordCheck().equals(userPassword)) {
-			return new ResponseEntity<>(new ApiResponse<>(NOT_PASSWORD_EXACT), HttpStatus.BAD_REQUEST);
+			return new ApiResponse<>(NOT_PASSWORD_EXACT).toResponseEntity();
 		} else if (memberService.isExistNickname(saveDto.getNickname())) {
-			return new ResponseEntity<>(new ApiResponse<>(MEMBER_NICKNAME_DUPLICATE), HttpStatus.BAD_REQUEST);
+			return new ApiResponse<>(MEMBER_NICKNAME_DUPLICATE).toResponseEntity();
 		}
 
 		Member member = memberService.joinMember(saveDto);
 		MemberSignUpResponse response = new MemberSignUpResponse(member.getMemberEmail(),
 			member.getMemberAccessToken());
 
-		return new ResponseEntity<>(new ApiResponse<>(response), HttpStatus.OK);
+		return new ApiResponse<>(response).toResponseEntity();
 	}
 
 	@PostMapping("/login")
@@ -90,7 +90,7 @@ public class MemberController {
 		BindingResult bindingResult
 	) {
 		if (bindingResult.hasErrors()) {
-			return new ResponseEntity<>(new ApiResponse<>(REQUEST_FIELD_NULL), HttpStatus.BAD_REQUEST);
+			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
 		}
 
 		try {
@@ -98,11 +98,10 @@ public class MemberController {
 			Member member = memberService.getMemberByEmail(loginDto.getEmail());
 			MemberSignUpResponse response = new MemberSignUpResponse(member.getMemberEmail(),
 				member.getMemberAccessToken());
-			return new ResponseEntity<>(new ApiResponse<>(response), HttpStatus.OK);
+			return new ApiResponse<>(response).toResponseEntity();
 		} catch (Exception e) {
-			return new ResponseEntity<>(new ApiResponse<>(LOGIN_REQUEST_ERROR), HttpStatus.BAD_REQUEST);
+			return new ApiResponse<>(LOGIN_REQUEST_ERROR).toResponseEntity();
 		}
-
 
 	}
 

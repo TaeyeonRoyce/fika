@@ -40,5 +40,4 @@ public class DramaController {
 		return new ApiResponse<>(drama.getTitle()).toResponseEntity();
 	}
 
-
 }

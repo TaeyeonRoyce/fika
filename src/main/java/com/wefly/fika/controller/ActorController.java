@@ -40,5 +40,4 @@ public class ActorController {
 		return new ApiResponse<>(actor.getActorName()).toResponseEntity();
 	}
 
-
 }

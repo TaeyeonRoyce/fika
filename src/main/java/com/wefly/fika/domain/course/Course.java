@@ -36,6 +36,4 @@ public class Course extends BaseTimeEntity {
 	@OneToMany(mappedBy = "course")
 	private List<CourseSpot> spotList = new ArrayList<>();
 
-
-
 }

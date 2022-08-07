@@ -14,7 +14,6 @@ import com.wefly.fika.service.ICharacterService;
 import com.wefly.fika.service.IDramaService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Transactional
