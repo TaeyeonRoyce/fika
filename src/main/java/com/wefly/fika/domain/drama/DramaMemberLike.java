@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import com.wefly.fika.domain.member.model.Member;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,14 +34,22 @@ public class DramaMemberLike {
 	@JoinColumn(name = "member_id")
 	private Member member;
 
-	private boolean like = false;
+	private boolean likeDrama;
+
+	@Builder
+	public DramaMemberLike(Drama drama, Member member, boolean likeDrama) {
+		this.drama = drama;
+		this.member = member;
+		this.likeDrama = likeDrama;
+		member.getLikeDramas().add(this);
+	}
 
 	public void toggleLikeInfo() {
-		if (this.like) {
-			this.like = false;
+		if (this.likeDrama) {
+			this.likeDrama = false;
 			return;
 		}
 
-		this.like = true;
+		this.likeDrama = true;
 	}
 }

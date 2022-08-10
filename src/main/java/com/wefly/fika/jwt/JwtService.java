@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
+import com.wefly.fika.domain.member.model.Member;
+import com.wefly.fika.repository.MemberRepository;
 import com.wefly.fika.utils.DateUtil;
 
 import io.jsonwebtoken.Claims;
@@ -20,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class JwtService {
 
 	private final DateUtil dateUtil;
+	private final MemberRepository memberRepository;
 
 	public String createMemberAccessToken(Long id, String email) {
 		LocalDateTime now = LocalDateTime.now();
@@ -74,5 +77,10 @@ public class JwtService {
 			.parseClaimsJws(accessToken)
 			.getBody()
 			.get("memberId", Long.class);
+	}
+
+	public Member getMember(String accessToken) {
+		Long memberId = getMemberId(accessToken);
+		return memberRepository.findById(memberId).get();
 	}
 }

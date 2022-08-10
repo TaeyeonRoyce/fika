@@ -1,13 +1,11 @@
 package com.wefly.fika.service.impl;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ import com.wefly.fika.domain.drama.DramaMemberLike;
 import com.wefly.fika.domain.member.model.Member;
 import com.wefly.fika.dto.character.CharacterNameDto;
 import com.wefly.fika.dto.drama.DramaGetResponse;
+import com.wefly.fika.dto.drama.DramaSaveDto;
 import com.wefly.fika.dto.member.MemberSignUpDto;
 import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.repository.DramaRepository;
@@ -85,7 +84,8 @@ class DramaServiceTest {
 			.build();
 
 		Member member = memberService.joinMember(saveDto);
-		Drama drama = dramaRepository.findAll().get(1);
+		Drama drama = dramaService.saveDrama(DramaSaveDto.builder().build());
+		dramaRepository.save(drama);
 
 		//when
 		DramaMemberLike dramaMemberLike = dramaService.toggleDramaLike(
@@ -94,14 +94,7 @@ class DramaServiceTest {
 		);
 
 		//then
-		assertThat(dramaMemberLike.isLike()).isTrue();
-
-		dramaService.toggleDramaLike(
-			member.getMemberAccessToken(),
-			drama.getId()
-		);
-
-		assertThat(dramaMemberLike.isLike()).isFalse();
+		assertThat(dramaMemberLike.isLikeDrama()).isTrue();
 	}
 
 

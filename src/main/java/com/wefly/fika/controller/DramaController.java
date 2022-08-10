@@ -65,7 +65,7 @@ public class DramaController {
 		try {
 			DramaMemberLike dramaMemberLike = dramaService.toggleDramaLike(accessToken, dramaId);
 
-			if (dramaMemberLike.isLike()) {
+			if (dramaMemberLike.isLikeDrama()) {
 				return new ApiResponse<>("좋아요가 반영 되었습니다.").toResponseEntity();
 			}
 

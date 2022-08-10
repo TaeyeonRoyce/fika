@@ -2,7 +2,6 @@ package com.wefly.fika.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -12,6 +11,7 @@ import com.wefly.fika.domain.actor.Actor;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaActor;
 import com.wefly.fika.domain.drama.DramaMemberLike;
+import com.wefly.fika.domain.member.model.Member;
 import com.wefly.fika.dto.character.CharacterNameDto;
 import com.wefly.fika.dto.drama.DramaGetResponse;
 import com.wefly.fika.dto.drama.DramaSaveDto;
@@ -81,11 +81,19 @@ public class DramaService implements IDramaService {
 
 	@Override
 	public DramaMemberLike toggleDramaLike(String accessToken, Long dramaId) throws NoSuchDataFound {
-		Long memberId = jwtService.getMemberId(accessToken);
+		Member member = jwtService.getMember(accessToken);
+		Drama drama = dramaRepository.findById(dramaId)
+			.orElseThrow(NoSuchDataFound::new);
 
 		DramaMemberLike dramaMemberLike = dramaMemberLikeRepository
-			.findByDrama_IdAndMember_Id((long)dramaId, memberId)
-			.orElseThrow(NoSuchDataFound::new);
+			.findByDrama_IdAndMember_Id(dramaId, member.getId())
+			.orElse(
+				DramaMemberLike.builder()
+					.member(member)
+					.drama(drama)
+					.likeDrama(false)
+					.build()
+			);
 
 		dramaMemberLike.toggleLikeInfo();
 
