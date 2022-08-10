@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -27,9 +27,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 			.anyRequest().authenticated();
 	}
 
-	@Override
-	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**")
-			.allowedOrigins("*");
-	}
 }
