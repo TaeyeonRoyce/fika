@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.domain.drama.Drama;
+import com.wefly.fika.domain.drama.DramaMemberLike;
 import com.wefly.fika.dto.drama.DramaGetResponse;
 import com.wefly.fika.dto.drama.DramaSaveDto;
 import com.wefly.fika.exception.NoSuchDataFound;
@@ -55,15 +56,21 @@ public class DramaController {
 	@PostMapping("/like")
 	public ResponseEntity<ApiResponse> toggleLikeDrama(
 		@RequestHeader("Access-Token") String accessToken,
-		Integer dramaId
+		Long dramaId
 	) {
 		if (dramaId == null) {
 			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
 		}
 
 		try {
-			String toggleResult = dramaService.toggleDramaLike(accessToken, dramaId);
-			return new ApiResponse<>(toggleResult).toResponseEntity();
+			DramaMemberLike dramaMemberLike = dramaService.toggleDramaLike(accessToken, dramaId);
+
+			if (dramaMemberLike.isLike()) {
+				return new ApiResponse<>("좋아요가 반영 되었습니다.").toResponseEntity();
+			}
+
+			return new ApiResponse<>("좋아요가 취소 되었습니다.").toResponseEntity();
+
 		} catch (NoSuchDataFound e) {
 			return new ApiResponse<>(NO_SUCH_DATA_FOUND).toResponseEntity();
 		}

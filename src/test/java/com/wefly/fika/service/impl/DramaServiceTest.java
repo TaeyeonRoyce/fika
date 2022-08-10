@@ -16,9 +16,15 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wefly.fika.domain.drama.Drama;
+import com.wefly.fika.domain.drama.DramaMemberLike;
+import com.wefly.fika.domain.member.model.Member;
 import com.wefly.fika.dto.character.CharacterNameDto;
 import com.wefly.fika.dto.drama.DramaGetResponse;
+import com.wefly.fika.dto.member.MemberSignUpDto;
+import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.repository.DramaRepository;
+import com.wefly.fika.repository.MemberRepository;
+import com.wefly.fika.service.IMemberService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -26,6 +32,13 @@ class DramaServiceTest {
 
 	@Autowired
 	DramaRepository dramaRepository;
+	@Autowired
+	DramaService dramaService;
+	@Autowired
+	IMemberService memberService;
+
+	@Autowired
+	MemberRepository memberRepository;
 
 	@Transactional
 	@Test
@@ -58,6 +71,37 @@ class DramaServiceTest {
 		System.out.println("-------------------------------");
 		System.out.println(System.currentTimeMillis() - a);
 		System.out.println("-------------------------------");
+	}
+
+	@Transactional
+	@Test
+	public void dramaLikeTest() throws NoSuchDataFound {
+	    //given
+		MemberSignUpDto saveDto = MemberSignUpDto.builder()
+			.nickname("Royce")
+			.email("test@gmail.com")
+			.password("qwer123!!")
+			.passwordCheck("qwer123!!")
+			.build();
+
+		Member member = memberService.joinMember(saveDto);
+		Drama drama = dramaRepository.findAll().get(1);
+
+		//when
+		DramaMemberLike dramaMemberLike = dramaService.toggleDramaLike(
+			member.getMemberAccessToken(),
+			drama.getId()
+		);
+
+		//then
+		assertThat(dramaMemberLike.isLike()).isTrue();
+
+		dramaService.toggleDramaLike(
+			member.getMemberAccessToken(),
+			drama.getId()
+		);
+
+		assertThat(dramaMemberLike.isLike()).isFalse();
 	}
 
 

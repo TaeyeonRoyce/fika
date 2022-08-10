@@ -80,7 +80,7 @@ public class DramaService implements IDramaService {
 	}
 
 	@Override
-	public String toggleDramaLike(String accessToken, Integer dramaId) throws NoSuchDataFound {
+	public DramaMemberLike toggleDramaLike(String accessToken, Long dramaId) throws NoSuchDataFound {
 		Long memberId = jwtService.getMemberId(accessToken);
 
 		DramaMemberLike dramaMemberLike = dramaMemberLikeRepository
@@ -89,10 +89,6 @@ public class DramaService implements IDramaService {
 
 		dramaMemberLike.toggleLikeInfo();
 
-		if (dramaMemberLike.isLike()) {
-			return "좋아요가 반영 되었습니다.";
-		}
-
-		return "좋아요가 해제되었습니다.";
+		return dramaMemberLike;
 	}
 }
