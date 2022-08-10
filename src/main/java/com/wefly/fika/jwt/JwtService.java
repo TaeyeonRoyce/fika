@@ -67,4 +67,12 @@ public class JwtService {
 			return true;
 		}
 	}
+
+	public Long getMemberId(String accessToken) {
+		return Jwts.parser()
+			.setSigningKey(JWT_SECRET_KEY) //gitignore에 등록된 KEY
+			.parseClaimsJws(accessToken)
+			.getBody()
+			.get("memberId", Long.class);
+	}
 }

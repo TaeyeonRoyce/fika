@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +19,7 @@ import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.dto.drama.DramaGetResponse;
 import com.wefly.fika.dto.drama.DramaSaveDto;
+import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.service.IDramaService;
 
 import lombok.RequiredArgsConstructor;
@@ -48,6 +50,23 @@ public class DramaController {
 	public ResponseEntity<ApiResponse> getAllDramas() {
 		List<DramaGetResponse> allDramas = dramaService.getAllDramas();
 		return new ApiResponse<>(allDramas).toResponseEntity();
+	}
+
+	@PostMapping("/like")
+	public ResponseEntity<ApiResponse> toggleLikeDrama(
+		@RequestHeader("Access-Token") String accessToken,
+		Integer dramaId
+	) {
+		if (dramaId == null) {
+			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
+		}
+
+		try {
+			String toggleResult = dramaService.toggleDramaLike(accessToken, dramaId);
+			return new ApiResponse<>(toggleResult).toResponseEntity();
+		} catch (NoSuchDataFound e) {
+			return new ApiResponse<>(NO_SUCH_DATA_FOUND).toResponseEntity();
+		}
 	}
 
 }

@@ -2,6 +2,7 @@ package com.wefly.fika.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -10,11 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wefly.fika.domain.actor.Actor;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaActor;
+import com.wefly.fika.domain.drama.DramaMemberLike;
 import com.wefly.fika.dto.character.CharacterNameDto;
 import com.wefly.fika.dto.drama.DramaGetResponse;
 import com.wefly.fika.dto.drama.DramaSaveDto;
 import com.wefly.fika.exception.NoSuchDataFound;
+import com.wefly.fika.jwt.JwtService;
 import com.wefly.fika.repository.DramaActorRepository;
+import com.wefly.fika.repository.DramaMemberLikeRepository;
 import com.wefly.fika.repository.DramaRepository;
 import com.wefly.fika.service.IDramaService;
 
@@ -25,8 +29,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class DramaService implements IDramaService {
 
+	private final JwtService jwtService;
 	private final DramaRepository dramaRepository;
 	private final DramaActorRepository dramaActorRepository;
+	private final DramaMemberLikeRepository dramaMemberLikeRepository;
 
 	@Override
 	public Drama saveDrama(DramaSaveDto saveDto) {
@@ -71,5 +77,22 @@ public class DramaService implements IDramaService {
 		}
 
 		return response;
+	}
+
+	@Override
+	public String toggleDramaLike(String accessToken, Integer dramaId) throws NoSuchDataFound {
+		Long memberId = jwtService.getMemberId(accessToken);
+
+		DramaMemberLike dramaMemberLike = dramaMemberLikeRepository
+			.findByDrama_IdAndMember_Id((long)dramaId, memberId)
+			.orElseThrow(NoSuchDataFound::new);
+
+		dramaMemberLike.toggleLikeInfo();
+
+		if (dramaMemberLike.isLike()) {
+			return "좋아요가 반영 되었습니다.";
+		}
+
+		return "좋아요가 해제되었습니다.";
 	}
 }
