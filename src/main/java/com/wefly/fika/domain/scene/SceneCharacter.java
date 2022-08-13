@@ -11,10 +11,13 @@ import javax.persistence.ManyToOne;
 
 import com.wefly.fika.domain.character.Characters;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class SceneCharacter {
 

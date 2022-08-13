@@ -45,19 +45,22 @@ public class Scene extends BaseTimeEntity {
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "spot_id")
-	private Spot spot;
+	private Spot mainSpot;
+
+	@OneToMany(mappedBy = "scene")
+	private List<SceneSpot> relatedSpots = new ArrayList<>();
 
 	@OneToMany(mappedBy = "scene")
 	private List<SceneCharacter> sceneCharacters = new ArrayList<>();
 
 	@Builder
-	public Scene(int episode, String sceneContent, Drama drama, String clipUrl, String imageUrl, Spot spot) {
+	public Scene(int episode, String sceneContent, Drama drama, String clipUrl, String imageUrl, Spot mainSpot) {
 		this.episode = episode;
 		this.sceneContent = sceneContent;
 		this.drama = drama;
 		this.clipUrl = clipUrl;
 		this.imageUrl = imageUrl;
-		this.spot = spot;
+		this.mainSpot = mainSpot;
 
 		drama.getScenes().add(this);
 	}

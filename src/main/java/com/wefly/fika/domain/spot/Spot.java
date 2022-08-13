@@ -29,6 +29,7 @@ public class Spot {
 	private String mapX;
 	private String mapY;
 
+	private int savedCount;
 	@Enumerated(EnumType.STRING)
 	private PlaceCategory category;
 

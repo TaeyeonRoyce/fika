@@ -38,7 +38,7 @@ public class SceneSaveDto {
 			.clipUrl(this.clipUrl)
 			.imageUrl(this.imageUrl)
 			.drama(drama)
-			.spot(spot)
+			.mainSpot(spot)
 			.build();
 	}
 }
