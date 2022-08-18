@@ -11,7 +11,7 @@ import com.wefly.fika.domain.actor.Actor;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaActor;
 import com.wefly.fika.domain.drama.DramaMemberLike;
-import com.wefly.fika.domain.member.model.Member;
+import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.dto.character.CharacterNameDto;
 import com.wefly.fika.dto.drama.DramaGetResponse;
 import com.wefly.fika.dto.drama.DramaSaveDto;

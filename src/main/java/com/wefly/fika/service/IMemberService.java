@@ -1,6 +1,6 @@
 package com.wefly.fika.service;
 
-import com.wefly.fika.domain.member.model.Member;
+import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.dto.member.MemberLoginDto;
 import com.wefly.fika.dto.member.MemberSignUpDto;
 import com.wefly.fika.exception.NoSuchDataFound;
