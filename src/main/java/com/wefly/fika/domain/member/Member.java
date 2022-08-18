@@ -1,4 +1,4 @@
-package com.wefly.fika.domain.member.model;
+package com.wefly.fika.domain.member;
 
 import java.util.ArrayList;
 import java.util.List;

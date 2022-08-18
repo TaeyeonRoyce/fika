@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
-import com.wefly.fika.domain.member.model.Member;
+import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.repository.MemberRepository;
 import com.wefly.fika.utils.DateUtil;
 

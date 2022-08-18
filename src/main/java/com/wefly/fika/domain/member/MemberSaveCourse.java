@@ -1,4 +1,4 @@
-package com.wefly.fika.domain.member.model;
+package com.wefly.fika.domain.member;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.wefly.fika.domain.base.BaseTimeEntity;
-import com.wefly.fika.domain.spot.Spot;
+import com.wefly.fika.domain.course.Course;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,11 +19,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class MemberSaveSpot extends BaseTimeEntity {
+public class MemberSaveCourse extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "member_save_spot_id")
+	@Column(name = "member_save_course_id")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -31,7 +31,7 @@ public class MemberSaveSpot extends BaseTimeEntity {
 	private Member member;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "spot_id")
-	private Spot spot;
+	@JoinColumn(name = "course_id")
+	private Course course;
 
 }

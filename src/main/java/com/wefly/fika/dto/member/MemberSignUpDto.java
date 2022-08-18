@@ -1,17 +1,15 @@
 package com.wefly.fika.dto.member;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.wefly.fika.domain.member.model.Member;
+import com.wefly.fika.domain.member.Member;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

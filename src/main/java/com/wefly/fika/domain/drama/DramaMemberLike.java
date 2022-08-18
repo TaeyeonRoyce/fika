@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.wefly.fika.domain.member.model.Member;
+import com.wefly.fika.domain.member.Member;
 
 import lombok.AccessLevel;
 import lombok.Builder;

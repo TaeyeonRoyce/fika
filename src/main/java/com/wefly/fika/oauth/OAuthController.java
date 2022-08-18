@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import com.wefly.fika.config.response.ApiResponse;
-import com.wefly.fika.domain.member.model.Member;
+import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.service.IMemberService;
 

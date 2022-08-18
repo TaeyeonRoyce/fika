@@ -28,7 +28,6 @@ public class Spot {
 	private String imageUrl;
 	private String mapX;
 	private String mapY;
-
 	private int savedCount;
 	@Enumerated(EnumType.STRING)
 	private PlaceCategory category;
@@ -41,5 +40,6 @@ public class Spot {
 		this.mapX = mapX;
 		this.mapY = mapY;
 		this.category = category;
+		this.savedCount = 0;
 	}
 }
