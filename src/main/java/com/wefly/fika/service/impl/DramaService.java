@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wefly.fika.domain.actor.Actor;
+import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaActor;
 import com.wefly.fika.domain.drama.DramaMemberLike;
+import com.wefly.fika.domain.locage.Locage;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.dto.character.CharacterNameDto;
 import com.wefly.fika.dto.drama.DramaGetResponse;
@@ -20,6 +22,7 @@ import com.wefly.fika.jwt.JwtService;
 import com.wefly.fika.repository.DramaActorRepository;
 import com.wefly.fika.repository.DramaMemberLikeRepository;
 import com.wefly.fika.repository.DramaRepository;
+import com.wefly.fika.repository.LocageRepository;
 import com.wefly.fika.service.IDramaService;
 
 import lombok.RequiredArgsConstructor;
@@ -30,13 +33,30 @@ import lombok.RequiredArgsConstructor;
 public class DramaService implements IDramaService {
 
 	private final JwtService jwtService;
+	private final SpotDataService spotDataService;
+	private final LocageRepository locageRepository;
 	private final DramaRepository dramaRepository;
 	private final DramaActorRepository dramaActorRepository;
 	private final DramaMemberLikeRepository dramaMemberLikeRepository;
 
 	@Override
 	public Drama saveDrama(DramaSaveDto saveDto) {
-		return dramaRepository.save(saveDto.toEntity());
+		List<SpotData> locageSpots = spotDataService.findSpotsByDramaName(saveDto.getTitle());
+		Drama drama = saveDto.toEntity();
+		dramaRepository.save(drama);
+
+		List<Locage> locages = new ArrayList<>();
+		for (SpotData locageSpot : locageSpots) {
+			locages.add(Locage.builder()
+				.spotData(locageSpot)
+				.quotes(locageSpot.getSubtitle())
+				.drama(drama)
+				.build());
+		}
+
+		locageRepository.saveAll(locages);
+
+		return drama;
 	}
 
 	@Override

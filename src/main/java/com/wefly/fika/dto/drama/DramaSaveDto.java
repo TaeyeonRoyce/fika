@@ -19,17 +19,21 @@ public class DramaSaveDto {
 	@NotBlank
 	private String imageUrl;
 
+	@NotBlank
+	private String genre;
+
 	@Builder
-	public DramaSaveDto(String title, String imageUrl) {
+	public DramaSaveDto(String title, String imageUrl, String genre) {
 		this.title = title;
 		this.imageUrl = imageUrl;
+		this.genre = genre;
 	}
 
 	public Drama toEntity() {
 		return Drama.builder()
 			.title(this.title)
 			.thumbnailUrl(this.imageUrl)
+			.genre(this.genre)
 			.build();
 	}
-
 }

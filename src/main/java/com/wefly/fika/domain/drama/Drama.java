@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 
 import com.wefly.fika.domain.base.BaseTimeEntity;
 import com.wefly.fika.domain.character.Characters;
+import com.wefly.fika.domain.locage.Locage;
 import com.wefly.fika.domain.scene.Scene;
 
 import lombok.AccessLevel;
@@ -32,6 +33,7 @@ public class Drama extends BaseTimeEntity {
 
 	private String title;
 	private String thumbnailUrl;
+	private String genre;
 
 	@OneToMany(mappedBy = "drama", cascade = CascadeType.ALL)
 	private List<Characters> characters = new ArrayList<>();
@@ -39,10 +41,14 @@ public class Drama extends BaseTimeEntity {
 	@OneToMany(mappedBy = "drama", cascade = CascadeType.ALL)
 	private List<Scene> scenes = new ArrayList<>();
 
+	@OneToMany(mappedBy = "drama", cascade = CascadeType.ALL)
+	private List<Locage> locages = new ArrayList<>();
+
 	@Builder
-	public Drama(String title, String thumbnailUrl) {
+	public Drama(String title, String thumbnailUrl, String genre) {
 		this.title = title;
 		this.thumbnailUrl = thumbnailUrl;
+		this.genre = genre;
 	}
 
 }
