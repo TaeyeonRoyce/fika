@@ -1,5 +1,4 @@
 package com.wefly.fika.domain.course;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +14,4 @@ public class DramaCourse extends Course {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "drama_id")
 	private Drama drama;
-
-
 }

@@ -29,9 +29,9 @@ public abstract class Course extends BaseTimeEntity {
 	private Long id;
 
 	private String courseTitle;
+	private String representDrama;
 
 	private int scrappedCount;
-
 	@OneToMany(mappedBy = "course")
 	private List<CourseSpot> spotList = new ArrayList<>();
 
