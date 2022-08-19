@@ -18,6 +18,7 @@ import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.member.Member;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -40,10 +41,24 @@ public class Course extends BaseTimeEntity {
 	@JoinColumn(name = "drama_id")
 	private Drama drama;
 
+	private String baseAddress;
 	private int courseSpotNumber;
 	private int savedCount;
-
-	private int scrappedCount;
 	@OneToMany(mappedBy = "course")
 	private List<CourseSpot> spotList = new ArrayList<>();
+
+	@Builder
+	public Course(String courseTitle, Member creatMember, Drama drama, String baseAddress, int courseSpotNumber,
+		int savedCount) {
+		this.courseTitle = courseTitle;
+		this.creatMember = creatMember;
+		this.drama = drama;
+		this.baseAddress = baseAddress;
+		this.courseSpotNumber = courseSpotNumber;
+		this.savedCount = savedCount;
+	}
+
+	public void update() {
+		this.courseSpotNumber = spotList.size();
+	}
 }

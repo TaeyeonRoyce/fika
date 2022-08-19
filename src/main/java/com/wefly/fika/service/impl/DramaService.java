@@ -34,7 +34,6 @@ public class DramaService implements IDramaService {
 
 	private final JwtService jwtService;
 	private final SpotDataService spotDataService;
-	private final LocageRepository locageRepository;
 	private final DramaRepository dramaRepository;
 	private final DramaActorRepository dramaActorRepository;
 	private final DramaMemberLikeRepository dramaMemberLikeRepository;
@@ -45,16 +44,10 @@ public class DramaService implements IDramaService {
 		Drama drama = saveDto.toEntity();
 		dramaRepository.save(drama);
 
-		List<Locage> locages = new ArrayList<>();
-		for (SpotData locageSpot : locageSpots) {
-			locages.add(Locage.builder()
-				.spotData(locageSpot)
-				.quotes(locageSpot.getSubtitle())
-				.drama(drama)
-				.build());
-		}
+		locageSpots.forEach(
+			o -> o.updateToLocage(drama, "test")
+		);
 
-		locageRepository.saveAll(locages);
 
 		return drama;
 	}

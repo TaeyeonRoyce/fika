@@ -45,7 +45,5 @@ public class Locage {
 		this.spotData = spotData;
 		this.drama = drama;
 		this.quotes = quotes;
-
-		drama.getLocages().add(this);
 	}
 }

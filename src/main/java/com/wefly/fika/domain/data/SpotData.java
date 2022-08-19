@@ -3,10 +3,15 @@ package com.wefly.fika.domain.data;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.wefly.fika.domain.drama.Drama;
 
 import lombok.Getter;
 
@@ -38,4 +43,19 @@ public class SpotData {
 	private Double latitude;
 	private String phoneNumber;
 	private String isCaptureAllowed;
+
+	private boolean isLocage;
+
+	private String quote;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "drama_id")
+	private Drama drama;
+
+	public void updateToLocage(Drama drama, String quote) {
+		this.isLocage = true;
+		this.drama = drama;
+
+		drama.getSpotDataList().add(this);
+	}
 }

@@ -10,11 +10,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.wefly.fika.domain.base.BaseTimeEntity;
-import com.wefly.fika.domain.spot.Spot;
+import com.wefly.fika.domain.data.SpotData;
 
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class CourseSpot extends BaseTimeEntity {
 
@@ -28,8 +32,17 @@ public class CourseSpot extends BaseTimeEntity {
 	private Course course;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "spot_id")
-	private Spot spot;
+	@JoinColumn(name = "spot_Data_id")
+	private SpotData spotData;
 
 	private int orderIndex;
+
+	@Builder
+	public CourseSpot(Course course, SpotData spotData, int orderIndex) {
+		this.course = course;
+		this.spotData = spotData;
+		this.orderIndex = orderIndex;
+
+		course.getSpotList().add(this);
+	}
 }
