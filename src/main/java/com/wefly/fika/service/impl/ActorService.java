@@ -1,12 +1,18 @@
 package com.wefly.fika.service.impl;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wefly.fika.domain.actor.Actor;
+import com.wefly.fika.domain.drama.Drama;
+import com.wefly.fika.domain.drama.DramaActor;
 import com.wefly.fika.dto.actor.ActorSaveDto;
 import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.repository.ActorRepository;
+import com.wefly.fika.repository.DramaActorRepository;
+import com.wefly.fika.repository.DramaRepository;
 import com.wefly.fika.service.IActorService;
 
 import lombok.RequiredArgsConstructor;
@@ -17,10 +23,25 @@ import lombok.RequiredArgsConstructor;
 public class ActorService implements IActorService {
 
 	private final ActorRepository actorRepository;
+	private final DramaRepository dramaRepository;
+	private final DramaActorRepository dramaActorRepository;
 
 	@Override
 	public Actor saveActor(ActorSaveDto saveDto) {
-		return actorRepository.save(saveDto.toEntity());
+		Actor actor = actorRepository.findActorByActorName(saveDto.getActorName()).orElse(
+			actorRepository.save(saveDto.toEntity())
+		);
+
+
+		Drama drama = dramaRepository.findById(saveDto.getDramaId()).get();
+
+		dramaActorRepository.save(
+			DramaActor.builder()
+				.drama(drama)
+				.actor(actor)
+				.build()
+		);
+		return actor;
 	}
 
 	@Override

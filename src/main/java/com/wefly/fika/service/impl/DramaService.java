@@ -68,6 +68,19 @@ public class DramaService implements IDramaService {
 	}
 
 	@Override
+	public List<Drama> getDramaByGenre(String genre) {
+		return dramaRepository.findDramaByGenre(genre);
+	}
+
+	@Override
+	public List<Drama> getDramaByActor(String actor) {
+		return dramaActorRepository.findAll().stream()
+			.filter(d -> d.getActor().getActorName().equals(actor))
+			.map(DramaActor::getDrama)
+			.collect(Collectors.toList());
+	}
+
+	@Override
 	public DramaMemberLike toggleDramaLike(String accessToken, Long dramaId) throws NoSuchDataFound {
 		Member member = jwtService.getMember(accessToken);
 		Drama drama = dramaRepository.findById(dramaId)

@@ -2,19 +2,25 @@ package com.wefly.fika.controller;
 
 import static com.wefly.fika.config.response.ApiResponseStatus.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaMemberLike;
+import com.wefly.fika.dto.drama.DramaPreviewResponse;
 import com.wefly.fika.dto.drama.DramaSaveDto;
 import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.service.IDramaService;
@@ -65,5 +71,48 @@ public class DramaController {
 			return new ApiResponse<>(NO_SUCH_DATA_FOUND).toResponseEntity();
 		}
 	}
+
+	@GetMapping("/all")
+	public ResponseEntity<ApiResponse> getAllDramas() {
+		List<Drama> allDramas = dramaService.getAllDramas();
+		List<DramaPreviewResponse> response = allDramas.stream()
+			.map(Drama::toDramaPreviewResponse)
+			.collect(Collectors.toList());
+
+		return new ApiResponse<>(response).toResponseEntity();
+	}
+
+	@GetMapping("/genre")
+	public ResponseEntity<ApiResponse> getDramasByGenre(
+		@RequestParam String genre
+	) {
+		if (genre == null) {
+			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
+		}
+
+		List<Drama> dramasByGenre = dramaService.getDramaByGenre(genre);
+		List<DramaPreviewResponse> response = dramasByGenre.stream()
+			.map(Drama::toDramaPreviewResponse)
+			.collect(Collectors.toList());
+
+		return new ApiResponse<>(response).toResponseEntity();
+	}
+
+	@GetMapping("/actor")
+	public ResponseEntity<ApiResponse> getDramaByActor(
+		@RequestParam String actor
+	) {
+		if (actor == null) {
+			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
+		}
+
+		List<Drama> dramasByGenre = dramaService.getDramaByActor(actor);
+		List<DramaPreviewResponse> response = dramasByGenre.stream()
+			.map(Drama::toDramaPreviewResponse)
+			.collect(Collectors.toList());
+
+		return new ApiResponse<>(response).toResponseEntity();
+	}
+
 
 }
