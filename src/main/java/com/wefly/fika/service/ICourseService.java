@@ -12,6 +12,6 @@ public interface ICourseService {
 
 	List<CoursePreviewResponse> getMyCourses(String accessToken);
 
-	List<CoursePreviewResponse> getCoursesSortBySaved();
+	List<Course> getCoursesSortBySaved();
 
 }

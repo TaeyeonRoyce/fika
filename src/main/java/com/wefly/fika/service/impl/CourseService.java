@@ -62,10 +62,7 @@ public class CourseService implements ICourseService {
 	}
 
 	@Override
-	public List<CoursePreviewResponse> getCoursesSortBySaved() {
-		return courseRepository.findTop5ByOrderBySavedCount()
-			.stream()
-			.map(Course::toCourseResponse)
-			.collect(Collectors.toList());
+	public List<Course> getCoursesSortBySaved() {
+		return courseRepository.findTop5ByOrderBySavedCountDesc();
 	}
 }

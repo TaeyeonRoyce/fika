@@ -1,6 +1,7 @@
 package com.wefly.fika.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wefly.fika.config.response.ApiResponse;
+import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 import com.wefly.fika.dto.drama.DramaPreviewResponse;
@@ -37,7 +39,10 @@ public class IndexController {
 	) {
 		List<CoursePreviewResponse> myCourses = courseService.getMyCourses(accessToken);
 		List<DramaPreviewResponse> allDramas = dramaService.getAllDramas();
-		List<CoursePreviewResponse> coursesSortBySaved = courseService.getCoursesSortBySaved();
+		List<CoursePreviewResponse> coursesSortBySaved = courseService.getCoursesSortBySaved()
+			.stream()
+			.map(Course::toCourseResponse)
+			.collect(Collectors.toList());
 		List<SpotPreviewResponse> spotsBySaved = spotDataService.getSpotsBySaved();
 
 		log.debug("[CHANGE TO RESPONSE]");

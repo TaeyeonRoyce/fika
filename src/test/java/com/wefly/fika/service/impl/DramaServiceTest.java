@@ -60,7 +60,6 @@ class DramaServiceTest {
 				DramaPreviewResponse.builder()
 					.dramaTitle(drama.getTitle())
 					.thumbnailUrl(drama.getThumbnailUrl())
-					.characterNames(characterNameDto)
 					.build()
 			);
 		}
