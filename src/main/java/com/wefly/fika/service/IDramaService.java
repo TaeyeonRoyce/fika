@@ -5,7 +5,7 @@ import java.util.List;
 import com.wefly.fika.domain.actor.Actor;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaMemberLike;
-import com.wefly.fika.dto.drama.DramaGetResponse;
+import com.wefly.fika.dto.drama.DramaPreviewResponse;
 import com.wefly.fika.dto.drama.DramaSaveDto;
 import com.wefly.fika.exception.NoSuchDataFound;
 
@@ -17,7 +17,7 @@ public interface IDramaService {
 
 	void mapDramaActor(Drama drama, Actor actor);
 
-	List<DramaGetResponse> getAllDramas();
+	List<DramaPreviewResponse> getAllDramas();
 
 	DramaMemberLike toggleDramaLike(String accessToken, Long dramaId) throws NoSuchDataFound;
 

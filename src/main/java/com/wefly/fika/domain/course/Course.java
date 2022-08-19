@@ -2,7 +2,9 @@ package com.wefly.fika.domain.course;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +18,7 @@ import javax.persistence.OneToMany;
 import com.wefly.fika.domain.base.BaseTimeEntity;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.member.Member;
+import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -44,7 +47,7 @@ public class Course extends BaseTimeEntity {
 	private String baseAddress;
 	private int courseSpotNumber;
 	private int savedCount;
-	@OneToMany(mappedBy = "course")
+	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	private List<CourseSpot> spotList = new ArrayList<>();
 
 	@Builder
@@ -60,5 +63,21 @@ public class Course extends BaseTimeEntity {
 
 	public void update() {
 		this.courseSpotNumber = spotList.size();
+	}
+
+	public CoursePreviewResponse toCourseResponse() {
+		List<String> spotTitleList = spotList.stream()
+			.map(s -> s.getSpotData().getTitle())
+			.collect(Collectors.toList());
+
+		return CoursePreviewResponse.builder()
+			.courseId(this.id)
+			.courseSavedCount(this.savedCount)
+			.baseAddress(this.baseAddress)
+			.locageImageUrl(this.spotList.get(0).getSpotData().getImage())
+			.courseTitle(this.courseTitle)
+			.dramaTitle(this.drama.getTitle())
+			.spotTitleList(spotTitleList)
+			.build();
 	}
 }

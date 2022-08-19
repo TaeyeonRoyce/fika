@@ -14,8 +14,8 @@ import javax.persistence.OneToMany;
 import com.wefly.fika.domain.base.BaseTimeEntity;
 import com.wefly.fika.domain.character.Characters;
 import com.wefly.fika.domain.data.SpotData;
-import com.wefly.fika.domain.locage.Locage;
 import com.wefly.fika.domain.scene.Scene;
+import com.wefly.fika.dto.drama.DramaPreviewResponse;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -50,6 +50,14 @@ public class Drama extends BaseTimeEntity {
 		this.title = title;
 		this.thumbnailUrl = thumbnailUrl;
 		this.genre = genre;
+	}
+
+	public DramaPreviewResponse toDramaPreviewResponse() {
+		return DramaPreviewResponse.builder()
+			.dramaId(this.id)
+			.dramaTitle(this.title)
+			.thumbnailUrl(this.thumbnailUrl)
+			.build();
 	}
 
 }

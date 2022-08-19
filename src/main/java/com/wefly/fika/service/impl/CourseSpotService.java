@@ -48,6 +48,7 @@ public class CourseSpotService implements ICourseSpotService {
 		}
 
 		courseSpotRepository.saveAll(saveList);
+		course.update();
 
 		return saveList.size();
 	}

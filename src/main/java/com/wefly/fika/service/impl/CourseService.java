@@ -1,6 +1,8 @@
 package com.wefly.fika.service.impl;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +11,7 @@ import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.dto.course.CourseSaveDto;
+import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 import com.wefly.fika.jwt.JwtService;
 import com.wefly.fika.repository.CourseRepository;
 import com.wefly.fika.repository.MemberRepository;
@@ -47,5 +50,22 @@ public class CourseService implements ICourseService {
 			.drama(locage.get().getDrama())
 			.build();
 		return courseRepository.save(course);
+	}
+
+	@Override
+	public List<CoursePreviewResponse> getMyCourses(String accessToken) {
+		Long memberId = jwtService.getMemberId(accessToken);
+		return courseRepository.findByCreatMemberId(memberId)
+			.stream()
+			.map(Course::toCourseResponse)
+			.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<CoursePreviewResponse> getCoursesSortBySaved() {
+		return courseRepository.findTop5ByOrderBySavedCount()
+			.stream()
+			.map(Course::toCourseResponse)
+			.collect(Collectors.toList());
 	}
 }

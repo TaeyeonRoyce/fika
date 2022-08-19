@@ -1,14 +1,17 @@
 package com.wefly.fika.service;
 
+import java.util.List;
+
 import com.wefly.fika.domain.course.Course;
-import com.wefly.fika.domain.spot.Spot;
 import com.wefly.fika.dto.course.CourseSaveDto;
-import com.wefly.fika.dto.spot.SpotSaveDto;
-import com.wefly.fika.exception.NoSuchDataFound;
+import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 
 public interface ICourseService {
 
 	Course saveCourse(String accessToken, CourseSaveDto saveDto);
 
+	List<CoursePreviewResponse> getMyCourses(String accessToken);
+
+	List<CoursePreviewResponse> getCoursesSortBySaved();
 
 }

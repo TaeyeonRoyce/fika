@@ -17,7 +17,7 @@ import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaMemberLike;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.dto.character.CharacterNameDto;
-import com.wefly.fika.dto.drama.DramaGetResponse;
+import com.wefly.fika.dto.drama.DramaPreviewResponse;
 import com.wefly.fika.dto.drama.DramaSaveDto;
 import com.wefly.fika.dto.member.MemberSignUpDto;
 import com.wefly.fika.exception.NoSuchDataFound;
@@ -46,7 +46,7 @@ class DramaServiceTest {
 
 		long a = System.currentTimeMillis();
 		List<Drama> allDramas = dramaRepository.findAll();
-		List<DramaGetResponse> response = new ArrayList<>();
+		List<DramaPreviewResponse> response = new ArrayList<>();
 
 		for (Drama drama : allDramas) {
 			List<CharacterNameDto> characterNameDto = drama.getCharacters().stream()
@@ -57,7 +57,7 @@ class DramaServiceTest {
 				.collect(Collectors.toList());
 
 			response.add(
-				DramaGetResponse.builder()
+				DramaPreviewResponse.builder()
 					.dramaTitle(drama.getTitle())
 					.thumbnailUrl(drama.getThumbnailUrl())
 					.characterNames(characterNameDto)

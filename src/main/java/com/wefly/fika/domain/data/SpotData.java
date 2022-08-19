@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.wefly.fika.domain.drama.Drama;
+import com.wefly.fika.domain.spot.Spot;
+import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 
 import lombok.Getter;
 
@@ -47,6 +49,7 @@ public class SpotData {
 	private boolean isLocage;
 
 	private String quote;
+	private int savedCount;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "drama_id")
@@ -57,5 +60,17 @@ public class SpotData {
 		this.drama = drama;
 
 		drama.getSpotDataList().add(this);
+	}
+
+	public SpotPreviewResponse toSpotPreviewResponse() {
+		return SpotPreviewResponse.builder()
+			.spotId(this.id)
+			.spotImageUrl(this.image)
+			.shortAddress(this.shortAddress)
+			.type(this.type)
+			.spotTitle(this.title)
+			.spotSavedCount(this.savedCount)
+			.isLocage(this.isLocage)
+			.build();
 	}
 }
