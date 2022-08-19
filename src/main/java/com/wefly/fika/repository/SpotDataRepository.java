@@ -9,6 +9,6 @@ import com.wefly.fika.domain.data.SpotData;
 public interface SpotDataRepository extends JpaRepository<SpotData, Long> {
 	List<SpotData> findAllByThemeName(String dramaName);
 
-	List<SpotData> findTop5ByOrderBySavedCount();
+	List<SpotData> findTop5ByOrderBySavedCountDesc();
 
 }

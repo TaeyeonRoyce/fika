@@ -63,11 +63,8 @@ public class DramaService implements IDramaService {
 	}
 
 	@Override
-	public List<DramaPreviewResponse> getAllDramas() {
-		return dramaRepository.findAll()
-			.stream()
-			.map(Drama::toDramaPreviewResponse)
-			.collect(Collectors.toList());
+	public List<Drama> getAllDramas() {
+		return dramaRepository.findAll();
 	}
 
 	@Override

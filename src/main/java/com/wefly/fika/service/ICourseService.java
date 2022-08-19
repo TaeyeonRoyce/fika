@@ -10,7 +10,7 @@ public interface ICourseService {
 
 	Course saveCourse(String accessToken, CourseSaveDto saveDto);
 
-	List<CoursePreviewResponse> getMyCourses(String accessToken);
+	List<Course> getMyCourses(String accessToken);
 
 	List<Course> getCoursesSortBySaved();
 

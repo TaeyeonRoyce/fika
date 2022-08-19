@@ -17,7 +17,7 @@ public interface IDramaService {
 
 	void mapDramaActor(Drama drama, Actor actor);
 
-	List<DramaPreviewResponse> getAllDramas();
+	List<Drama> getAllDramas();
 
 	DramaMemberLike toggleDramaLike(String accessToken, Long dramaId) throws NoSuchDataFound;
 

@@ -73,4 +73,9 @@ public class SpotData {
 			.isLocage(this.isLocage)
 			.build();
 	}
+
+	//=== Test 전용 메서드 ===//
+	public void setSavedCount(int savedCount) {
+		this.savedCount = savedCount;
+	}
 }

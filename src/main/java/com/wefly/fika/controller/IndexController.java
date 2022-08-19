@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.domain.course.Course;
+import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 import com.wefly.fika.dto.drama.DramaPreviewResponse;
@@ -37,13 +38,26 @@ public class IndexController {
 	public ResponseEntity<ApiResponse> saveCourse(
 		@RequestHeader("Access-Token") String accessToken
 	) {
-		List<CoursePreviewResponse> myCourses = courseService.getMyCourses(accessToken);
-		List<DramaPreviewResponse> allDramas = dramaService.getAllDramas();
+
+		List<CoursePreviewResponse> myCourses = courseService.getMyCourses(accessToken)
+			.stream()
+			.map(Course::toCourseResponse)
+			.collect(Collectors.toList());
+
+		List<DramaPreviewResponse> allDramas = dramaService.getAllDramas()
+			.stream()
+			.map(Drama::toDramaPreviewResponse)
+			.collect(Collectors.toList());
+
 		List<CoursePreviewResponse> coursesSortBySaved = courseService.getCoursesSortBySaved()
 			.stream()
 			.map(Course::toCourseResponse)
 			.collect(Collectors.toList());
-		List<SpotPreviewResponse> spotsBySaved = spotDataService.getSpotsBySaved();
+
+		List<SpotPreviewResponse> spotsBySaved = spotDataService.getSpotsBySaved()
+			.stream()
+			.map(SpotData::toSpotPreviewResponse)
+			.collect(Collectors.toList());
 
 		log.debug("[CHANGE TO RESPONSE]");
 		MainPageResponse response = MainPageResponse.builder()

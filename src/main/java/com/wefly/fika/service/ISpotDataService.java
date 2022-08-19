@@ -9,5 +9,5 @@ public interface ISpotDataService {
 
 	List<SpotData> findSpotsByDramaName(String dramaName);
 
-	List<SpotPreviewResponse> getSpotsBySaved();
+	List<SpotData> getSpotsBySaved();
 }

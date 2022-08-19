@@ -24,10 +24,8 @@ public class SpotDataService implements ISpotDataService {
 		return spotDataRepository.findAllByThemeName(dramaName);
 	}
 
-	public List<SpotPreviewResponse> getSpotsBySaved() {
-		return spotDataRepository.findTop5ByOrderBySavedCount().stream()
-			.map(SpotData::toSpotPreviewResponse)
-			.collect(Collectors.toList());
+	public List<SpotData> getSpotsBySaved() {
+		return spotDataRepository.findTop5ByOrderBySavedCountDesc();
 	}
 
 }

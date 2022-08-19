@@ -53,12 +53,9 @@ public class CourseService implements ICourseService {
 	}
 
 	@Override
-	public List<CoursePreviewResponse> getMyCourses(String accessToken) {
+	public List<Course> getMyCourses(String accessToken) {
 		Long memberId = jwtService.getMemberId(accessToken);
-		return courseRepository.findByCreatMemberId(memberId)
-			.stream()
-			.map(Course::toCourseResponse)
-			.collect(Collectors.toList());
+		return courseRepository.findByCreatMemberId(memberId);
 	}
 
 	@Override
