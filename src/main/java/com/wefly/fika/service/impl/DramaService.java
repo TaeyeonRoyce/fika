@@ -1,6 +1,7 @@
 package com.wefly.fika.service.impl;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -68,15 +69,21 @@ public class DramaService implements IDramaService {
 	}
 
 	@Override
-	public List<Drama> getDramaByGenre(String genre) {
-		return dramaRepository.findDramaByGenre(genre);
+	public List<Drama> getDramaByGenre(List<Drama> dramaList, String genre) {
+		return dramaList.stream()
+			.filter(d -> d.getGenre().equals(genre))
+			.collect(Collectors.toList());
 	}
 
 	@Override
-	public List<Drama> getDramaByActor(String actor) {
-		return dramaActorRepository.findAll().stream()
+	public List<Drama> getDramaByActor(List<Drama> dramaList, String actor) {
+		Set<Drama> dramasByActor = dramaActorRepository.findAll().stream()
 			.filter(d -> d.getActor().getActorName().equals(actor))
 			.map(DramaActor::getDrama)
+			.collect(Collectors.toSet());
+
+		return dramaList.stream()
+			.filter(dramasByActor::contains)
 			.collect(Collectors.toList());
 	}
 

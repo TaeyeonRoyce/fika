@@ -11,15 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.data.SpotData;
-import com.wefly.fika.domain.drama.Drama;
-import com.wefly.fika.domain.member.Member;
-import com.wefly.fika.repository.CourseRepository;
-import com.wefly.fika.repository.DramaRepository;
-import com.wefly.fika.repository.MemberRepository;
 import com.wefly.fika.repository.SpotDataRepository;
-import com.wefly.fika.service.ICourseService;
 import com.wefly.fika.service.ISpotDataService;
 
 @ExtendWith(SpringExtension.class)

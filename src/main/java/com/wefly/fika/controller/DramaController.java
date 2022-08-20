@@ -73,41 +73,23 @@ public class DramaController {
 	}
 
 	@GetMapping("/all")
-	public ResponseEntity<ApiResponse> getAllDramas() {
-		List<Drama> allDramas = dramaService.getAllDramas();
-		List<DramaPreviewResponse> response = allDramas.stream()
-			.map(Drama::toDramaPreviewResponse)
-			.collect(Collectors.toList());
-
-		return new ApiResponse<>(response).toResponseEntity();
-	}
-
-	@GetMapping("/genre")
-	public ResponseEntity<ApiResponse> getDramasByGenre(
-		@RequestParam String genre
+	public ResponseEntity<ApiResponse> getAllDramas(
+		@RequestParam(required = false) String genre,
+		@RequestParam(required = false) String actor
 	) {
-		if (genre == null) {
-			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
+		List<Drama> dramas = dramaService.getAllDramas();
+
+		if (genre != null) {
+			log.debug("[GENRE FILTER AVAILABLE] : GENRE = {}", genre);
+			dramas = dramaService.getDramaByGenre(dramas, genre);
 		}
 
-		List<Drama> dramasByGenre = dramaService.getDramaByGenre(genre);
-		List<DramaPreviewResponse> response = dramasByGenre.stream()
-			.map(Drama::toDramaPreviewResponse)
-			.collect(Collectors.toList());
-
-		return new ApiResponse<>(response).toResponseEntity();
-	}
-
-	@GetMapping("/actor")
-	public ResponseEntity<ApiResponse> getDramaByActor(
-		@RequestParam String actor
-	) {
-		if (actor == null) {
-			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
+		if (actor != null) {
+			log.debug("[ACTOR FILTER AVAILABLE] : ACTOR = {}", actor);
+			dramas = dramaService.getDramaByActor(dramas, actor);
 		}
 
-		List<Drama> dramasByGenre = dramaService.getDramaByActor(actor);
-		List<DramaPreviewResponse> response = dramasByGenre.stream()
+		List<DramaPreviewResponse> response = dramas.stream()
 			.map(Drama::toDramaPreviewResponse)
 			.collect(Collectors.toList());
 
