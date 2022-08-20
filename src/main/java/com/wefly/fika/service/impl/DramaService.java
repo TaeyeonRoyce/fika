@@ -69,16 +69,16 @@ public class DramaService implements IDramaService {
 	}
 
 	@Override
-	public List<Drama> getDramaByGenre(List<Drama> dramaList, String genre) {
+	public List<Drama> filterByGenre(List<Drama> dramaList, String genre) {
 		return dramaList.stream()
 			.filter(d -> d.getGenre().equals(genre))
 			.collect(Collectors.toList());
 	}
 
 	@Override
-	public List<Drama> getDramaByActor(List<Drama> dramaList, String actor) {
+	public List<Drama> filterByActor(List<Drama> dramaList, Long actorId) {
 		Set<Drama> dramasByActor = dramaActorRepository.findAll().stream()
-			.filter(d -> d.getActor().getActorName().equals(actor))
+			.filter(d -> d.getActor().getId().equals(actorId))
 			.map(DramaActor::getDrama)
 			.collect(Collectors.toSet());
 

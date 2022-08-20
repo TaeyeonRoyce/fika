@@ -75,18 +75,18 @@ public class DramaController {
 	@GetMapping("/all")
 	public ResponseEntity<ApiResponse> getAllDramas(
 		@RequestParam(required = false) String genre,
-		@RequestParam(required = false) String actor
+		@RequestParam(required = false) String actorId
 	) {
 		List<Drama> dramas = dramaService.getAllDramas();
 
 		if (genre != null) {
 			log.debug("[GENRE FILTER AVAILABLE] : GENRE = {}", genre);
-			dramas = dramaService.getDramaByGenre(dramas, genre);
+			dramas = dramaService.filterByGenre(dramas, genre);
 		}
 
-		if (actor != null) {
-			log.debug("[ACTOR FILTER AVAILABLE] : ACTOR = {}", actor);
-			dramas = dramaService.getDramaByActor(dramas, actor);
+		if (actorId != null) {
+			log.debug("[ACTOR FILTER AVAILABLE] : ACTOR Id = {}", actorId);
+			dramas = dramaService.filterByActor(dramas, Long.parseLong(actorId));
 		}
 
 		List<DramaPreviewResponse> response = dramas.stream()
