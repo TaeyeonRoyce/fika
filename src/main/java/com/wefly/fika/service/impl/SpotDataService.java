@@ -1,13 +1,18 @@
 package com.wefly.fika.service.impl;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wefly.fika.domain.data.SpotData;
-import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
+import com.wefly.fika.domain.member.Member;
+import com.wefly.fika.domain.member.MemberSaveSpot;
+import com.wefly.fika.jwt.JwtService;
+import com.wefly.fika.repository.MemberRepository;
+import com.wefly.fika.repository.MemberSaveSpotRepository;
 import com.wefly.fika.repository.SpotDataRepository;
 import com.wefly.fika.service.ISpotDataService;
 
@@ -19,6 +24,9 @@ import lombok.RequiredArgsConstructor;
 public class SpotDataService implements ISpotDataService {
 
 	private final SpotDataRepository spotDataRepository;
+	private final JwtService jwtService;
+	private final MemberSaveSpotRepository memberSaveSpotRepository;
+	private final MemberRepository memberRepository;
 
 	public List<SpotData> findSpotsByDramaName(String dramaName) {
 		return spotDataRepository.findAllByThemeName(dramaName);
@@ -31,6 +39,36 @@ public class SpotDataService implements ISpotDataService {
 	@Override
 	public List<SpotData> findSpotsByDramaId(Long dramaId) {
 		return spotDataRepository.findByDramaId(dramaId);
+	}
+
+	@Override
+	public boolean scrapSpot(Long spotId, String accessToken) throws NoSuchElementException {
+		Long memberId = jwtService.getMemberId(accessToken);
+
+		Optional<MemberSaveSpot> memberSaveSpot = memberSaveSpotRepository.findByMemberIdAndSpotDataId(
+			memberId, spotId);
+
+		if (memberSaveSpot.isEmpty()) {
+			Member member = memberRepository.findById(memberId).get();
+			SpotData spotData = spotDataRepository.findById(spotId).get();
+			MemberSaveSpot save = memberSaveSpotRepository.save(
+				MemberSaveSpot.builder()
+					.member(member)
+					.spotData(spotData)
+					.build()
+			);
+
+			save.getSpotData().addSavedCount();
+
+			return true;
+
+		} else {
+			memberSaveSpot.get().getSpotData().cancelSavedCount();
+			memberSaveSpot.get().deleteMemberSaveSpot();
+			memberSaveSpotRepository.delete(memberSaveSpot.get());
+
+			return false;
+		}
 	}
 
 }

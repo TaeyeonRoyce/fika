@@ -1,6 +1,7 @@
 package com.wefly.fika.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.drama.Drama;
@@ -24,5 +25,5 @@ public interface ICourseService {
 
 	Course getCourseInfo(Long courseId) throws NoSuchDataFound;
 
-	boolean scrapCourse(Long courseId, String accessToken) throws NoSuchDataFound;
+	boolean scrapCourse(Long courseId, String accessToken) throws NoSuchElementException;
 }

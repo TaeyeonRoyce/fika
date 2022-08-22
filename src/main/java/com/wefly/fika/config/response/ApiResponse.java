@@ -43,6 +43,14 @@ public class ApiResponse<T> {
 		this.httpStatus = status.getHttpStatus();
 	}
 
+	public ApiResponse(T result, ApiResponseStatus status) {
+		this.isSuccess = status.isSuccess();
+		this.message = status.getMessage();
+		this.code = status.getCode();
+		this.httpStatus = status.getHttpStatus();
+		this.result = result;
+	}
+
 	public ResponseEntity<ApiResponse> toResponseEntity() {
 		return new ResponseEntity<>(this, this.httpStatus);
 	}

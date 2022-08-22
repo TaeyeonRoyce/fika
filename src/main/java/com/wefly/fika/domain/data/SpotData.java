@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.security.core.parameters.P;
+
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.spot.Spot;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
@@ -74,6 +76,14 @@ public class SpotData {
 			.mapX(longitude)
 			.mapY(latitude)
 			.build();
+	}
+
+	public void addSavedCount() {
+		this.savedCount += 1;
+	}
+
+	public void cancelSavedCount() {
+		this.savedCount -= 1;
 	}
 
 	//=== Test 전용 메서드 ===//

@@ -62,4 +62,8 @@ public class Member extends BaseTimeEntity {
 	public void deleteSaveCourse(MemberSaveCourse course) {
 		saveCourses.remove(course);
 	}
+
+	public void deleteSaveSpot(MemberSaveSpot spot) {
+		saveSpots.remove(spot);
+	}
 }

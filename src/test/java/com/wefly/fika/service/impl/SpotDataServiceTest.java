@@ -12,7 +12,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.data.SpotData;
+import com.wefly.fika.domain.member.Member;
+import com.wefly.fika.domain.spot.Spot;
+import com.wefly.fika.exception.NoSuchDataFound;
+import com.wefly.fika.repository.MemberRepository;
 import com.wefly.fika.repository.SpotDataRepository;
 import com.wefly.fika.service.ISpotDataService;
 
@@ -26,6 +31,8 @@ class SpotDataServiceTest {
 	@Autowired
 	SpotDataRepository spotDataRepository;
 
+	@Autowired
+	MemberRepository memberRepository;
 	@Transactional
 	@Test
 	void sortedBySavedTest() {
@@ -78,6 +85,31 @@ class SpotDataServiceTest {
 		System.out.println("-------------------------------");
 		System.out.println(System.currentTimeMillis() - b);
 		System.out.println("-------------------------------");
+	}
+
+	@Transactional
+	@Test
+	public void spotScrapTest() throws NoSuchDataFound {
+		//given
+		Long memberId = 3L;
+		Member member = memberRepository.findById(memberId).get();
+		String accessToken = member.getMemberAccessToken();
+		Long spotAId = 1100L;
+		Long spotBId = 1201L;
+
+
+		//when
+		spotDataService.scrapSpot(spotAId, accessToken);
+		spotDataService.scrapSpot(spotBId, accessToken);
+
+		//then
+		SpotData spotData = spotDataRepository.findById(spotAId).get();
+		assertThat(spotData.getSavedCount()).isEqualTo(1);
+		assertThat(member.getSaveSpots().size()).isEqualTo(2);
+
+		spotDataService.scrapSpot(spotAId, accessToken);
+		assertThat(spotData.getSavedCount()).isEqualTo(0);
+		assertThat(member.getSaveSpots().size()).isEqualTo(1);
 	}
 
 

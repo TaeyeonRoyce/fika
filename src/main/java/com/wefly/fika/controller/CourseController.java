@@ -3,6 +3,7 @@ package com.wefly.fika.controller;
 import static com.wefly.fika.config.response.ApiResponseStatus.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -135,7 +136,7 @@ public class CourseController {
 			}
 
 			return new ApiResponse<>(COURSE_CANCEL_SCRAPPED).toResponseEntity();
-		} catch (NoSuchDataFound e) {
+		} catch (NoSuchElementException e) {
 			return new ApiResponse<>(NO_SUCH_DATA_FOUND).toResponseEntity();
 		} catch (NumberFormatException e) {
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();

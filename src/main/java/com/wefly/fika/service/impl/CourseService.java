@@ -1,6 +1,7 @@
 package com.wefly.fika.service.impl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -112,7 +113,7 @@ public class CourseService implements ICourseService {
 	}
 
 	@Override
-	public boolean scrapCourse(Long courseId, String accessToken) throws NoSuchDataFound {
+	public boolean scrapCourse(Long courseId, String accessToken) throws NoSuchElementException {
 		Long memberId = jwtService.getMemberId(accessToken);
 
 		Optional<MemberSaveCourse> memberSaveCourse = memberSaveCourseRepository.findByMemberIdAndCourseId(

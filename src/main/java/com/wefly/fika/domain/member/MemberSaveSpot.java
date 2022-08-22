@@ -10,9 +10,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.wefly.fika.domain.base.BaseTimeEntity;
-import com.wefly.fika.domain.spot.Spot;
+import com.wefly.fika.domain.data.SpotData;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,7 +32,16 @@ public class MemberSaveSpot extends BaseTimeEntity {
 	private Member member;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "spot_id")
-	private Spot spot;
+	@JoinColumn(name = "spot_data_id")
+	private SpotData spotData;
 
+	@Builder
+	public MemberSaveSpot(Member member, SpotData spotData) {
+		this.member = member;
+		this.spotData = spotData;
+	}
+
+	public void deleteMemberSaveSpot() {
+		this.member.deleteSaveSpot(this);
+	}
 }
