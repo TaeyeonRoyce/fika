@@ -1,6 +1,7 @@
 package com.wefly.fika.domain.course;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,9 +17,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.wefly.fika.domain.base.BaseTimeEntity;
+import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
+import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -81,5 +84,13 @@ public class Course extends BaseTimeEntity {
 			.dramaTitle(this.drama.getTitle())
 			.spotTitleList(spotTitleList)
 			.build();
+	}
+
+	public List<SpotPreviewResponse> getSortedSpotList() {
+		Collections.sort(spotList);
+		return spotList.stream()
+			.map(CourseSpot::getSpotData)
+			.map(SpotData::toSpotPreviewResponse)
+			.collect(Collectors.toList());
 	}
 }

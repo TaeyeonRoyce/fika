@@ -15,6 +15,7 @@ import com.wefly.fika.domain.drama.DramaActor;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
+import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.jwt.JwtService;
 import com.wefly.fika.repository.CourseRepository;
 import com.wefly.fika.repository.DramaActorRepository;
@@ -98,5 +99,12 @@ public class CourseService implements ICourseService {
 		return courseList.stream()
 			.filter(c -> c.getCourseSpotNumber() == spotCount)
 			.collect(Collectors.toList());
+	}
+
+	@Override
+	public Course getCourseInfo(Long courseId) throws NoSuchDataFound {
+		return courseRepository.findById(courseId).orElseThrow(
+			NoSuchDataFound::new
+		);
 	}
 }

@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class CourseSpot extends BaseTimeEntity {
+public class CourseSpot extends BaseTimeEntity implements Comparable<CourseSpot> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,5 +44,10 @@ public class CourseSpot extends BaseTimeEntity {
 		this.orderIndex = orderIndex;
 
 		course.getSpotList().add(this);
+	}
+
+	@Override
+	public int compareTo(CourseSpot o) {
+		return orderIndex - o.orderIndex;
 	}
 }
