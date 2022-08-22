@@ -93,4 +93,12 @@ public class Course extends BaseTimeEntity {
 			.map(SpotData::toSpotPreviewResponse)
 			.collect(Collectors.toList());
 	}
+
+	public void addSavedCount() {
+		this.savedCount += 1;
+	}
+
+	public void cancelSavedCount() {
+		this.savedCount -= 1;
+	}
 }

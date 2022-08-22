@@ -13,6 +13,7 @@ import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaActor;
 import com.wefly.fika.domain.member.Member;
+import com.wefly.fika.domain.member.MemberSaveCourse;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 import com.wefly.fika.exception.NoSuchDataFound;
@@ -20,6 +21,7 @@ import com.wefly.fika.jwt.JwtService;
 import com.wefly.fika.repository.CourseRepository;
 import com.wefly.fika.repository.DramaActorRepository;
 import com.wefly.fika.repository.MemberRepository;
+import com.wefly.fika.repository.MemberSaveCourseRepository;
 import com.wefly.fika.repository.SpotDataRepository;
 import com.wefly.fika.service.ICourseService;
 
@@ -36,6 +38,7 @@ public class CourseService implements ICourseService {
 
 	private final SpotDataRepository spotDataRepository;
 	private final DramaActorRepository dramaActorRepository;
+	private final MemberSaveCourseRepository memberSaveCourseRepository;
 
 	@Override
 	public Course saveCourse(String accessToken, CourseSaveDto saveDto) {
@@ -106,5 +109,33 @@ public class CourseService implements ICourseService {
 		return courseRepository.findById(courseId).orElseThrow(
 			NoSuchDataFound::new
 		);
+	}
+
+	@Override
+	public boolean scrapCourse(Long courseId, String accessToken) throws NoSuchDataFound {
+		Long memberId = jwtService.getMemberId(accessToken);
+
+		Optional<MemberSaveCourse> memberSaveCourse = memberSaveCourseRepository.findByMemberIdAndCourseId(
+			memberId, courseId);
+
+		if (memberSaveCourse.isEmpty()) {
+			MemberSaveCourse save = memberSaveCourseRepository.save(
+				MemberSaveCourse.builder()
+					.member(memberRepository.findById(memberId).get())
+					.course(courseRepository.findById(courseId).get())
+					.build()
+			);
+
+			save.getCourse().addSavedCount();
+
+			return true;
+
+		} else {
+			memberSaveCourse.get().getCourse().cancelSavedCount();
+			memberSaveCourse.get().deleteMemberSaveCourse();
+			memberSaveCourseRepository.delete(memberSaveCourse.get());
+
+			return false;
+		}
 	}
 }

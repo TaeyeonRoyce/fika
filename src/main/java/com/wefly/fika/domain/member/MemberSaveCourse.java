@@ -13,6 +13,7 @@ import com.wefly.fika.domain.base.BaseTimeEntity;
 import com.wefly.fika.domain.course.Course;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,4 +35,13 @@ public class MemberSaveCourse extends BaseTimeEntity {
 	@JoinColumn(name = "course_id")
 	private Course course;
 
+	@Builder
+	public MemberSaveCourse(Member member, Course course) {
+		this.member = member;
+		this.course = course;
+	}
+
+	public void deleteMemberSaveCourse() {
+		this.member.deleteSaveCourse(this);
+	}
 }

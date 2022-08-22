@@ -16,7 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.member.Member;
+import com.wefly.fika.domain.member.MemberSaveCourse;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
+import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.repository.CourseRepository;
 import com.wefly.fika.repository.DramaRepository;
 import com.wefly.fika.repository.MemberRepository;
@@ -78,6 +80,30 @@ class CourseServiceTest {
 		assertThat(coursesSortBySaved.get(1).getSavedCount()).isEqualTo(middleSavedCount);
 		assertThat(coursesSortBySaved.get(2).getSavedCount()).isEqualTo(smallerSavedCount);
 	}
+
+	@Transactional
+	@Test
+	public void courseScrapTest() throws NoSuchDataFound {
+	    //given
+		Long memberId = 6L;
+		Member member = memberRepository.findById(memberId).get();
+		String accessToken = member.getMemberAccessToken();
+		Long courseId = 17L;
+
+
+		//when
+		courseService.scrapCourse(courseId, accessToken);
+
+		//then
+		Course course = courseRepository.findById(courseId).get();
+		assertThat(course.getSavedCount()).isEqualTo(1);
+		assertThat(member.getSaveCourses().size()).isEqualTo(1);
+
+		courseService.scrapCourse(courseId, accessToken);
+		assertThat(course.getSavedCount()).isEqualTo(0);
+		assertThat(member.getSaveCourses().size()).isEqualTo(0);
+	}
+
 
 
 }

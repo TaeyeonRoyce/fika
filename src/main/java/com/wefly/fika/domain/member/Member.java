@@ -1,7 +1,10 @@
 package com.wefly.fika.domain.member;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -41,7 +44,7 @@ public class Member extends BaseTimeEntity {
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private List<MemberSaveSpot> saveSpots = new ArrayList<>();
 
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "member")
 	private List<MemberSaveCourse> saveCourses = new ArrayList<>();
 
 	@Builder
@@ -54,5 +57,9 @@ public class Member extends BaseTimeEntity {
 
 	public void updateMemberAccessToken(String memberAccessToken) {
 		this.memberAccessToken = memberAccessToken;
+	}
+
+	public void deleteSaveCourse(MemberSaveCourse course) {
+		saveCourses.remove(course);
 	}
 }

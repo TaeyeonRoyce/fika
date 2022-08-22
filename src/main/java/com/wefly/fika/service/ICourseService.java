@@ -23,4 +23,6 @@ public interface ICourseService {
 	List<Course> filterBySpotCount(List<Course> courseList, int spotCount);
 
 	Course getCourseInfo(Long courseId) throws NoSuchDataFound;
+
+	boolean scrapCourse(Long courseId, String accessToken) throws NoSuchDataFound;
 }

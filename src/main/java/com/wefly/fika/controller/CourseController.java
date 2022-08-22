@@ -117,4 +117,29 @@ public class CourseController {
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
 		}
 	}
+
+	@PostMapping("/scrap/{courseId}")
+	public ResponseEntity<ApiResponse> scrapCourse(
+		@RequestHeader("Access-Token") String accessToken,
+		@PathVariable String courseId
+	) {
+		if (accessToken == null) {
+			return new ApiResponse<>(ACCESS_TOKEN_NULL).toResponseEntity();
+		}
+
+		try {
+			boolean isScrapAdded = courseService.scrapCourse(Long.parseLong(courseId), accessToken);
+
+			if (isScrapAdded) {
+				return new ApiResponse<>(COURSE_SCRAPPED).toResponseEntity();
+			}
+
+			return new ApiResponse<>(COURSE_CANCEL_SCRAPPED).toResponseEntity();
+		} catch (NoSuchDataFound e) {
+			return new ApiResponse<>(NO_SUCH_DATA_FOUND).toResponseEntity();
+		} catch (NumberFormatException e) {
+			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
+		}
+	}
+
 }
