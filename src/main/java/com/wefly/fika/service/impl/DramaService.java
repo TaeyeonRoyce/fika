@@ -21,6 +21,7 @@ import com.wefly.fika.repository.DramaActorRepository;
 import com.wefly.fika.repository.DramaMemberLikeRepository;
 import com.wefly.fika.repository.DramaRepository;
 import com.wefly.fika.service.IDramaService;
+import com.wefly.fika.service.ISpotDataService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class DramaService implements IDramaService {
 
 	private final JwtService jwtService;
-	private final SpotDataService spotDataService;
+	private final ISpotDataService spotDataService;
 	private final DramaRepository dramaRepository;
 	private final DramaActorRepository dramaActorRepository;
 	private final DramaMemberLikeRepository dramaMemberLikeRepository;
@@ -106,5 +107,11 @@ public class DramaService implements IDramaService {
 		dramaMemberLike.toggleLikeInfo();
 
 		return dramaMemberLike;
+	}
+
+	@Override
+	public Drama getDramaInfo(Long dramaId) throws NoSuchDataFound {
+		return dramaRepository.findById(dramaId)
+			.orElseThrow(NoSuchDataFound::new);
 	}
 }

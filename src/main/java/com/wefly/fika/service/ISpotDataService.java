@@ -10,4 +10,6 @@ public interface ISpotDataService {
 	List<SpotData> findSpotsByDramaName(String dramaName);
 
 	List<SpotData> getSpotsBySaved();
+
+	List<SpotData> findSpotsByDramaId(Long dramaId);
 }

@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -18,10 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wefly.fika.config.response.ApiResponse;
+import com.wefly.fika.domain.course.Course;
+import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaMemberLike;
 import com.wefly.fika.dto.drama.DramaPreviewResponse;
 import com.wefly.fika.dto.drama.DramaSaveDto;
+import com.wefly.fika.dto.drama.response.DramaInfoResponse;
 import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.service.IDramaService;
 
@@ -97,4 +101,40 @@ public class DramaController {
 	}
 
 
+	@GetMapping("/{dramaId}")
+	public ResponseEntity<ApiResponse> getDramaInfo(
+		@PathVariable String dramaId) {
+
+		if (dramaId == null) {
+			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
+		}
+
+		try {
+			Drama drama = dramaService.getDramaInfo(Long.parseLong(dramaId));
+
+			DramaInfoResponse response = DramaInfoResponse.builder()
+				.dramaTitle(drama.getTitle())
+				.genre(drama.getGenre())
+				.thumbnailUrl(drama.getThumbnailUrl())
+				.spotDataList(drama.getSpotDataList()
+					.stream()
+					.map(SpotData::toSpotPreviewResponse)
+					.collect(Collectors.toList())
+				)
+				.courseList(drama.getCourseList()
+					.stream()
+					.map(Course::toCourseResponse)
+					.collect(Collectors.toList())
+				)
+				.build();
+
+			return new ApiResponse<>(response).toResponseEntity();
+
+		} catch (NoSuchDataFound e) {
+			return new ApiResponse<>(NO_SUCH_DATA_FOUND).toResponseEntity();
+		} catch (NumberFormatException e) {
+			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
+		}
+
+	}
 }

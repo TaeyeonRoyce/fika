@@ -3,6 +3,7 @@ package com.wefly.fika.service.impl;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,5 +56,29 @@ class SpotDataServiceTest {
 		assertThat(spotsBySaved.get(1).getSavedCount()).isEqualTo(middleSavedCount);
 		assertThat(spotsBySaved.get(2).getSavedCount()).isEqualTo(smallerSavedCount);
 	}
+
+	@Test
+	public void compQueryAndStream() {
+	    //query
+		long a = System.currentTimeMillis();
+		String findTheme = "이태원 클라쓰";
+		List<SpotData> allByThemeNameA = spotDataRepository.findAllByThemeName(findTheme);
+		assertThat(allByThemeNameA.size()).isEqualTo(15);
+		System.out.println("-------------------------------");
+		System.out.println(System.currentTimeMillis() - a);
+		System.out.println("-------------------------------");
+
+
+
+		long b = System.currentTimeMillis();
+		List<SpotData> allByThemeNameB = spotDataRepository.findAll().stream()
+			.filter(o -> o.getThemeName().equals(findTheme))
+			.collect(Collectors.toList());
+		assertThat(allByThemeNameB.size()).isEqualTo(15);
+		System.out.println("-------------------------------");
+		System.out.println(System.currentTimeMillis() - b);
+		System.out.println("-------------------------------");
+	}
+
 
 }

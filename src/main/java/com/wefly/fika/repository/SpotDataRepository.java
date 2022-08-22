@@ -11,4 +11,6 @@ public interface SpotDataRepository extends JpaRepository<SpotData, Long> {
 
 	List<SpotData> findTop5ByOrderBySavedCountDesc();
 
+	List<SpotData> findByDramaId(Long dramaId);
+
 }

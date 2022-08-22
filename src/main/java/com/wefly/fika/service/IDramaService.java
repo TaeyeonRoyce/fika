@@ -23,4 +23,6 @@ public interface IDramaService {
 
 	DramaMemberLike toggleDramaLike(String accessToken, Long dramaId) throws NoSuchDataFound;
 
+	Drama getDramaInfo(Long dramaId) throws NoSuchDataFound;
+
 }

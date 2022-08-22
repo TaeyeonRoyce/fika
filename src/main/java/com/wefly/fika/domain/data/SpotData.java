@@ -71,6 +71,8 @@ public class SpotData {
 			.spotTitle(this.title)
 			.spotSavedCount(this.savedCount)
 			.isLocage(this.isLocage)
+			.mapX(longitude)
+			.mapY(latitude)
 			.build();
 	}
 

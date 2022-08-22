@@ -59,6 +59,8 @@ public class Course extends BaseTimeEntity {
 		this.baseAddress = baseAddress;
 		this.courseSpotNumber = courseSpotNumber;
 		this.savedCount = savedCount;
+
+		drama.getCourseList().add(this);
 	}
 
 	public void update() {

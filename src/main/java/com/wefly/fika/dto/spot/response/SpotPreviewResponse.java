@@ -15,10 +15,12 @@ public class SpotPreviewResponse {
 	private String spotTitle;
 	private int spotSavedCount;
 	private boolean isLocage;
+	private double mapX;
+	private double mapY;
 
 	@Builder
 	public SpotPreviewResponse(Long spotId, String spotImageUrl, String shortAddress, String type, String spotTitle,
-		int spotSavedCount, boolean isLocage) {
+		int spotSavedCount, boolean isLocage, double mapX, double mapY) {
 		this.spotId = spotId;
 		this.spotImageUrl = spotImageUrl;
 		this.shortAddress = shortAddress;
@@ -26,5 +28,7 @@ public class SpotPreviewResponse {
 		this.spotTitle = spotTitle;
 		this.spotSavedCount = spotSavedCount;
 		this.isLocage = isLocage;
+		this.mapX = mapX;
+		this.mapY = mapY;
 	}
 }

@@ -28,4 +28,9 @@ public class SpotDataService implements ISpotDataService {
 		return spotDataRepository.findTop5ByOrderBySavedCountDesc();
 	}
 
+	@Override
+	public List<SpotData> findSpotsByDramaId(Long dramaId) {
+		return spotDataRepository.findByDramaId(dramaId);
+	}
+
 }

@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 
 import com.wefly.fika.domain.base.BaseTimeEntity;
 import com.wefly.fika.domain.character.Characters;
+import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.scene.Scene;
 import com.wefly.fika.dto.drama.DramaPreviewResponse;
@@ -44,6 +45,9 @@ public class Drama extends BaseTimeEntity {
 
 	@OneToMany(mappedBy = "drama", cascade = CascadeType.ALL)
 	private List<SpotData> spotDataList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "drama", cascade = CascadeType.ALL)
+	private List<Course> courseList = new ArrayList<>();
 
 	@Builder
 	public Drama(String title, String thumbnailUrl, String genre) {
