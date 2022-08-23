@@ -63,12 +63,14 @@ public class MemberService implements IMemberService {
 	}
 
 	@Override
-	public String loginByPassword(MemberLoginDto requestDto) throws Exception {
+	public Member loginByPassword(MemberLoginDto requestDto) throws Exception {
 		Member member = memberRepository.findByMemberEmail(requestDto.getEmail())
 			.orElseThrow(Exception::new);
 
 		if (encoder.matches(requestDto.getPassword(), member.getMemberPassword())) {
-			return jwtService.createMemberAccessToken(member.getId(), member.getMemberEmail());
+			String newAccessToken = jwtService.createMemberAccessToken(member.getId(), member.getMemberEmail());
+			member.updateMemberAccessToken(newAccessToken);
+			return member;
 		} else {
 			throw new Exception();
 		}

@@ -15,5 +15,5 @@ public interface IMemberService {
 
 	Member joinMember(MemberSignUpDto saveDto);
 
-	String loginByPassword(MemberLoginDto requestDto) throws Exception;
+	Member loginByPassword(MemberLoginDto requestDto) throws Exception;
 }
