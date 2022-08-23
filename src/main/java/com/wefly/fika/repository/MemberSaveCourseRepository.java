@@ -1,5 +1,6 @@
 package com.wefly.fika.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,6 @@ public interface MemberSaveCourseRepository extends JpaRepository<MemberSaveCour
 	Optional<MemberSaveCourse> findByMemberIdAndCourseId(Long memberId, Long courseId);
 
 	boolean existsByMemberIdAndCourseId(Long memberId, Long courseId);
+
+	List<MemberSaveCourse> findByMemberId(Long memberId);
 }

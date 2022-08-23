@@ -15,4 +15,6 @@ public interface ISpotDataService {
 	List<SpotData> findSpotsByDramaId(Long dramaId);
 
 	boolean scrapSpot(Long spotId, String accessToken) throws NoSuchElementException;
+
+	List<SpotPreviewResponse> checkScrapped(List<SpotPreviewResponse> previewResponseList, String accessToken);
 }

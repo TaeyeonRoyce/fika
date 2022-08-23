@@ -1,6 +1,7 @@
 package com.wefly.fika.service.impl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
@@ -15,8 +16,10 @@ import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaActor;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.domain.member.MemberSaveCourse;
+import com.wefly.fika.domain.member.MemberSaveSpot;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
+import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.jwt.JwtService;
 import com.wefly.fika.repository.CourseRepository;
@@ -138,5 +141,20 @@ public class CourseService implements ICourseService {
 
 			return false;
 		}
+	}
+
+	@Override
+	public List<CoursePreviewResponse> checkScrapped(List<CoursePreviewResponse> previewResponseList,
+		String accessToken) {
+		Long memberId = jwtService.getMemberId(accessToken);
+		Map<Long, MemberSaveCourse> memberSaveCourseMap = memberSaveCourseRepository.findByMemberId(memberId)
+			.stream()
+			.collect(Collectors.toMap(o -> o.getCourse().getId(), saveCourse -> saveCourse));
+
+		for (CoursePreviewResponse coursePreviewResponse : previewResponseList) {
+			coursePreviewResponse.setScrapped(memberSaveCourseMap.containsKey(coursePreviewResponse.getCourseId()));
+		}
+
+		return previewResponseList;
 	}
 }

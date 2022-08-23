@@ -17,10 +17,11 @@ public class SpotPreviewResponse {
 	private boolean isLocage;
 	private double mapX;
 	private double mapY;
+	private boolean scrapped;
 
 	@Builder
 	public SpotPreviewResponse(Long spotId, String spotImageUrl, String shortAddress, String type, String spotTitle,
-		int spotSavedCount, boolean isLocage, double mapX, double mapY) {
+		int spotSavedCount, boolean isLocage, double mapX, double mapY, boolean scrapped) {
 		this.spotId = spotId;
 		this.spotImageUrl = spotImageUrl;
 		this.shortAddress = shortAddress;
@@ -30,5 +31,9 @@ public class SpotPreviewResponse {
 		this.isLocage = isLocage;
 		this.mapX = mapX;
 		this.mapY = mapY;
+	}
+
+	public void setScrapped(boolean isScrapped) {
+		this.scrapped = isScrapped;
 	}
 }

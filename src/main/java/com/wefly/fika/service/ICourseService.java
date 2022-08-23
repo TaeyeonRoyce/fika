@@ -7,6 +7,7 @@ import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
+import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 import com.wefly.fika.exception.NoSuchDataFound;
 
 public interface ICourseService {
@@ -26,4 +27,6 @@ public interface ICourseService {
 	Course getCourseInfo(Long courseId) throws NoSuchDataFound;
 
 	boolean scrapCourse(Long courseId, String accessToken) throws NoSuchElementException;
+
+	List<CoursePreviewResponse> checkScrapped(List<CoursePreviewResponse> previewResponseList, String accessToken);
 }

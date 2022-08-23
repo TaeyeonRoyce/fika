@@ -59,6 +59,9 @@ public class IndexController {
 			.map(SpotData::toSpotPreviewResponse)
 			.collect(Collectors.toList());
 
+		spotDataService.checkScrapped(spotsBySaved, accessToken);
+		courseService.checkScrapped(coursesSortBySaved, accessToken);
+
 		log.debug("[CHANGE TO RESPONSE]");
 		MainPageResponse response = MainPageResponse.builder()
 			.myCourseList(myCourses)

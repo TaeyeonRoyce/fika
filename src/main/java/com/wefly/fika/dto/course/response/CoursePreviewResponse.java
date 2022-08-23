@@ -19,6 +19,8 @@ public class CoursePreviewResponse {
 	private List<String> spotTitleList;
 	private int courseSavedCount;
 
+	private boolean isScrapped;
+
 	@Builder
 
 	public CoursePreviewResponse(Long courseId, String locageImageUrl, String courseTitle, String dramaTitle,
@@ -30,5 +32,9 @@ public class CoursePreviewResponse {
 		this.baseAddress = baseAddress;
 		this.spotTitleList = spotTitleList;
 		this.courseSavedCount = courseSavedCount;
+	}
+
+	public void setScrapped(boolean isScrapped) {
+		this.isScrapped = isScrapped;
 	}
 }

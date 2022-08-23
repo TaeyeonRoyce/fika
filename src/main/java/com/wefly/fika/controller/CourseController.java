@@ -31,6 +31,7 @@ import com.wefly.fika.dto.drama.response.DramaInfoResponse;
 import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.service.ICourseService;
 import com.wefly.fika.service.ICourseSpotService;
+import com.wefly.fika.service.ISpotDataService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,7 @@ public class CourseController {
 
 	private final ICourseService courseService;
 	private final ICourseSpotService courseSpotService;
+	private final ISpotDataService spotDataService;
 
 	@PostMapping
 	public ResponseEntity<ApiResponse> saveCourse(
@@ -62,6 +64,7 @@ public class CourseController {
 
 	@GetMapping("/all")
 	public ResponseEntity<ApiResponse> getAllCourses(
+		@RequestHeader(value = "Access-Token", required = false) String accessToken,
 		@RequestParam(required = false) String dramaId,
 		@RequestParam(required = false) String actorId,
 		@RequestParam(required = false) String spots
@@ -88,11 +91,16 @@ public class CourseController {
 			.map(Course::toCourseResponse)
 			.collect(Collectors.toList());
 
+		if (accessToken != null) {
+			courseService.checkScrapped(response, accessToken);
+		}
+
 		return new ApiResponse<>(response).toResponseEntity();
 	}
 
 	@GetMapping("/{courseId}")
 	public ResponseEntity<ApiResponse> getCourseInfo(
+		@RequestHeader(value = "Access-Token", required = false) String accessToken,
 		@PathVariable String courseId
 	) {
 		if (courseId == null) {
@@ -101,6 +109,7 @@ public class CourseController {
 
 		try {
 			Course course = courseService.getCourseInfo(Long.parseLong(courseId));
+
 			CourseInfoResponse response = CourseInfoResponse.builder()
 				.courseId(course.getId())
 				.courseTitle(course.getCourseTitle())
@@ -109,6 +118,10 @@ public class CourseController {
 				.spotList(course.getSortedSpotList())
 				.courseSavedCount(course.getSavedCount())
 				.build();
+
+			if (accessToken != null) {
+				spotDataService.checkScrapped(response.getSpotList(), accessToken);
+			}
 
 			return new ApiResponse<>(response).toResponseEntity();
 
