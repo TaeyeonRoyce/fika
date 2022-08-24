@@ -10,4 +10,6 @@ public interface ICourseSpotService {
 	int addSpotsToCourse(Course course, CourseSaveDto saveDto);
 
 	int addSpotsToCourse(Course course, List<Long> spotList);
+
+	int updateCourseSpots(Course course, List<Long> spotList);
 }

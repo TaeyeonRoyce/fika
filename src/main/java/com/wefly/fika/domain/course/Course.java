@@ -101,4 +101,12 @@ public class Course extends BaseTimeEntity {
 	public void cancelSavedCount() {
 		this.savedCount -= 1;
 	}
+
+	public void initSpotData() {
+		this.spotList = new ArrayList<>();
+	}
+
+	public void updateCourseTitle(String courseTitle) {
+		this.courseTitle = courseTitle;
+	}
 }

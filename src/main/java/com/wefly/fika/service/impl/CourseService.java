@@ -19,7 +19,9 @@ import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaActor;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.domain.member.MemberSaveCourse;
+import com.wefly.fika.dto.course.CourseEditDto;
 import com.wefly.fika.dto.course.CourseSaveDto;
+import com.wefly.fika.dto.course.response.CourseInfoResponse;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 import com.wefly.fika.jwt.JwtService;
@@ -174,9 +176,35 @@ public class CourseService implements ICourseService {
 
 		List<SpotData> spotData = spotDataRepository.findAllById(spotIdList);
 		courseSpotService.addSpotsToCourse(course, spotIdList);
+		courseRepository.save(course);
 
 		return spotData.stream()
 			.map(SpotData::toSpotPreviewResponse)
 			.collect(Collectors.toList());
+	}
+
+	@Override
+	public CourseInfoResponse editCourse(String accessToken, Long courseId, CourseEditDto editDto) throws
+		CustomException {
+		Long memberId = jwtService.getMemberId(accessToken);
+		Course course = courseRepository.findById(courseId).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+
+		if (!course.getCreatMember().getId().equals(memberId)) {
+			throw new CustomException(NO_AUTHENTICATION);
+		}
+		courseSpotService.updateCourseSpots(course, editDto.getSpotIdList());
+		course.updateCourseTitle(editDto.getCourseTitle());
+		courseRepository.save(course);
+
+		return CourseInfoResponse.builder()
+			.courseId(course.getId())
+			.courseTitle(course.getCourseTitle())
+			.dramaTitle(course.getDrama().getTitle())
+			.dramaId(course.getDrama().getId())
+			.spotList(course.getSortedSpotList())
+			.courseSavedCount(course.getSavedCount())
+			.build();
 	}
 }

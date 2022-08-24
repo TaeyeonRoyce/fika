@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.course.Course;
+import com.wefly.fika.dto.course.CourseEditDto;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CourseInfoResponse;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
@@ -165,6 +166,23 @@ public class CourseController {
 		try {
 			List<SpotPreviewResponse> response = courseService.addSpotsToCourse(accessToken,
 				Long.parseLong(courseId), patchDto.getSpotIdList());
+			return new ApiResponse<>(response).toResponseEntity();
+		} catch (NumberFormatException e) {
+			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
+		} catch (CustomException e) {
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
+		}
+	}
+
+	@PatchMapping("/edit/{courseId}")
+	public ResponseEntity<ApiResponse> editCourse(
+		@RequestHeader(value = "Access-Token") String accessToken,
+		@PathVariable String courseId,
+		@RequestBody CourseEditDto editDto
+	) {
+		try {
+			CourseInfoResponse response = courseService.editCourse(accessToken,
+				Long.parseLong(courseId), editDto);
 			return new ApiResponse<>(response).toResponseEntity();
 		} catch (NumberFormatException e) {
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
