@@ -28,6 +28,7 @@ public enum ApiResponseStatus {
 	NOT_VALID_FORMAT(false, 4026, "요청 형식이 잘 못 되었습니다", HttpStatus.BAD_REQUEST),
 
 
+	NO_AUTHENTICATION(false, 4100, "해당 코스의 수정 권한이 없습니다", HttpStatus.UNAUTHORIZED),
 	NO_SUCH_DATA_FOUND(false, 5000, "해당 값에 존재하는 데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR);
 
 	private final boolean isSuccess;

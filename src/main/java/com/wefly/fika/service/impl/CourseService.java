@@ -1,5 +1,7 @@
 package com.wefly.fika.service.impl;
 
+import static com.wefly.fika.config.response.ApiResponseStatus.*;
+
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -10,6 +12,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wefly.fika.config.response.ApiException;
+import com.wefly.fika.config.response.ApiResponseStatus;
 import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.drama.Drama;
@@ -28,6 +32,7 @@ import com.wefly.fika.repository.MemberRepository;
 import com.wefly.fika.repository.MemberSaveCourseRepository;
 import com.wefly.fika.repository.SpotDataRepository;
 import com.wefly.fika.service.ICourseService;
+import com.wefly.fika.service.ICourseSpotService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,6 +43,7 @@ public class CourseService implements ICourseService {
 
 	private final CourseRepository courseRepository;
 	private final JwtService jwtService;
+	private final ICourseSpotService courseSpotService;
 	private final MemberRepository memberRepository;
 
 	private final SpotDataRepository spotDataRepository;
@@ -156,5 +162,23 @@ public class CourseService implements ICourseService {
 		}
 
 		return previewResponseList;
+	}
+
+	@Override
+	public List<SpotPreviewResponse> addSpotsToCourse(String accessToken, Long courseId, List<Long> spotIdList) throws
+		NoSuchDataFound,
+		ApiException {
+		Long memberId = jwtService.getMemberId(accessToken);
+		Course course = courseRepository.findById(courseId).orElseThrow(NoSuchDataFound::new);
+		if (!course.getCreatMember().getId().equals(memberId)) {
+			throw new ApiException(NO_AUTHENTICATION);
+		}
+
+		List<SpotData> spotData = spotDataRepository.findAllById(spotIdList);
+		courseSpotService.addSpotsToCourse(course, spotIdList);
+
+		return spotData.stream()
+			.map(SpotData::toSpotPreviewResponse)
+			.collect(Collectors.toList());
 	}
 }

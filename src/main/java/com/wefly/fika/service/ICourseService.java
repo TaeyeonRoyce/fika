@@ -3,6 +3,7 @@ package com.wefly.fika.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.wefly.fika.config.response.ApiException;
 import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.dto.course.CourseSaveDto;
@@ -29,4 +30,6 @@ public interface ICourseService {
 	boolean scrapCourse(Long courseId, String accessToken) throws NoSuchElementException;
 
 	List<CoursePreviewResponse> checkScrapped(List<CoursePreviewResponse> previewResponseList, String accessToken);
+
+	List<SpotPreviewResponse> addSpotsToCourse(String accessToken, Long courseId, List<Long> spotIdList) throws NoSuchDataFound, ApiException;
 }

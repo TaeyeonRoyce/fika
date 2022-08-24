@@ -52,4 +52,25 @@ public class CourseSpotService implements ICourseSpotService {
 
 		return saveList.size();
 	}
+
+	public int addSpotsToCourse(Course course, List<Long> spotList) {
+		List<SpotData> spotData = spotDataRepository.findAllById(spotList);
+		List<CourseSpot> saveList = new ArrayList<>();
+
+		int index = course.getSpotList().size() + 1;
+		for (SpotData spotDatum : spotData) {
+			saveList.add(
+				CourseSpot.builder()
+					.course(course)
+					.spotData(spotDatum)
+					.orderIndex(index++)
+					.build()
+			);
+		}
+
+		courseSpotRepository.saveAll(saveList);
+		course.update();
+
+		return saveList.size();
+	}
 }

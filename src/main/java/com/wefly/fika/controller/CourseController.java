@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wefly.fika.config.response.ApiException;
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.data.SpotData;
@@ -28,6 +30,8 @@ import com.wefly.fika.dto.course.response.CourseInfoResponse;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 import com.wefly.fika.dto.drama.DramaPreviewResponse;
 import com.wefly.fika.dto.drama.response.DramaInfoResponse;
+import com.wefly.fika.dto.spot.SpotIdListDto;
+import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.service.ICourseService;
 import com.wefly.fika.service.ICourseSpotService;
@@ -153,6 +157,26 @@ public class CourseController {
 			return new ApiResponse<>(NO_SUCH_DATA_FOUND).toResponseEntity();
 		} catch (NumberFormatException e) {
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
+		}
+	}
+
+	@PatchMapping("/{courseId}")
+	public ResponseEntity<ApiResponse> addSpotsToCourse(
+		@RequestHeader(value = "Access-Token") String accessToken,
+		@PathVariable String courseId,
+		@RequestBody SpotIdListDto patchDto
+	) {
+		try {
+			List<SpotPreviewResponse> response = courseService.addSpotsToCourse(accessToken,
+				Long.parseLong(courseId), patchDto.getSpotIdList());
+			return new ApiResponse<>(response).toResponseEntity();
+
+		} catch (NoSuchDataFound e) {
+			return new ApiResponse<>(NO_SUCH_DATA_FOUND).toResponseEntity();
+		} catch (NumberFormatException e) {
+			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
+		} catch (ApiException e) {
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
 	}
 
