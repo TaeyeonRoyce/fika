@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wefly.fika.config.response.ApiResponse;
+import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.scene.Scene;
 import com.wefly.fika.dto.scene.SceneSaveDto;
 import com.wefly.fika.dto.scene.SceneSaveResponse;
-import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.service.ISceneService;
 
 import lombok.RequiredArgsConstructor;
@@ -45,8 +45,8 @@ public class SceneController {
 
 			return new ApiResponse<>(response).toResponseEntity();
 
-		} catch (NoSuchDataFound e) {
-			return new ApiResponse<>(NO_SUCH_DATA_FOUND).toResponseEntity();
+		} catch (CustomException e) {
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
 
 	}

@@ -1,5 +1,7 @@
 package com.wefly.fika.service.impl;
 
+import static com.wefly.fika.config.response.ApiResponseStatus.*;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -7,15 +9,14 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.actor.Actor;
 import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaActor;
 import com.wefly.fika.domain.drama.DramaMemberLike;
 import com.wefly.fika.domain.member.Member;
-import com.wefly.fika.dto.drama.DramaPreviewResponse;
 import com.wefly.fika.dto.drama.DramaSaveDto;
-import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.jwt.JwtService;
 import com.wefly.fika.repository.DramaActorRepository;
 import com.wefly.fika.repository.DramaMemberLikeRepository;
@@ -50,9 +51,9 @@ public class DramaService implements IDramaService {
 	}
 
 	@Override
-	public Drama getDramaByTitle(String dramaTitle) throws NoSuchDataFound {
+	public Drama getDramaByTitle(String dramaTitle) throws CustomException {
 		return dramaRepository.findDramaByTitle(dramaTitle)
-			.orElseThrow(NoSuchDataFound::new);
+			.orElseThrow(() -> new CustomException(NO_SUCH_DATA_FOUND));
 	}
 
 	public void mapDramaActor(Drama drama, Actor actor) {
@@ -89,10 +90,10 @@ public class DramaService implements IDramaService {
 	}
 
 	@Override
-	public DramaMemberLike toggleDramaLike(String accessToken, Long dramaId) throws NoSuchDataFound {
+	public DramaMemberLike toggleDramaLike(String accessToken, Long dramaId) throws CustomException {
 		Member member = jwtService.getMember(accessToken);
 		Drama drama = dramaRepository.findById(dramaId)
-			.orElseThrow(NoSuchDataFound::new);
+			.orElseThrow(() -> new CustomException(NO_SUCH_DATA_FOUND));
 
 		DramaMemberLike dramaMemberLike = dramaMemberLikeRepository
 			.findByDrama_IdAndMember_Id(dramaId, member.getId())
@@ -110,8 +111,8 @@ public class DramaService implements IDramaService {
 	}
 
 	@Override
-	public Drama getDramaInfo(Long dramaId) throws NoSuchDataFound {
+	public Drama getDramaInfo(Long dramaId) throws CustomException {
 		return dramaRepository.findById(dramaId)
-			.orElseThrow(NoSuchDataFound::new);
+			.orElseThrow(() -> new CustomException(NO_SUCH_DATA_FOUND));
 	}
 }

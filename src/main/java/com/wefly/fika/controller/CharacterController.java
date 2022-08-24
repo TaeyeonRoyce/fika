@@ -12,14 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wefly.fika.config.response.ApiResponse;
+import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.character.Characters;
 import com.wefly.fika.dto.character.CharacterSaveDto;
 import com.wefly.fika.dto.character.CharacterSaveResponse;
-import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.service.ICharacterService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -45,7 +47,7 @@ public class CharacterController {
 				character.getCharacterName()
 			);
 			return new ApiResponse<>(response).toResponseEntity();
-		} catch (NoSuchDataFound e) {
+		} catch (CustomException e) {
 			return new ApiResponse<>(NO_SUCH_DATA_FOUND).toResponseEntity();
 		}
 	}

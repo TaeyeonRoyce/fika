@@ -1,8 +1,12 @@
 package com.wefly.fika.service.impl;
 
+import static com.wefly.fika.config.response.ApiResponseStatus.*;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wefly.fika.config.response.ApiResponseStatus;
+import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.actor.Actor;
 import com.wefly.fika.domain.character.Characters;
 import com.wefly.fika.domain.drama.Drama;
@@ -25,7 +29,7 @@ public class CharacterService implements ICharacterService {
 	private final IDramaService dramaService;
 
 	@Override
-	public Characters saveCharacter(CharacterSaveDto saveDto) throws NoSuchDataFound {
+	public Characters saveCharacter(CharacterSaveDto saveDto) throws CustomException {
 		Actor actor = actorService.getActorByName(saveDto.getActorName());
 		Drama drama = dramaService.getDramaByTitle(saveDto.getDramaName());
 
@@ -36,8 +40,8 @@ public class CharacterService implements ICharacterService {
 	}
 
 	@Override
-	public Characters getCharacterByName(String name) throws NoSuchDataFound {
+	public Characters getCharacterByName(String name) throws CustomException {
 		return characterRepository.findCharactersByCharacterName(name)
-			.orElseThrow(NoSuchDataFound::new);
+			.orElseThrow(() -> new CustomException(NO_SUCH_DATA_FOUND));
 	}
 }

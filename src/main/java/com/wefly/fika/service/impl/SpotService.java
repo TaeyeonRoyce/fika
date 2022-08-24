@@ -1,8 +1,12 @@
 package com.wefly.fika.service.impl;
 
+import static com.wefly.fika.config.response.ApiResponseStatus.*;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wefly.fika.config.response.ApiResponseStatus;
+import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.spot.Spot;
 import com.wefly.fika.dto.spot.SpotSaveDto;
 import com.wefly.fika.exception.NoSuchDataFound;
@@ -25,8 +29,8 @@ public class SpotService implements ISpotService {
 	}
 
 	@Override
-	public Spot getSpotById(Long spotId) throws NoSuchDataFound {
+	public Spot getSpotById(Long spotId) throws CustomException {
 		return spotRepository.findById(spotId)
-			.orElseThrow(NoSuchDataFound::new);
+			.orElseThrow(() -> new CustomException(NO_SUCH_DATA_FOUND));
 	}
 }

@@ -1,10 +1,14 @@
 package com.wefly.fika.service.impl;
 
+import static com.wefly.fika.config.response.ApiResponseStatus.*;
+
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wefly.fika.config.response.ApiResponseStatus;
+import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.actor.Actor;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaActor;
@@ -45,8 +49,8 @@ public class ActorService implements IActorService {
 	}
 
 	@Override
-	public Actor getActorByName(String name) throws NoSuchDataFound {
+	public Actor getActorByName(String name) throws CustomException {
 		return actorRepository.findActorByActorName(name)
-			.orElseThrow(NoSuchDataFound::new);
+			.orElseThrow(() -> new CustomException(NO_SUCH_DATA_FOUND));
 	}
 }

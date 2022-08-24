@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wefly.fika.config.response.ApiResponse;
+import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.drama.Drama;
@@ -26,7 +27,6 @@ import com.wefly.fika.domain.drama.DramaMemberLike;
 import com.wefly.fika.dto.drama.DramaPreviewResponse;
 import com.wefly.fika.dto.drama.DramaSaveDto;
 import com.wefly.fika.dto.drama.response.DramaInfoResponse;
-import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.service.IDramaService;
 
 import lombok.RequiredArgsConstructor;
@@ -70,9 +70,8 @@ public class DramaController {
 			}
 
 			return new ApiResponse<>("좋아요가 취소 되었습니다.").toResponseEntity();
-
-		} catch (NoSuchDataFound e) {
-			return new ApiResponse<>(NO_SUCH_DATA_FOUND).toResponseEntity();
+		} catch (CustomException e) {
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
 	}
 
@@ -129,11 +128,10 @@ public class DramaController {
 				.build();
 
 			return new ApiResponse<>(response).toResponseEntity();
-
-		} catch (NoSuchDataFound e) {
-			return new ApiResponse<>(NO_SUCH_DATA_FOUND).toResponseEntity();
 		} catch (NumberFormatException e) {
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
+		} catch (CustomException e) {
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
 
 	}

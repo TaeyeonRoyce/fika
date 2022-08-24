@@ -20,25 +20,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wefly.fika.config.response.ApiException;
 import com.wefly.fika.config.response.ApiResponse;
+import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.course.Course;
-import com.wefly.fika.domain.data.SpotData;
-import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CourseInfoResponse;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
-import com.wefly.fika.dto.drama.DramaPreviewResponse;
-import com.wefly.fika.dto.drama.response.DramaInfoResponse;
 import com.wefly.fika.dto.spot.SpotIdListDto;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
-import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.service.ICourseService;
 import com.wefly.fika.service.ICourseSpotService;
 import com.wefly.fika.service.ISpotDataService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -128,11 +125,10 @@ public class CourseController {
 			}
 
 			return new ApiResponse<>(response).toResponseEntity();
-
-		} catch (NoSuchDataFound e) {
-			return new ApiResponse<>(NO_SUCH_DATA_FOUND).toResponseEntity();
 		} catch (NumberFormatException e) {
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
+		} catch (CustomException e) {
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
 	}
 
@@ -170,12 +166,9 @@ public class CourseController {
 			List<SpotPreviewResponse> response = courseService.addSpotsToCourse(accessToken,
 				Long.parseLong(courseId), patchDto.getSpotIdList());
 			return new ApiResponse<>(response).toResponseEntity();
-
-		} catch (NoSuchDataFound e) {
-			return new ApiResponse<>(NO_SUCH_DATA_FOUND).toResponseEntity();
 		} catch (NumberFormatException e) {
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
-		} catch (ApiException e) {
+		} catch (CustomException e) {
 			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
 	}

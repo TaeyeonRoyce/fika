@@ -3,6 +3,7 @@ package com.wefly.fika.service.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.character.Characters;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.scene.Scene;
@@ -32,7 +33,7 @@ public class SceneService implements ISceneService {
 	private final ICharacterService characterService;
 
 	@Override
-	public Scene saveScene(SceneSaveDto saveDto) throws NoSuchDataFound {
+	public Scene saveScene(SceneSaveDto saveDto) throws CustomException {
 		Drama drama = dramaService.getDramaByTitle(saveDto.getDramaTitle());
 		Spot spot = spotService.getSpotById(saveDto.getSpotId());
 

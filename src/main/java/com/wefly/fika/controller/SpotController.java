@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.domain.spot.Spot;
 import com.wefly.fika.dto.spot.SpotSaveDto;
-import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.service.ISpotDataService;
 import com.wefly.fika.service.ISpotService;
 

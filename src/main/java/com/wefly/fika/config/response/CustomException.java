@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ApiException extends Exception {
+public class CustomException extends Exception {
 	private ApiResponseStatus status;
 }

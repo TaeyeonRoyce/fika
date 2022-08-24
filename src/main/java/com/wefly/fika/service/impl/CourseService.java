@@ -12,19 +12,16 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wefly.fika.config.response.ApiException;
-import com.wefly.fika.config.response.ApiResponseStatus;
+import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaActor;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.domain.member.MemberSaveCourse;
-import com.wefly.fika.domain.member.MemberSaveSpot;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
-import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.jwt.JwtService;
 import com.wefly.fika.repository.CourseRepository;
 import com.wefly.fika.repository.DramaActorRepository;
@@ -115,9 +112,9 @@ public class CourseService implements ICourseService {
 	}
 
 	@Override
-	public Course getCourseInfo(Long courseId) throws NoSuchDataFound {
+	public Course getCourseInfo(Long courseId) throws CustomException {
 		return courseRepository.findById(courseId).orElseThrow(
-			NoSuchDataFound::new
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
 		);
 	}
 
@@ -166,12 +163,13 @@ public class CourseService implements ICourseService {
 
 	@Override
 	public List<SpotPreviewResponse> addSpotsToCourse(String accessToken, Long courseId, List<Long> spotIdList) throws
-		NoSuchDataFound,
-		ApiException {
+		CustomException {
 		Long memberId = jwtService.getMemberId(accessToken);
-		Course course = courseRepository.findById(courseId).orElseThrow(NoSuchDataFound::new);
+		Course course = courseRepository.findById(courseId).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
 		if (!course.getCreatMember().getId().equals(memberId)) {
-			throw new ApiException(NO_AUTHENTICATION);
+			throw new CustomException(NO_AUTHENTICATION);
 		}
 
 		List<SpotData> spotData = spotDataRepository.findAllById(spotIdList);

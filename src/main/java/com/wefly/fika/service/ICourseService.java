@@ -3,13 +3,11 @@ package com.wefly.fika.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import com.wefly.fika.config.response.ApiException;
+import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.course.Course;
-import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
-import com.wefly.fika.exception.NoSuchDataFound;
 
 public interface ICourseService {
 
@@ -25,11 +23,11 @@ public interface ICourseService {
 
 	List<Course> filterBySpotCount(List<Course> courseList, int spotCount);
 
-	Course getCourseInfo(Long courseId) throws NoSuchDataFound;
+	Course getCourseInfo(Long courseId) throws CustomException;
 
 	boolean scrapCourse(Long courseId, String accessToken) throws NoSuchElementException;
 
 	List<CoursePreviewResponse> checkScrapped(List<CoursePreviewResponse> previewResponseList, String accessToken);
 
-	List<SpotPreviewResponse> addSpotsToCourse(String accessToken, Long courseId, List<Long> spotIdList) throws NoSuchDataFound, ApiException;
+	List<SpotPreviewResponse> addSpotsToCourse(String accessToken, Long courseId, List<Long> spotIdList) throws CustomException;
 }
