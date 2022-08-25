@@ -56,5 +56,7 @@ public class Review extends BaseTimeEntity {
 		this.rate = rate;
 		this.reviewContents = reviewContents;
 		this.isImageReview = isImageReview;
+
+		spotData.getReviews().add(this);
 	}
 }

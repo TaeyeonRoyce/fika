@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wefly.fika.config.response.ApiResponse;
+import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.spot.Spot;
 import com.wefly.fika.dto.spot.SpotSaveDto;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
@@ -68,8 +69,8 @@ public class SpotController {
 			}
 
 			return new ApiResponse<>(SPOT_CANCEL_SCRAPPED).toResponseEntity();
-		} catch (NoSuchElementException e) {
-			return new ApiResponse<>(NO_SUCH_DATA_FOUND).toResponseEntity();
+		} catch (CustomException e) {
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		} catch (NumberFormatException e) {
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
 		}
@@ -84,5 +85,20 @@ public class SpotController {
 
 		return new ApiResponse<>(response).toResponseEntity();
 
+	}
+
+	@GetMapping("/detail/{spotId}")
+	public ResponseEntity<ApiResponse> getSpotDetail(
+		@RequestHeader(value = "Access-Token", required = false) String accessToken,
+		@PathVariable String spotId
+	) {
+		try {
+			spotDataService.getSpotDataDetail(Long.parseLong(spotId));
+			return new ApiResponse<>(SPOT_CANCEL_SCRAPPED).toResponseEntity();
+		} catch (CustomException e) {
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
+		} catch (NumberFormatException e) {
+			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
+		}
 	}
 }

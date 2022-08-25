@@ -200,22 +200,14 @@ public class CourseController {
 	) {
 		try {
 			Course course = courseService.getCourseInfo(Long.valueOf(courseId));
-			SpotData locage = course.getLocage();
 
 			if (accessToken != null) {
 				spotDataService.checkScrapped(course.getSortedSpotList(), accessToken);
 			}
 
 			CourseDetailResponse response = CourseDetailResponse.builder()
-				.courseId(course.getId())
-				.courseTitle(course.getCourseTitle())
-				.dramaTitle(course.getDrama().getTitle())
-				.dramaId(course.getDrama().getId())
-				.locageSceneDescribe(locage.getSubtitle())
-				.locageSceneImageUrl(locage.getImage())
-				.hashTag(locage.getHashTag())
+				.course(course)
 				.spotList(course.getSortedSpotList())
-				.courseSavedCount(course.getSavedCount())
 				.build();
 
 			return new ApiResponse<>(response).toResponseEntity();

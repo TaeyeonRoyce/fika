@@ -1,7 +1,10 @@
 package com.wefly.fika.dto.course.response;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.wefly.fika.domain.course.Course;
+import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 
 import lombok.AccessLevel;
@@ -21,23 +24,26 @@ public class CourseDetailResponse {
 	private String locageSceneImageUrl;
 	private String dramaTitle;
 	private String baseAddress;
+	private SpotPreviewResponse courseLocage;
 	private List<SpotPreviewResponse> spotList;
 	private int courseSavedCount;
-
 	@Builder
-	public CourseDetailResponse(Long courseId, String courseTitle, Long dramaId, String locageSceneDescribe,
-		String hashTag,
-		String locageSceneImageUrl, String dramaTitle, String baseAddress, List<SpotPreviewResponse> spotList,
-		int courseSavedCount) {
-		this.courseId = courseId;
-		this.courseTitle = courseTitle;
-		this.dramaId = dramaId;
-		this.locageSceneDescribe = locageSceneDescribe;
-		this.hashTag = hashTag;
-		this.locageSceneImageUrl = locageSceneImageUrl;
-		this.dramaTitle = dramaTitle;
-		this.baseAddress = baseAddress;
-		this.spotList = spotList;
-		this.courseSavedCount = courseSavedCount;
+	public CourseDetailResponse(Course course, List<SpotPreviewResponse> spotList) {
+		SpotData locage = course.getLocage();
+
+		this.courseId = course.getId();
+		this.courseTitle = course.getCourseTitle();
+		this.dramaId = course.getDrama().getId();
+		this.locageSceneDescribe = locage.getSubtitle();
+		this.hashTag = locage.getHashTag();
+		this.locageSceneImageUrl = locage.getImage();
+		this.dramaTitle = course.getDrama().getTitle();
+		this.baseAddress = course.getBaseAddress();
+		this.courseLocage = locage.toSpotPreviewResponse();
+		this.courseSavedCount = course.getSavedCount();
+
+		this.spotList = spotList.stream()
+			.filter(o -> !o.getSpotId().equals(locage.getId()))
+			.collect(Collectors.toList());
 	}
 }

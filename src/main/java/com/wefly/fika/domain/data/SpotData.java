@@ -1,6 +1,10 @@
 package com.wefly.fika.domain.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,11 +13,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.core.parameters.P;
 
 import com.wefly.fika.domain.drama.Drama;
+import com.wefly.fika.domain.review.Review;
 import com.wefly.fika.domain.spot.Spot;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 
@@ -58,6 +64,9 @@ public class SpotData {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "drama_id")
 	private Drama drama;
+
+	@OneToMany(mappedBy = "spotData", cascade = CascadeType.ALL)
+	private List<Review> reviews = new ArrayList<>();
 
 	public void updateToLocage(Drama drama, String quote, String hashTag) {
 		this.isLocage = true;

@@ -1,5 +1,7 @@
 package com.wefly.fika.service.impl;
 
+import static com.wefly.fika.config.response.ApiResponseStatus.*;
+
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -9,6 +11,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wefly.fika.config.response.ApiResponseStatus;
+import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.domain.member.MemberSaveSpot;
@@ -45,15 +49,19 @@ public class SpotDataService implements ISpotDataService {
 	}
 
 	@Override
-	public boolean scrapSpot(Long spotId, String accessToken) throws NoSuchElementException {
+	public boolean scrapSpot(Long spotId, String accessToken) throws CustomException {
 		Long memberId = jwtService.getMemberId(accessToken);
 
 		Optional<MemberSaveSpot> memberSaveSpot = memberSaveSpotRepository.findByMemberIdAndSpotDataId(
 			memberId, spotId);
 
 		if (memberSaveSpot.isEmpty()) {
-			Member member = memberRepository.findById(memberId).get();
-			SpotData spotData = spotDataRepository.findById(spotId).get();
+			Member member = memberRepository.findById(memberId).orElseThrow(
+				() -> new CustomException(NO_SUCH_DATA_FOUND)
+			);
+			SpotData spotData = spotDataRepository.findById(spotId).orElseThrow(
+				() -> new CustomException(NO_SUCH_DATA_FOUND)
+			);
 			MemberSaveSpot save = memberSaveSpotRepository.save(
 				MemberSaveSpot.builder()
 					.member(member)
@@ -96,6 +104,16 @@ public class SpotDataService implements ISpotDataService {
 			.map(MemberSaveSpot::getSpotData)
 			.map(SpotData::toSpotPreviewResponse)
 			.collect(Collectors.toList());
+	}
+
+	@Override
+	public void getSpotDataDetail(Long spotId) throws CustomException {
+		SpotData spotData = spotDataRepository.findById(spotId).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+
+
+
 	}
 
 }
