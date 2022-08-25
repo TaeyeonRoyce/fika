@@ -17,4 +17,6 @@ public interface ISpotDataService {
 	boolean scrapSpot(Long spotId, String accessToken) throws NoSuchElementException;
 
 	List<SpotPreviewResponse> checkScrapped(List<SpotPreviewResponse> previewResponseList, String accessToken);
+
+	List<SpotPreviewResponse> getSavedSpots(String accessToken);
 }

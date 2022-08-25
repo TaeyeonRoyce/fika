@@ -87,4 +87,15 @@ public class SpotDataService implements ISpotDataService {
 		return previewResponseList;
 	}
 
+	@Override
+	public List<SpotPreviewResponse> getSavedSpots(String accessToken) {
+		Long memberId = jwtService.getMemberId(accessToken);
+		List<MemberSaveSpot> savedSpots = memberSaveSpotRepository.findByMemberId(memberId);
+
+		return savedSpots.stream()
+			.map(MemberSaveSpot::getSpotData)
+			.map(SpotData::toSpotPreviewResponse)
+			.collect(Collectors.toList());
+	}
+
 }

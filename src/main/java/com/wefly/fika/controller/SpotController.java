@@ -2,12 +2,15 @@ package com.wefly.fika.controller;
 
 import static com.wefly.fika.config.response.ApiResponseStatus.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.domain.spot.Spot;
 import com.wefly.fika.dto.spot.SpotSaveDto;
+import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 import com.wefly.fika.service.ISpotDataService;
 import com.wefly.fika.service.ISpotService;
 
@@ -48,7 +52,7 @@ public class SpotController {
 	}
 
 	@PostMapping("/scrap/{spotId}")
-	public ResponseEntity<ApiResponse> scrapCourse(
+	public ResponseEntity<ApiResponse> scrapSpot(
 		@RequestHeader("Access-Token") String accessToken,
 		@PathVariable String spotId
 	) {
@@ -69,5 +73,16 @@ public class SpotController {
 		} catch (NumberFormatException e) {
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
 		}
+	}
+
+	@GetMapping("/my")
+	public ResponseEntity<ApiResponse> getMySpots(
+		@RequestHeader("Access-Token") String accessToken
+	) {
+		List<SpotPreviewResponse> response = spotDataService.getSavedSpots(accessToken);
+		response.forEach(o -> o.setScrapped(true));
+
+		return new ApiResponse<>(response).toResponseEntity();
+
 	}
 }
