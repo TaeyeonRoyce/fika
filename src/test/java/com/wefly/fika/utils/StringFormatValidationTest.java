@@ -39,5 +39,30 @@ class StringFormatValidationTest {
 		assertThat(isPassword2).isFalse();
 	}
 
+	@Test
+	public void nicknameRegexTest() {
+		//given
+		String nickname = "Royce";
+		String nonNickname1 = "t";
+		String nonNickname2 = "toolongnickname~!";
+		String nonNickname3 = "1!@%!@#";
+		String nickname4 = "로이스";
+
+		//when
+		boolean isNickname1 = StringFormatValidation.isNickNameRegex(nickname);
+		boolean isNickname2 = StringFormatValidation.isNickNameRegex(nonNickname1);
+		boolean isNickname3 = StringFormatValidation.isNickNameRegex(nonNickname2);
+		boolean isNickname4 = StringFormatValidation.isNickNameRegex(nonNickname3);
+		boolean isNickname5 = StringFormatValidation.isNickNameRegex(nickname4);
+
+		//then
+		assertThat(isNickname1).isTrue();
+		assertThat(isNickname2).isFalse();
+		assertThat(isNickname3).isFalse();
+		assertThat(isNickname4).isFalse();
+		assertThat(isNickname5).isTrue();
+	}
+
+
 
 }

@@ -2,6 +2,8 @@ package com.wefly.fika.service;
 
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.dto.member.MemberLoginDto;
+import com.wefly.fika.dto.member.MemberNicknameDto;
+import com.wefly.fika.dto.member.MemberPatchNicknameDto;
 import com.wefly.fika.dto.member.MemberSignUpDto;
 import com.wefly.fika.exception.NoSuchDataFound;
 
@@ -16,4 +18,6 @@ public interface IMemberService {
 	Member joinMember(MemberSignUpDto saveDto);
 
 	Member loginByPassword(MemberLoginDto requestDto) throws Exception;
+
+	String joinSocialMember(MemberPatchNicknameDto requestDto);
 }

@@ -17,4 +17,11 @@ public class StringFormatValidation {
 		Matcher matcher = pattern.matcher(password);
 		return matcher.matches();
 	}
+
+	public static boolean isNickNameRegex(String nickname) {
+		String regex = "^([a-z]|[A-Z]|[0-9]|[가-힣]|[-_]){2,10}$";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(nickname);
+		return matcher.matches();
+	}
 }
