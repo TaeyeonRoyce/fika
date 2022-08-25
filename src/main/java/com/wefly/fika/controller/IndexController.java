@@ -1,5 +1,6 @@
 package com.wefly.fika.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,13 +37,15 @@ public class IndexController {
 
 	@GetMapping("/main")
 	public ResponseEntity<ApiResponse> saveCourse(
-		@RequestHeader("Access-Token") String accessToken
+		@RequestHeader(value = "Access-Token", required = false) String accessToken
 	) {
-
-		List<CoursePreviewResponse> myCourses = courseService.getMyCourses(accessToken)
-			.stream()
-			.map(Course::toCourseResponse)
-			.collect(Collectors.toList());
+		List<CoursePreviewResponse> myCourses = new ArrayList<>();
+		if (accessToken != null) {
+			myCourses = courseService.getMyCourses(accessToken)
+				.stream()
+				.map(Course::toCourseResponse)
+				.collect(Collectors.toList());
+		}
 
 		List<DramaPreviewResponse> allDramas = dramaService.getAllDramas()
 			.stream()
@@ -59,8 +62,10 @@ public class IndexController {
 			.map(SpotData::toSpotPreviewResponse)
 			.collect(Collectors.toList());
 
-		spotDataService.checkScrapped(spotsBySaved, accessToken);
-		courseService.checkScrapped(coursesSortBySaved, accessToken);
+		if (accessToken != null) {
+			spotDataService.checkScrapped(spotsBySaved, accessToken);
+			courseService.checkScrapped(coursesSortBySaved, accessToken);
+		}
 
 		log.debug("[CHANGE TO RESPONSE]");
 		MainPageResponse response = MainPageResponse.builder()
@@ -72,6 +77,5 @@ public class IndexController {
 
 		return new ApiResponse<>(response).toResponseEntity();
 	}
-
 
 }

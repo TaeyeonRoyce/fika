@@ -31,6 +31,7 @@ import com.wefly.fika.dto.course.response.CourseInfoResponse;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 import com.wefly.fika.dto.spot.SpotIdListDto;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
+import com.wefly.fika.jwt.JwtInterceptor;
 import com.wefly.fika.service.ICourseService;
 import com.wefly.fika.service.ICourseSpotService;
 import com.wefly.fika.service.ISpotDataService;
@@ -159,7 +160,8 @@ public class CourseController {
 		}
 	}
 
-	@PatchMapping("/{courseId}")
+
+	@PatchMapping("/{courseId}/spots")
 	public ResponseEntity<ApiResponse> addSpotsToCourse(
 		@RequestHeader(value = "Access-Token") String accessToken,
 		@PathVariable String courseId,

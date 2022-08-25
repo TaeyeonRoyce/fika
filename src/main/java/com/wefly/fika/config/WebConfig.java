@@ -20,7 +20,10 @@ public class WebConfig implements WebMvcConfigurer {
 			.addPathPatterns("/token/test/**")
 			.addPathPatterns("/course")
 			.addPathPatterns("/course/scrap/**")
-			.addPathPatterns("/spot/scrap/**");
+			.addPathPatterns("/spot/scrap/**")
+			.addPathPatterns("/course/{*courseId}/spots")
+			.addPathPatterns("/course/edit/{*courseId}")
+			.addPathPatterns("/spot/my");
 	}
 
 }
