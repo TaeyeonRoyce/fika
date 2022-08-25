@@ -66,6 +66,7 @@ public class CourseService implements ICourseService {
 			.savedCount(0)
 			.creatMember(createMember.get())
 			.drama(locage.get().getDrama())
+			.locage(locage.get())
 			.build();
 		return courseRepository.save(course);
 	}

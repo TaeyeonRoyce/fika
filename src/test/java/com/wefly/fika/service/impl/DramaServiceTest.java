@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.drama.Drama;
 // import com.wefly.fika.domain.drama.DramaLike;
 import com.wefly.fika.domain.member.Member;
@@ -23,6 +25,7 @@ import com.wefly.fika.dto.member.MemberSignUpDto;
 import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.repository.DramaRepository;
 import com.wefly.fika.repository.MemberRepository;
+import com.wefly.fika.repository.SpotDataRepository;
 import com.wefly.fika.service.IMemberService;
 
 @ExtendWith(SpringExtension.class)
@@ -38,6 +41,12 @@ class DramaServiceTest {
 
 	@Autowired
 	MemberRepository memberRepository;
+
+	@Autowired
+	SpotDataService spotDataService;
+
+	@Autowired
+	SpotDataRepository spotDataRepository;
 
 	@Transactional
 	@Test
@@ -94,6 +103,17 @@ class DramaServiceTest {
 		//
 		// //then
 		// assertThat(dramaMemberLike.isLikeDrama()).isTrue();
+	}
+
+	@Test
+	public void test() {
+		List<SpotData> locageSpots = spotDataService.findSpotsByDramaName("이태원 클라쓰");
+		locageSpots.forEach(
+			o -> o.setHashTag("#test #hash #string")
+		);
+
+		spotDataRepository.saveAll(locageSpots);
+
 	}
 
 

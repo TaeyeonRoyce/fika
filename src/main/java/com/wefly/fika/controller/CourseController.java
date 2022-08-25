@@ -23,8 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.course.Course;
+import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.dto.course.CourseEditDto;
 import com.wefly.fika.dto.course.CourseSaveDto;
+import com.wefly.fika.dto.course.response.CourseDetailResponse;
 import com.wefly.fika.dto.course.response.CourseInfoResponse;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 import com.wefly.fika.dto.spot.SpotIdListDto;
@@ -183,6 +185,39 @@ public class CourseController {
 		try {
 			CourseInfoResponse response = courseService.editCourse(accessToken,
 				Long.parseLong(courseId), editDto);
+			return new ApiResponse<>(response).toResponseEntity();
+		} catch (NumberFormatException e) {
+			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
+		} catch (CustomException e) {
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
+		}
+	}
+
+	@GetMapping("/detail/{courseId}")
+	public ResponseEntity<ApiResponse> getCourseDetail(
+		@RequestHeader(value = "Access-Token", required = false) String accessToken,
+		@PathVariable String courseId
+	) {
+		try {
+			Course course = courseService.getCourseInfo(Long.valueOf(courseId));
+			SpotData locage = course.getLocage();
+
+			if (accessToken != null) {
+				spotDataService.checkScrapped(course.getSortedSpotList(), accessToken);
+			}
+
+			CourseDetailResponse response = CourseDetailResponse.builder()
+				.courseId(course.getId())
+				.courseTitle(course.getCourseTitle())
+				.dramaTitle(course.getDrama().getTitle())
+				.dramaId(course.getDrama().getId())
+				.locageSceneDescribe(locage.getSubtitle())
+				.locageSceneImageUrl(locage.getImage())
+				.hashTag(locage.getHashTag())
+				.spotList(course.getSortedSpotList())
+				.courseSavedCount(course.getSavedCount())
+				.build();
+
 			return new ApiResponse<>(response).toResponseEntity();
 		} catch (NumberFormatException e) {
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();

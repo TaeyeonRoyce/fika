@@ -44,7 +44,7 @@ public class DramaService implements IDramaService {
 		dramaRepository.save(drama);
 
 		locageSpots.forEach(
-			o -> o.updateToLocage(drama, "test")
+			o -> o.updateToLocage(drama, "test", "#test #hash #string")
 		);
 
 		return drama;

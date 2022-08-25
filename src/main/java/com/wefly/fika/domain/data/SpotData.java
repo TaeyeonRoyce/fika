@@ -53,13 +53,16 @@ public class SpotData {
 	private String quote;
 	private int savedCount;
 
+	private String hashTag;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "drama_id")
 	private Drama drama;
 
-	public void updateToLocage(Drama drama, String quote) {
+	public void updateToLocage(Drama drama, String quote, String hashTag) {
 		this.isLocage = true;
 		this.drama = drama;
+		this.hashTag = hashTag;
 
 		drama.getSpotDataList().add(this);
 	}
@@ -89,5 +92,8 @@ public class SpotData {
 	//=== Test 전용 메서드 ===//
 	public void setSavedCount(int savedCount) {
 		this.savedCount = savedCount;
+	}
+	public void setHashTag(String hashTag) {
+		this.hashTag = hashTag;
 	}
 }

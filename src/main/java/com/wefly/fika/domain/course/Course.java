@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.wefly.fika.domain.base.BaseTimeEntity;
 import com.wefly.fika.domain.data.SpotData;
@@ -47,6 +48,10 @@ public class Course extends BaseTimeEntity {
 	@JoinColumn(name = "drama_id")
 	private Drama drama;
 
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "locage_id")
+	private SpotData locage;
+
 	private String baseAddress;
 	private int courseSpotNumber;
 	private int savedCount;
@@ -55,13 +60,14 @@ public class Course extends BaseTimeEntity {
 
 	@Builder
 	public Course(String courseTitle, Member creatMember, Drama drama, String baseAddress, int courseSpotNumber,
-		int savedCount) {
+		int savedCount, SpotData locage) {
 		this.courseTitle = courseTitle;
 		this.creatMember = creatMember;
 		this.drama = drama;
 		this.baseAddress = baseAddress;
 		this.courseSpotNumber = courseSpotNumber;
 		this.savedCount = savedCount;
+		this.locage = locage;
 
 		drama.getCourseList().add(this);
 	}
