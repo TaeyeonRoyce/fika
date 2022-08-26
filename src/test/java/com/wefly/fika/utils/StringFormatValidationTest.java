@@ -42,7 +42,7 @@ class StringFormatValidationTest {
 	@Test
 	public void nicknameRegexTest() {
 		//given
-		String nickname = "Royce";
+		String nickname = "Roy ce";
 		String nonNickname1 = "t";
 		String nonNickname2 = "toolongnickname~!";
 		String nonNickname3 = "1!@%!@#";
@@ -56,7 +56,7 @@ class StringFormatValidationTest {
 		boolean isNickname5 = StringFormatValidation.isNickNameRegex(nickname4);
 
 		//then
-		assertThat(isNickname1).isTrue();
+		assertThat(isNickname1).isFalse();
 		assertThat(isNickname2).isFalse();
 		assertThat(isNickname3).isFalse();
 		assertThat(isNickname4).isFalse();

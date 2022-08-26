@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum ApiResponseStatus {
 
 	SUCCESS(true, 1000, "요청에 성공하셨습니다", HttpStatus.OK),
+	SOCIAL_LOGIN_FIRST(true, 1002, "최초 로그인 회원입니다", HttpStatus.TEMPORARY_REDIRECT),
 
 	COURSE_SCRAPPED(true, 1010, "해당 코스를 스크랩 하였습니다", HttpStatus.OK),
 
