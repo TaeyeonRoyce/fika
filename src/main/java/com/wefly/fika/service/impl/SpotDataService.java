@@ -4,14 +4,12 @@ import static com.wefly.fika.config.response.ApiResponseStatus.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wefly.fika.config.response.ApiResponseStatus;
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.member.Member;
@@ -36,7 +34,7 @@ public class SpotDataService implements ISpotDataService {
 	private final MemberRepository memberRepository;
 
 	public List<SpotData> findSpotsByDramaName(String dramaName) {
-		return spotDataRepository.findAllByThemeName(dramaName);
+		return spotDataRepository.findAllByDramaName(dramaName);
 	}
 
 	public List<SpotData> getSpotsBySaved() {

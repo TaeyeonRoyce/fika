@@ -40,7 +40,7 @@ public class SceneController {
 
 		try {
 			Scene scene = sceneService.saveScene(saveDto);
-			SceneSaveResponse response = new SceneSaveResponse(scene.getDrama().getTitle(),
+			SceneSaveResponse response = new SceneSaveResponse(scene.getDrama().getDramaName(),
 				scene.getSceneContent());
 
 			return new ApiResponse<>(response).toResponseEntity();

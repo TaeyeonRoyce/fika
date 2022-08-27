@@ -27,7 +27,7 @@ public class ReviewDetailResponse {
 	public ReviewDetailResponse(Review review) {
 		this.reviewId = review.getId();
 		this.spotDataId = review.getSpotData().getId();
-		this.spotDataTitle = review.getSpotData().getTitle();
+		this.spotDataTitle = review.getSpotData().getSpotName();
 		this.rate = review.getRate();
 		this.reviewContents = review.getReviewContents();
 		this.isImageReview = review.isImageReview();

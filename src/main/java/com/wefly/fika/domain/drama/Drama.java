@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.wefly.fika.domain.base.BaseTimeEntity;
 import com.wefly.fika.domain.character.Characters;
@@ -25,6 +26,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "drama_fika", schema = "fikadb")
 @Entity
 public class Drama extends BaseTimeEntity {
 
@@ -33,8 +35,11 @@ public class Drama extends BaseTimeEntity {
 	@Column(name = "drama_id")
 	private Long id;
 
-	private String title;
+	@Column(name = "drama_name_kr")
+	private String dramaName;
+	@Column(name = "poster_image_kr")
 	private String thumbnailUrl;
+	@Column(name = "genre_kr")
 	private String genre;
 
 	@OneToMany(mappedBy = "drama", cascade = CascadeType.ALL)
@@ -50,8 +55,8 @@ public class Drama extends BaseTimeEntity {
 	private List<Course> courseList = new ArrayList<>();
 
 	@Builder
-	public Drama(String title, String thumbnailUrl, String genre) {
-		this.title = title;
+	public Drama(String dramaName, String thumbnailUrl, String genre) {
+		this.dramaName = dramaName;
 		this.thumbnailUrl = thumbnailUrl;
 		this.genre = genre;
 	}
@@ -59,9 +64,14 @@ public class Drama extends BaseTimeEntity {
 	public DramaPreviewResponse toDramaPreviewResponse() {
 		return DramaPreviewResponse.builder()
 			.dramaId(this.id)
-			.dramaTitle(this.title)
+			.dramaTitle(this.dramaName)
 			.thumbnailUrl(this.thumbnailUrl)
 			.build();
+	}
+
+	//test
+	public void initSpotList() {
+		this.spotDataList = new ArrayList<>();
 	}
 
 }

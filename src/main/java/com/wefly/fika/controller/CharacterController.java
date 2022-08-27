@@ -43,7 +43,7 @@ public class CharacterController {
 		try {
 			Characters character = characterService.saveCharacter(saveDto);
 			CharacterSaveResponse response = new CharacterSaveResponse(
-				character.getDrama().getTitle(),
+				character.getDrama().getDramaName(),
 				character.getCharacterName()
 			);
 			return new ApiResponse<>(response).toResponseEntity();

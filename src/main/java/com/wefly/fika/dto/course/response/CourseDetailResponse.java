@@ -34,10 +34,10 @@ public class CourseDetailResponse {
 		this.courseId = course.getId();
 		this.courseTitle = course.getCourseTitle();
 		this.dramaId = course.getDrama().getId();
-		this.locageSceneDescribe = locage.getSubtitle();
+		this.locageSceneDescribe = locage.getSceneDescribe();
 		this.hashTag = locage.getHashTag();
 		this.locageSceneImageUrl = locage.getImage();
-		this.dramaTitle = course.getDrama().getTitle();
+		this.dramaTitle = course.getDrama().getDramaName();
 		this.baseAddress = course.getBaseAddress();
 		this.courseLocage = locage.toSpotPreviewResponse();
 		this.courseSavedCount = course.getSavedCount();

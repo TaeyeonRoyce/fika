@@ -50,7 +50,7 @@ public class DramaController {
 		}
 
 		Drama drama = dramaService.saveDrama(saveDto);
-		return new ApiResponse<>(drama.getTitle()).toResponseEntity();
+		return new ApiResponse<>(drama.getDramaName()).toResponseEntity();
 	}
 
 	@PostMapping("/like")
@@ -112,7 +112,7 @@ public class DramaController {
 			Drama drama = dramaService.getDramaInfo(Long.parseLong(dramaId));
 
 			DramaInfoResponse response = DramaInfoResponse.builder()
-				.dramaTitle(drama.getTitle())
+				.dramaTitle(drama.getDramaName())
 				.genre(drama.getGenre())
 				.thumbnailUrl(drama.getThumbnailUrl())
 				.spotDataList(drama.getSpotDataList()

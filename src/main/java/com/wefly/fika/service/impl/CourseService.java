@@ -79,7 +79,7 @@ public class CourseService implements ICourseService {
 
 	@Override
 	public List<Course> getCoursesSortBySaved() {
-		return courseRepository.findTop5ByOrderBySavedCountDesc();
+		return courseRepository.findTop3ByOrderBySavedCountDesc();
 	}
 
 	@Override
@@ -195,6 +195,10 @@ public class CourseService implements ICourseService {
 		if (!course.getCreatMember().getId().equals(memberId)) {
 			throw new CustomException(NO_AUTHENTICATION);
 		}
+
+		if (!editDto.getSpotIdList().contains(course.getLocage().getId())) {
+			throw new CustomException(LOCAGE_MUST_CONTAIN);
+		}
 		courseSpotService.updateCourseSpots(course, editDto.getSpotIdList());
 		course.updateCourseTitle(editDto.getCourseTitle());
 		courseRepository.save(course);
@@ -202,7 +206,7 @@ public class CourseService implements ICourseService {
 		return CourseInfoResponse.builder()
 			.courseId(course.getId())
 			.courseTitle(course.getCourseTitle())
-			.dramaTitle(course.getDrama().getTitle())
+			.dramaTitle(course.getDrama().getDramaName())
 			.dramaId(course.getDrama().getId())
 			.spotList(course.getSortedSpotList())
 			.courseSavedCount(course.getSavedCount())

@@ -31,6 +31,7 @@ public enum ApiResponseStatus {
 
 
 	NO_AUTHENTICATION(false, 4100, "해당 코스의 수정 권한이 없습니다", HttpStatus.UNAUTHORIZED),
+	LOCAGE_MUST_CONTAIN(false, 4101, "대표 로케지는 포함되어야 합니다", HttpStatus.BAD_REQUEST),
 	NO_SUCH_DATA_FOUND(false, 5000, "해당 값에 존재하는 데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR);
 
 	private final boolean isSuccess;

@@ -3,7 +3,6 @@ package com.wefly.fika.domain.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,49 +15,64 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.springframework.security.core.parameters.P;
-
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.review.Review;
-import com.wefly.fika.domain.spot.Spot;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 
 import lombok.Getter;
 
+/*
+	TODO
+	1. shortAddress 업데이트
+	2. drama연결
+	3. SpotData 사용하는 곳 모두 테스트
+ */
+
+
 @Getter
 @Entity
-@Table(name = "startrip", schema = "fikadb")
+@Table(name = "spot_data_fika", schema = "fikadb")
 public class SpotData {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "data_spot_id")
+	@Column(name = "spot_data_fika_id")
 	private Long id;
 
-	private String themeType;
-	private String themeName;
-	private String title;
-	private String titleKo;
-	private String subtitle;
-	private String shortAddress;
-	private Integer pinNumber;
-	private String isLiked;
-	private String image;
-	private String type;
-	private String timeOpened;
-	private String isParkingAvailable;
-	private String address;
-	private String instagramPath;
-	private Double longitude;
-	private Double latitude;
-	private String phoneNumber;
-	private String isCaptureAllowed;
+	@Column(name = "drama_name_kr")
+	private String dramaName;
+	@Column(name = "spot_name_kr")
+	private String spotName;
 
+	@Column(name = "scene_describe_kr")
+	private String sceneDescribe;
+	private String shortAddress;
+	@Column(name = "url")
+	private String image;
+	@Column(name = "category")
+	private String category;
+
+	@Column(name = "operation_time_kr")
+	private String timeOpened;
+
+	@Column(name = "address_jp")
+	private String address;
+	@Column(name = "mapx")
+	private Double longitude;
+	@Column(name = "mapy")
+	private Double latitude;
+
+	@Column(name = "tel")
+	private String phoneNumber;
+
+	@Column(name = "is_locage")
 	private boolean isLocage;
 
-	private String quote;
+	@Column(name = "script_image")
+	private String scriptImage;
 	private int savedCount;
 
+	@Column(name = "hashtag_kr")
 	private String hashTag;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -81,8 +95,8 @@ public class SpotData {
 			.spotId(this.id)
 			.spotImageUrl(this.image)
 			.shortAddress(this.shortAddress)
-			.type(this.type)
-			.spotTitle(this.title)
+			.type(this.category)
+			.spotTitle(this.spotName)
 			.spotSavedCount(this.savedCount)
 			.isLocage(this.isLocage)
 			.mapX(longitude)
@@ -104,5 +118,22 @@ public class SpotData {
 	}
 	public void setHashTag(String hashTag) {
 		this.hashTag = hashTag;
+	}
+
+	public void updateShortAddress() {
+		System.out.println(this.address);
+		if (this.address == null) {
+			return;
+		}
+		if (this.address.equals("オンライン開催")) {
+			return;
+		}
+		String[] s = this.address.split("区");
+		this.shortAddress = s[0] + "区";
+	}
+
+	public void updateDrama(Drama drama) {
+		this.drama = drama;
+		drama.getSpotDataList().add(this);
 	}
 }

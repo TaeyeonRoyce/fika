@@ -52,7 +52,7 @@ public class DramaService implements IDramaService {
 
 	@Override
 	public Drama getDramaByTitle(String dramaTitle) throws CustomException {
-		return dramaRepository.findDramaByTitle(dramaTitle)
+		return dramaRepository.findDramaByDramaName(dramaTitle)
 			.orElseThrow(() -> new CustomException(NO_SUCH_DATA_FOUND));
 	}
 

@@ -3,7 +3,6 @@ package com.wefly.fika.service.impl;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
@@ -14,12 +13,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wefly.fika.config.response.CustomException;
-import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.data.SpotData;
+import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.member.Member;
-import com.wefly.fika.domain.review.Review;
-import com.wefly.fika.domain.spot.Spot;
 import com.wefly.fika.exception.NoSuchDataFound;
+import com.wefly.fika.repository.DramaRepository;
 import com.wefly.fika.repository.MemberRepository;
 import com.wefly.fika.repository.ReviewRepository;
 import com.wefly.fika.repository.SpotDataRepository;
@@ -40,6 +38,9 @@ class SpotDataServiceTest {
 
 	@Autowired
 	ReviewRepository reviewRepository;
+
+	@Autowired
+	DramaRepository dramaRepository;
 
 	@Transactional
 	@Test
@@ -77,7 +78,7 @@ class SpotDataServiceTest {
 	    //query
 		long a = System.currentTimeMillis();
 		String findTheme = "이태원 클라쓰";
-		List<SpotData> allByThemeNameA = spotDataRepository.findAllByThemeName(findTheme);
+		List<SpotData> allByThemeNameA = spotDataRepository.findAllByDramaName(findTheme);
 		assertThat(allByThemeNameA.size()).isEqualTo(15);
 		System.out.println("-------------------------------");
 		System.out.println(System.currentTimeMillis() - a);
@@ -87,7 +88,7 @@ class SpotDataServiceTest {
 
 		long b = System.currentTimeMillis();
 		List<SpotData> allByThemeNameB = spotDataRepository.findAll().stream()
-			.filter(o -> o.getThemeName().equals(findTheme))
+			.filter(o -> o.getDramaName().equals(findTheme))
 			.collect(Collectors.toList());
 		assertThat(allByThemeNameB.size()).isEqualTo(15);
 		System.out.println("-------------------------------");
@@ -119,5 +120,31 @@ class SpotDataServiceTest {
 		assertThat(spotData.getSavedCount()).isEqualTo(0);
 		assertThat(member.getSaveSpots().size()).isEqualTo(1);
 	}
+
+	@Test
+	public void updateShortAddressOfNewSpot() {
+	    //given
+		List<SpotData> all = spotDataRepository.findAll();
+		//when
+		all.forEach(SpotData::updateShortAddress);
+		spotDataRepository.saveAll(all);
+	}
+
+	@Test
+	public void updateSpotDataDrama() {
+	    //given
+		Drama drama = dramaRepository.findById(1L).get();
+		drama.initSpotList();
+		//when
+		List<SpotData> all = spotDataRepository.findAll();
+		all.stream()
+			.filter(SpotData::isLocage)
+			.forEach(o -> o.updateDrama(drama));
+
+	    //then
+		spotDataRepository.saveAll(all);
+	}
+
+
 
 }

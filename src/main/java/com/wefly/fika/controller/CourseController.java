@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.course.Course;
-import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.dto.course.CourseEditDto;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CourseDetailResponse;
@@ -31,7 +30,6 @@ import com.wefly.fika.dto.course.response.CourseInfoResponse;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 import com.wefly.fika.dto.spot.SpotIdListDto;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
-import com.wefly.fika.jwt.JwtInterceptor;
 import com.wefly.fika.service.ICourseService;
 import com.wefly.fika.service.ICourseSpotService;
 import com.wefly.fika.service.ISpotDataService;
@@ -118,10 +116,11 @@ public class CourseController {
 			CourseInfoResponse response = CourseInfoResponse.builder()
 				.courseId(course.getId())
 				.courseTitle(course.getCourseTitle())
-				.dramaTitle(course.getDrama().getTitle())
+				.dramaTitle(course.getDrama().getDramaName())
 				.dramaId(course.getDrama().getId())
 				.spotList(course.getSortedSpotList())
 				.courseSavedCount(course.getSavedCount())
+				.baseAddress(course.getBaseAddress())
 				.build();
 
 			if (accessToken != null) {

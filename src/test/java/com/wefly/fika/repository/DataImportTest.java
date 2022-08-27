@@ -2,10 +2,8 @@ package com.wefly.fika.repository;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.List;
 import java.util.Optional;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +25,8 @@ public class DataImportTest {
 
 		//then
 		assertThat(byId.get().getId()).isEqualTo(4067L);
-		assertThat(byId.get().getTitle()).isEqualTo("최참판댁 촬영지");
-		assertThat(byId.get().getThemeName()).isEqualTo("푸른바다의전설");
+		assertThat(byId.get().getSpotName()).isEqualTo("최참판댁 촬영지");
+		assertThat(byId.get().getDramaName()).isEqualTo("푸른바다의전설");
 
 	}
 

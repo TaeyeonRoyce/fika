@@ -34,6 +34,7 @@ public class Characters {
 	private Long id;
 
 	private String characterName;
+	private String characterImage;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "drama_id")

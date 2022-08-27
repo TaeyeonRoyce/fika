@@ -31,7 +31,7 @@ public class DramaSaveDto {
 
 	public Drama toEntity() {
 		return Drama.builder()
-			.title(this.title)
+			.dramaName(this.title)
 			.thumbnailUrl(this.imageUrl)
 			.genre(this.genre)
 			.build();

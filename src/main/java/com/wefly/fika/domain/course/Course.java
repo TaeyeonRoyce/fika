@@ -78,7 +78,7 @@ public class Course extends BaseTimeEntity {
 
 	public CoursePreviewResponse toCourseResponse() {
 		List<String> spotTitleList = spotList.stream()
-			.map(s -> s.getSpotData().getTitle())
+			.map(s -> s.getSpotData().getSpotName())
 			.collect(Collectors.toList());
 
 		return CoursePreviewResponse.builder()
@@ -87,7 +87,7 @@ public class Course extends BaseTimeEntity {
 			.baseAddress(this.baseAddress)
 			.locageImageUrl(this.spotList.get(0).getSpotData().getImage())
 			.courseTitle(this.courseTitle)
-			.dramaTitle(this.drama.getTitle())
+			.dramaTitle(this.drama.getDramaName())
 			.spotTitleList(spotTitleList)
 			.build();
 	}
