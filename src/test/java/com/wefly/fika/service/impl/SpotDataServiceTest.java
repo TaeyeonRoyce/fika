@@ -3,6 +3,7 @@ package com.wefly.fika.service.impl;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.data.SpotData;
+import com.wefly.fika.domain.data.SpotMenu;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.exception.NoSuchDataFound;
@@ -21,6 +23,7 @@ import com.wefly.fika.repository.DramaRepository;
 import com.wefly.fika.repository.MemberRepository;
 import com.wefly.fika.repository.ReviewRepository;
 import com.wefly.fika.repository.SpotDataRepository;
+import com.wefly.fika.repository.SpotMenuRepository;
 import com.wefly.fika.service.ISpotDataService;
 
 @ExtendWith(SpringExtension.class)
@@ -41,6 +44,9 @@ class SpotDataServiceTest {
 
 	@Autowired
 	DramaRepository dramaRepository;
+
+	@Autowired
+	SpotMenuRepository spotMenuRepository;
 
 	@Transactional
 	@Test
@@ -144,6 +150,25 @@ class SpotDataServiceTest {
 	    //then
 		spotDataRepository.saveAll(all);
 	}
+
+	@Test
+	public void updateSpotMenuSpot() {
+	    //given
+		List<SpotMenu> bySpotDataId = spotMenuRepository.findBySpotDataId(null);
+		//when
+
+		Map<Long, SpotData> spotDataMap = spotDataRepository.findAll().stream()
+			.collect(Collectors.toMap(SpotData::getId, spotData -> spotData));
+
+		for (SpotMenu spotMenu : bySpotDataId) {
+			SpotData spotData = spotDataMap.get(spotMenu.getSpotIdInfo());
+			spotMenu.updateSpotData(spotData);
+		}
+
+		spotMenuRepository.saveAll(bySpotDataId);
+	    //then
+	}
+
 
 
 

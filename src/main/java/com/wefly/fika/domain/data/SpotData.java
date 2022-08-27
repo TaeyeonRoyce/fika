@@ -82,6 +82,9 @@ public class SpotData {
 	@OneToMany(mappedBy = "spotData", cascade = CascadeType.ALL)
 	private List<Review> reviews = new ArrayList<>();
 
+	@OneToMany(mappedBy = "spotData", cascade = CascadeType.ALL)
+	private List<SpotMenu> spotMenuList = new ArrayList<>();
+
 	public void updateToLocage(Drama drama, String quote, String hashTag) {
 		this.isLocage = true;
 		this.drama = drama;
