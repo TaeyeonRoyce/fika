@@ -11,15 +11,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wefly.fika.config.response.ApiResponse;
+import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.drama.Drama;
+import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 import com.wefly.fika.dto.drama.DramaPreviewResponse;
 import com.wefly.fika.dto.index.MainPageResponse;
+import com.wefly.fika.dto.index.MyPageResponse;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 import com.wefly.fika.service.ICourseService;
 import com.wefly.fika.service.IDramaService;
+import com.wefly.fika.service.IMemberService;
 import com.wefly.fika.service.ISpotDataService;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 public class IndexController {
 
+	private final IMemberService memberService;
 	private final IDramaService dramaService;
 	private final ICourseService courseService;
 	private final ISpotDataService spotDataService;
@@ -76,6 +81,26 @@ public class IndexController {
 			.build();
 
 		return new ApiResponse<>(response).toResponseEntity();
+	}
+
+	@GetMapping("/mypage")
+	public ResponseEntity<ApiResponse> getMyPage(
+		@RequestHeader("Access-Token") String accessToken
+	) {
+		try {
+			Member member = memberService.getMemberByToken(accessToken);
+
+			MyPageResponse response = MyPageResponse.builder()
+				.memberNickname(member.getMemberNickname())
+				.savedSpotCount(member.getSaveSpots().size())
+				.savedCourseCount(member.getSaveCourses().size())
+				.build();
+
+			return new ApiResponse<>(response).toResponseEntity();
+		} catch (CustomException e) {
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
+		}
+
 	}
 
 }

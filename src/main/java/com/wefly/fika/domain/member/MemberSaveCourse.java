@@ -39,6 +39,8 @@ public class MemberSaveCourse extends BaseTimeEntity {
 	public MemberSaveCourse(Member member, Course course) {
 		this.member = member;
 		this.course = course;
+
+		member.getSaveCourses().add(this);
 	}
 
 	public void deleteMemberSaveCourse() {

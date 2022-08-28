@@ -1,9 +1,13 @@
 package com.wefly.fika.service.impl;
 
+import static com.wefly.fika.config.response.ApiResponseStatus.*;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wefly.fika.config.response.ApiResponseStatus;
+import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.dto.member.MemberLoginDto;
 import com.wefly.fika.dto.member.MemberPatchNicknameDto;
@@ -24,6 +28,14 @@ public class MemberService implements IMemberService {
 	private final BCryptPasswordEncoder encoder;
 
 	private final MemberRepository memberRepository;
+
+	@Override
+	public Member getMemberByToken(String accessToken) throws CustomException {
+		Long memberId = jwtService.getMemberId(accessToken);
+		return memberRepository.findById(memberId).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+	}
 
 	@Override
 	public boolean isExistEmail(String email) {

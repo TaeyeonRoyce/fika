@@ -20,6 +20,7 @@ import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaActor;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.domain.member.MemberSaveCourse;
+import com.wefly.fika.domain.member.MemberSaveSpot;
 import com.wefly.fika.dto.course.CourseEditDto;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CourseInfoResponse;
@@ -216,5 +217,16 @@ public class CourseService implements ICourseService {
 			.spotList(course.getSortedSpotList())
 			.courseSavedCount(course.getSavedCount())
 			.build();
+	}
+
+	@Override
+	public List<CoursePreviewResponse> getSavedCourse(String accessToken) {
+		Long memberId = jwtService.getMemberId(accessToken);
+		List<MemberSaveCourse> savedSpots = memberSaveCourseRepository.findByMemberId(memberId);
+
+		return savedSpots.stream()
+			.map(MemberSaveCourse::getCourse)
+			.map(Course::toCourseResponse)
+			.collect(Collectors.toList());
 	}
 }

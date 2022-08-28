@@ -34,4 +34,6 @@ public interface ICourseService {
 	List<SpotPreviewResponse> addSpotsToCourse(String accessToken, Long courseId, List<Long> spotIdList) throws CustomException;
 
 	CourseInfoResponse editCourse(String accessToken, Long courseId, CourseEditDto editDto) throws CustomException;
+
+	List<CoursePreviewResponse> getSavedCourse(String accessToken);
 }

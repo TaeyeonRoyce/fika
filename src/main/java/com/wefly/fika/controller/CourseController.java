@@ -222,11 +222,13 @@ public class CourseController {
 		}
 	}
 
-	// @GetMapping("/my")
-	// public ResponseEntity<ApiResponse> getMyCourse(
-	// 	@RequestHeader("Access-Token") String accessToken
-	// ) {
-	//
-	// }
+	@GetMapping("/my/scrap")
+	public ResponseEntity<ApiResponse> getMyCourse(
+		@RequestHeader("Access-Token") String accessToken
+	) {
+		List<CoursePreviewResponse> response = courseService.getSavedCourse(accessToken);
+		response.forEach(o -> o.setScrapped(true));
+		return new ApiResponse<>(response).toResponseEntity();
+	}
 
 }
