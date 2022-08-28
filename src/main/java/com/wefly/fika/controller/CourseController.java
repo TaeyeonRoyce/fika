@@ -59,10 +59,17 @@ public class CourseController {
 			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
 		}
 
-		Course course = courseService.saveCourse(accessToken, saveDto);
-		int savedSpots = courseSpotService.addSpotsToCourse(course, saveDto);
+		try {
+			log.info("[SAVE COURSE] : Save new course {}", saveDto.getCourseTitle());
+			Course course = courseService.saveCourse(accessToken, saveDto);
+			int savedSpots = courseSpotService.addSpotsToCourse(course, saveDto);
 
-		return new ApiResponse<>(savedSpots).toResponseEntity();
+			return new ApiResponse<>(savedSpots).toResponseEntity();
+
+		} catch (CustomException e) {
+			log.warn("[ERROR] : {}", e.getStatus().getMessage());
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
+		}
 	}
 
 	@GetMapping("/all")
@@ -72,24 +79,26 @@ public class CourseController {
 		@RequestParam(required = false) String actor,
 		@RequestParam(required = false) String spots
 	) {
+		log.info("[GET ALL COURSE] : Get all course with filter options");
 		List<Course> courses = courseService.getAllCourse();
 
 		if (dramaId != null) {
-			log.debug("[DRAMA FILTER AVAILABLE] : DRAMA = {}", dramaId);
+			log.info("[DRAMA FILTER AVAILABLE] : DRAMA = {}", dramaId);
 			courses = courseService.filterByDrama(courses, Long.parseLong(dramaId));
 		}
 
 		if (actor != null) {
-			log.debug("[ACTOR FILTER AVAILABLE] : ACTOR = {}", actor);
+			log.info("[ACTOR FILTER AVAILABLE] : ACTOR = {}", actor);
 			try {
 				courses = courseService.filterByActor(courses, actor);
 			} catch (CustomException e) {
+				log.warn("[ERROR] : {}", e.getStatus().getMessage());
 				new ApiResponse<>(e.getStatus()).toResponseEntity();
 			}
 		}
 
 		if (spots != null) {
-			log.debug("[SPOT AMOUNT FILTER AVAILABLE] : SPOT AMOUNT = {}", spots);
+			log.info("[SPOT AMOUNT FILTER AVAILABLE] : SPOT AMOUNT = {}", spots);
 			int spotCount = Integer.parseInt(spots);
 			courses = courseService.filterBySpotCount(courses, spotCount);
 		}
@@ -99,6 +108,7 @@ public class CourseController {
 			.collect(Collectors.toList());
 
 		if (accessToken != null) {
+			log.info("[LOGIN USER] : Apply scrap infos");
 			courseService.checkScrapped(response, accessToken);
 		}
 
@@ -114,9 +124,12 @@ public class CourseController {
 			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
 		}
 
+		log.info("[GET COURSE INFO] : Get single course info by course id");
+
 		try {
 			Course course = courseService.getCourseInfo(Long.parseLong(courseId));
 
+			log.info("[RESPONSE COURSE] : {}", course.getCourseTitle());
 			CourseInfoResponse response = CourseInfoResponse.builder()
 				.courseId(course.getId())
 				.courseTitle(course.getCourseTitle())
@@ -128,13 +141,16 @@ public class CourseController {
 				.build();
 
 			if (accessToken != null) {
+				log.info("[LOGIN USER] : Apply scrap infos");
 				spotDataService.checkScrapped(response.getSpotList(), accessToken);
 			}
 
 			return new ApiResponse<>(response).toResponseEntity();
 		} catch (NumberFormatException e) {
+			log.warn("[ERROR] : {}", e.getMessage());
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
 		} catch (CustomException e) {
+			log.warn("[ERROR] : {}", e.getStatus().getMessage());
 			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
 	}
@@ -148,17 +164,23 @@ public class CourseController {
 			return new ApiResponse<>(ACCESS_TOKEN_NULL).toResponseEntity();
 		}
 
+		log.info("[SCRAP COURSE] : Scrap single course");
+
 		try {
 			boolean isScrapAdded = courseService.scrapCourse(Long.parseLong(courseId), accessToken);
 
-			if (isScrapAdded) {
-				return new ApiResponse<>(COURSE_SCRAPPED).toResponseEntity();
+			if (!isScrapAdded) {
+				log.info("[CANCEL SCRAP]");
+				return new ApiResponse<>(COURSE_CANCEL_SCRAPPED).toResponseEntity();
 			}
 
-			return new ApiResponse<>(COURSE_CANCEL_SCRAPPED).toResponseEntity();
+			log.info("[SCRAP]");
+			return new ApiResponse<>(COURSE_SCRAPPED).toResponseEntity();
 		} catch (NoSuchElementException e) {
+			log.warn("[ERROR] : {}", e.getMessage());
 			return new ApiResponse<>(NO_SUCH_DATA_FOUND).toResponseEntity();
 		} catch (NumberFormatException e) {
+			log.warn("[ERROR] : {}", e.getMessage());
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
 		}
 	}
@@ -170,12 +192,16 @@ public class CourseController {
 		@RequestBody SpotIdListDto patchDto
 	) {
 		try {
+			log.info("[ADD SPOTS TO COURSE] : Add selected spots to course");
 			List<SpotPreviewResponse> response = courseService.addSpotsToCourse(accessToken,
 				Long.parseLong(courseId), patchDto.getSpotIdList());
+
+			log.info("[{} SPOTS TO COURSE]", response.size());
 			return new ApiResponse<>(response).toResponseEntity();
 		} catch (NumberFormatException e) {
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
 		} catch (CustomException e) {
+			log.warn("[ERROR] : {}", e.getStatus().getMessage());
 			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
 	}
@@ -187,12 +213,17 @@ public class CourseController {
 		@RequestBody CourseEditDto editDto
 	) {
 		try {
+			log.info("[EDIT COURSE] : Edit sequence of spots and course title");
 			CourseInfoResponse response = courseService.editCourse(accessToken,
 				Long.parseLong(courseId), editDto);
+
+			log.info("[COURSE EDITED]");
 			return new ApiResponse<>(response).toResponseEntity();
 		} catch (NumberFormatException e) {
+			log.warn("[ERROR] : {}", e.getMessage());
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
 		} catch (CustomException e) {
+			log.warn("[ERROR] : {}", e.getStatus().getMessage());
 			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
 	}
@@ -203,9 +234,12 @@ public class CourseController {
 		@PathVariable String courseId
 	) {
 		try {
+			log.info("[GET COURSE DETAIL] : Get course detail by course id");
 			Course course = courseService.getCourseInfo(Long.valueOf(courseId));
 
+			log.info("[COURSE] : {}", course.getCourseTitle());
 			if (accessToken != null) {
+				log.info("[LOGIN USER] : Apply scrap infos");
 				spotDataService.checkScrapped(course.getSortedSpotList(), accessToken);
 			}
 
@@ -216,8 +250,10 @@ public class CourseController {
 
 			return new ApiResponse<>(response).toResponseEntity();
 		} catch (NumberFormatException e) {
+			log.warn("[ERROR] : {}", e.getMessage());
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
 		} catch (CustomException e) {
+			log.warn("[ERROR] : {}", e.getStatus().getMessage());
 			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
 	}
@@ -226,8 +262,11 @@ public class CourseController {
 	public ResponseEntity<ApiResponse> getMyCourse(
 		@RequestHeader("Access-Token") String accessToken
 	) {
+		log.info("[GET MY COURSE] : Get user scrapped course");
 		List<CoursePreviewResponse> response = courseService.getSavedCourse(accessToken);
 		response.forEach(o -> o.setScrapped(true));
+
+		log.info("[SCRAPPED COURSE COUNT] : {}", response.size());
 		return new ApiResponse<>(response).toResponseEntity();
 	}
 

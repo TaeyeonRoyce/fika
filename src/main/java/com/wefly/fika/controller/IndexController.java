@@ -41,9 +41,11 @@ public class IndexController {
 	private final ISpotDataService spotDataService;
 
 	@GetMapping("/main")
-	public ResponseEntity<ApiResponse> saveCourse(
+	public ResponseEntity<ApiResponse> getMainPage(
 		@RequestHeader(value = "Access-Token", required = false) String accessToken
 	) {
+		log.info("[GET MAIN PAGE]");
+		log.info("[GET MY COURSE]");
 		List<CoursePreviewResponse> myCourses = new ArrayList<>();
 		if (accessToken != null) {
 			myCourses = courseService.getMyCourses(accessToken)
@@ -52,27 +54,30 @@ public class IndexController {
 				.collect(Collectors.toList());
 		}
 
+		log.info("[GET DRAMAS]");
 		List<DramaPreviewResponse> allDramas = dramaService.getAllDramas()
 			.stream()
 			.map(Drama::toDramaPreviewResponse)
 			.collect(Collectors.toList());
 
+		log.info("[GET COURSES ORDER BY SCRAPPED COUNT DESCENDING]");
 		List<CoursePreviewResponse> coursesSortBySaved = courseService.getCoursesSortBySaved()
 			.stream()
 			.map(Course::toCourseResponse)
 			.collect(Collectors.toList());
 
+		log.info("[GET SPOTS ORDER BY SCRAPPED COUNT DESCENDING]");
 		List<SpotPreviewResponse> spotsBySaved = spotDataService.getSpotsBySaved()
 			.stream()
 			.map(SpotData::toSpotPreviewResponse)
 			.collect(Collectors.toList());
 
 		if (accessToken != null) {
+			log.info("[LOGIN USER] : Apply scrap infos");
 			spotDataService.checkScrapped(spotsBySaved, accessToken);
 			courseService.checkScrapped(coursesSortBySaved, accessToken);
 		}
 
-		log.debug("[CHANGE TO RESPONSE]");
 		MainPageResponse response = MainPageResponse.builder()
 			.myCourseList(myCourses)
 			.dramaList(allDramas)
@@ -88,8 +93,10 @@ public class IndexController {
 		@RequestHeader("Access-Token") String accessToken
 	) {
 		try {
+			log.info("[GET MY PAGE] : Get user profile page");
 			Member member = memberService.getMemberByToken(accessToken);
 
+			log.info("[USER] : {}", member.getMemberNickname());
 			MyPageResponse response = MyPageResponse.builder()
 				.memberNickname(member.getMemberNickname())
 				.savedSpotCount(member.getSaveSpots().size())
@@ -98,6 +105,7 @@ public class IndexController {
 
 			return new ApiResponse<>(response).toResponseEntity();
 		} catch (CustomException e) {
+			log.warn("[ERROR] : {}", e.getStatus().getMessage());
 			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
 

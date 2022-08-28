@@ -35,23 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/spot")
 @RestController
 public class SpotController {
-
-	private final ISpotService spotService;
 	private final ISpotDataService spotDataService;
-
-	@PostMapping("/auth")
-	public ResponseEntity<ApiResponse> saveDummySpot(
-		@Valid @RequestBody SpotSaveDto saveDto,
-		BindingResult bindingResult
-	) {
-		if (bindingResult.hasErrors()) {
-			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
-		}
-
-		Spot spot = spotService.saveSpot(saveDto);
-
-		return new ApiResponse<>(spot.getSpotName()).toResponseEntity();
-	}
 
 	@PostMapping("/scrap/{spotId}")
 	public ResponseEntity<ApiResponse> scrapSpot(
@@ -63,16 +47,20 @@ public class SpotController {
 		}
 
 		try {
+			log.info("[SCRAP SPOT] : Scrap single spot");
 			boolean isScrapAdded = spotDataService.scrapSpot(Long.parseLong(spotId), accessToken);
 
-			if (isScrapAdded) {
-				return new ApiResponse<>(SPOT_SCRAPPED).toResponseEntity();
+			if (!isScrapAdded) {
+				log.info("[CANCEL SCRAP]");
+				return new ApiResponse<>(SPOT_CANCEL_SCRAPPED).toResponseEntity();
 			}
-
-			return new ApiResponse<>(SPOT_CANCEL_SCRAPPED).toResponseEntity();
+			log.info("[SCRAP]");
+			return new ApiResponse<>(SPOT_SCRAPPED).toResponseEntity();
 		} catch (CustomException e) {
+			log.warn("[ERROR] : {}", e.getStatus().getMessage());
 			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		} catch (NumberFormatException e) {
+			log.warn("[ERROR] : {}", e.getMessage());
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
 		}
 	}
@@ -81,9 +69,11 @@ public class SpotController {
 	public ResponseEntity<ApiResponse> getMySpots(
 		@RequestHeader("Access-Token") String accessToken
 	) {
+		log.info("[GET MY SPOTS] : Get user scrapped spots");
 		List<SpotPreviewResponse> response = spotDataService.getSavedSpots(accessToken);
 		response.forEach(o -> o.setScrapped(true));
 
+		log.info("[SCRAPPED SPOT COUNT] : {}", response.size());
 		return new ApiResponse<>(response).toResponseEntity();
 
 	}
@@ -94,11 +84,15 @@ public class SpotController {
 		@PathVariable String spotId
 	) {
 		try {
+			log.info("[GET SPOT DETAIL] : Get spot detail info");
 			SpotDetailResponse response = spotDataService.getSpotDataDetail(accessToken, Long.parseLong(spotId));
+			log.info("[SPOT] : {}", response.getSpotTitle());
 			return new ApiResponse<>(response).toResponseEntity();
 		} catch (CustomException e) {
+			log.warn("[ERROR] : {}", e.getStatus().getMessage());
 			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		} catch (NumberFormatException e) {
+			log.warn("[ERROR] : {}", e.getMessage());
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
 		}
 	}

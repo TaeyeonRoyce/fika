@@ -39,15 +39,18 @@ public class MemberController {
 	@PostMapping("/valid/nickname")
 	public ResponseEntity<ApiResponse> checkNickname(
 		@RequestBody MemberNicknameDto requestDto) {
+		log.info("[CHECK NICK NAME] : {}", requestDto.getNickname());
 		if (requestDto.getNickname() == null) {
 			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
 		}
 
 		if (memberService.isExistNickname(requestDto.getNickname())) {
+			log.warn("[DUPLICATE NICK NAME] : {}", requestDto.getNickname());
 			return new ApiResponse<>(MEMBER_NICKNAME_DUPLICATE).toResponseEntity();
 		}
 
 		if (!StringFormatValidation.isNickNameRegex(requestDto.getNickname())) {
+			log.warn("[INVALID NICK NAME] : {}", requestDto.getNickname());
 			return new ApiResponse<>(NOT_NICKNAME_REGEX).toResponseEntity();
 		}
 
@@ -123,10 +126,13 @@ public class MemberController {
 		}
 
 		if (!StringFormatValidation.isNickNameRegex(requestDto.getNickname())) {
+			log.warn("[INVALID NICK NAME] : {}", requestDto.getNickname());
 			return new ApiResponse<>(NOT_NICKNAME_REGEX).toResponseEntity();
 		} else if (memberService.isExistEmail(requestDto.getEmail())) {
+			log.warn("[ALREADY SIGN UP EMAIL] : {}", requestDto.getEmail());
 			return new ApiResponse<>(MEMBER_EMAIL_DUPLICATE).toResponseEntity();
 		} else if (!StringFormatValidation.isEmailRegex(requestDto.getEmail())) {
+			log.warn("[INVALID EMAIL] : {}", requestDto.getEmail());
 			return new ApiResponse<>(NOT_EMAIL_REGEX).toResponseEntity();
 		}
 

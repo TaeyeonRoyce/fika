@@ -13,7 +13,7 @@ import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 
 public interface ICourseService {
 
-	Course saveCourse(String accessToken, CourseSaveDto saveDto);
+	Course saveCourse(String accessToken, CourseSaveDto saveDto) throws CustomException;
 
 	List<Course> getMyCourses(String accessToken);
 

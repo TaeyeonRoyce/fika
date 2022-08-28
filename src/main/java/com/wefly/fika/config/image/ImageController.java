@@ -20,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.wefly.fika.config.response.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/s3")
 @RequiredArgsConstructor
@@ -33,7 +35,9 @@ public class ImageController {
 		@RequestPart List<MultipartFile> multipartFile) throws Exception {
 
 		try {
+			log.debug("[IMAGE UPLOAD]");
 			List<String> fileImageList = imageUploadService.upload(multipartFile);
+			log.debug("[IMAGE UPLOAD] : Success");
 			return new ApiResponse<>(fileImageList).toResponseEntity();
 		} catch (MaxUploadSizeExceededException e) {
 			return new ApiResponse<>(OVER_FILE_UPLOAD_LIMIT).toResponseEntity();
@@ -44,7 +48,9 @@ public class ImageController {
 	@DeleteMapping("/file")
 	public ResponseEntity<ApiResponse> remove(@RequestParam String fileName) throws Exception {
 
+		log.debug("[IMAGE DELETE]");
 		imageUploadService.remove(fileName);
+		log.debug("[IMAGE DELETE] : {}", fileName);
 
 		return new ApiResponse<>(fileName).toResponseEntity();
 	}

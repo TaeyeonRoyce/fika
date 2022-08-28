@@ -53,45 +53,25 @@ public class DramaController {
 		return new ApiResponse<>(drama.getDramaName()).toResponseEntity();
 	}
 
-	@PostMapping("/like")
-	public ResponseEntity<ApiResponse> toggleLikeDrama(
-		@RequestHeader("Access-Token") String accessToken,
-		Long dramaId
-	) {
-		if (dramaId == null) {
-			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
-		}
-
-		try {
-			DramaMemberLike dramaMemberLike = dramaService.toggleDramaLike(accessToken, dramaId);
-
-			if (dramaMemberLike.isLikeDrama()) {
-				return new ApiResponse<>("좋아요가 반영 되었습니다.").toResponseEntity();
-			}
-
-			return new ApiResponse<>("좋아요가 취소 되었습니다.").toResponseEntity();
-		} catch (CustomException e) {
-			return new ApiResponse<>(e.getStatus()).toResponseEntity();
-		}
-	}
-
 	@GetMapping("/all")
 	public ResponseEntity<ApiResponse> getAllDramas(
 		@RequestParam(required = false) String genre,
 		@RequestParam(required = false) String actor
 	) {
+		log.info("[GET ALL DRAMAS] : Get all drama with filter options");
 		List<Drama> dramas = dramaService.getAllDramas();
 
 		if (genre != null) {
-			log.debug("[GENRE FILTER AVAILABLE] : GENRE = {}", genre);
+			log.info("[GENRE FILTER AVAILABLE] : GENRE = {}", genre);
 			dramas = dramaService.filterByGenre(dramas, genre);
 		}
 
 		if (actor != null) {
 			try {
-				log.debug("[ACTOR FILTER AVAILABLE] : ACTOR Id = {}", actor);
+				log.info("[ACTOR FILTER AVAILABLE] : ACTOR Id = {}", actor);
 				dramas = dramaService.filterByActor(dramas, actor);
 			} catch (CustomException e) {
+				log.warn("[ERROR] : {}", e.getStatus().getMessage());
 				return new ApiResponse<>(e.getStatus()).toResponseEntity();
 			}
 		}
@@ -109,17 +89,21 @@ public class DramaController {
 		@RequestHeader(value = "Access-Token", required = false) String accessToken,
 		@PathVariable String dramaId) {
 
+		log.info("[GET DRAMA INFO] : Get single drama info by drama id");
+
 		if (dramaId == null) {
 			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
 		}
 
 		try {
 			DramaInfoResponse response = dramaService.getDramaInfo(accessToken, Long.parseLong(dramaId));
-
+			log.info("[DRAMA] : {}", response.getDramaTitle());
 			return new ApiResponse<>(response).toResponseEntity();
 		} catch (NumberFormatException e) {
+			log.warn("[ERROR] : {}", e.getMessage());
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
 		} catch (CustomException e) {
+			log.warn("[ERROR] : {}", e.getStatus().getMessage());
 			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
 

@@ -26,9 +26,9 @@ public class KakaoOAuthService {
 			.bodyToMono(String.class)
 			.block();
 
-		log.debug("[USER INFO FROM KAKAO] : {}", result);
+		log.info("[USER INFO FROM KAKAO] : {}", result);
 		String email = kakaoInfoParser.getEmailFromAttribute(result);
-		log.debug("[USER KAKAO EMAIL] : {}", email);
+		log.info("[USER KAKAO EMAIL] : {}", email);
 		return email;
 	}
 }

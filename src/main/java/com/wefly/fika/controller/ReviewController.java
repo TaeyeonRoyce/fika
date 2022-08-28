@@ -32,10 +32,11 @@ public class ReviewController {
 		@RequestBody ReviewSaveDto saveDto
 	) {
 		try {
+			log.info("[SAVE REVIEW] : Save new review");
 			Review review = reviewService.saveReview(accessToken, saveDto);
 
 			if (saveDto.getIsImageReview()) {
-				log.debug("[IMAGE REVIEW] : Save images");
+				log.info("[IMAGE REVIEW] : Save images");
 				reviewService.saveReviewImages(review, saveDto.getImageUrls());
 			}
 
@@ -45,6 +46,7 @@ public class ReviewController {
 			return new ApiResponse<>(response).toResponseEntity();
 
 		} catch (CustomException e) {
+			log.warn("[ERROR] : {}", e.getStatus().getMessage());
 			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
 
@@ -56,10 +58,12 @@ public class ReviewController {
 		@RequestBody ReviewReportDto reportDto
 	) {
 		try {
+			log.info("[REPORT REVIEW] : Report review");
 			reviewService.reportReview(accessToken, reportDto);
 			return new ApiResponse<>("신고가 접수 되었습니다").toResponseEntity();
 
 		} catch (CustomException e) {
+			log.warn("[ERROR] : {}", e.getStatus().getMessage());
 			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
 

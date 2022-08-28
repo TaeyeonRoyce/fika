@@ -87,11 +87,6 @@ public class DramaService implements IDramaService {
 
 	@Override
 	public List<Drama> filterByActor(List<Drama> dramaList, String actorName) throws CustomException {
-		// Set<Drama> dramasByActor = dramaActorRepository.findAll().stream()
-		// 	.filter(d -> d.getActor().getActorName().equals(actorName))
-		// 	.map(DramaActor::getDrama)
-		// 	.collect(Collectors.toSet());
-
 		Actor actor = actorRepository.findActorByActorName(actorName).orElseThrow(
 			() -> new CustomException(NO_SUCH_DATA_FOUND)
 		);

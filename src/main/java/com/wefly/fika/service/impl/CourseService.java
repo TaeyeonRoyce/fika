@@ -37,7 +37,9 @@ import com.wefly.fika.service.ICourseService;
 import com.wefly.fika.service.ICourseSpotService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -54,13 +56,18 @@ public class CourseService implements ICourseService {
 	private final MemberSaveCourseRepository memberSaveCourseRepository;
 
 	@Override
-	public Course saveCourse(String accessToken, CourseSaveDto saveDto) {
+	public Course saveCourse(String accessToken, CourseSaveDto saveDto) throws CustomException {
 		Long memberId = jwtService.getMemberId(accessToken);
-		Optional<Member> createMember = memberRepository.findById(memberId);
-		Optional<SpotData> locage = spotDataRepository.findById(saveDto.getLocageSpotId());
+		Member createMember = memberRepository.findById(memberId).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+		SpotData locage = spotDataRepository.findById(saveDto.getLocageSpotId()).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
 
-		if (!locage.get().isLocage()) {
-
+		if (!locage.isLocage()) {
+			log.warn("[NOT LOCAGE SPOT] : {}", locage.getSpotName());
+			throw new CustomException(LOCAGE_MUST_CONTAIN);
 		}
 
 		Course course = Course.builder()
@@ -68,9 +75,9 @@ public class CourseService implements ICourseService {
 			.courseSpotNumber(0)
 			.baseAddress(saveDto.getBaseAddress())
 			.savedCount(0)
-			.creatMember(createMember.get())
-			.drama(locage.get().getDrama())
-			.locage(locage.get())
+			.creatMember(createMember)
+			.drama(locage.getDrama())
+			.locage(locage)
 			.build();
 		return courseRepository.save(course);
 	}

@@ -19,6 +19,7 @@ public class RestExceptionHandler {
 	@ExceptionHandler(MaxUploadSizeExceededException.class)
 	@ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
 	public ResponseEntity<ApiResponse> fileSizeLimitExceeded() {
+		log.warn("[IMAGE UPLOAD FAIL] : Upload size exceeded max size");
 		return new ApiResponse<>(OVER_FILE_UPLOAD_LIMIT).toResponseEntity();
 	}
 }
