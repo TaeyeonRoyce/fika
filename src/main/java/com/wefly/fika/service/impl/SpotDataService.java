@@ -12,13 +12,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.data.SpotData;
+import com.wefly.fika.domain.data.SpotMenu;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.domain.member.MemberSaveSpot;
+import com.wefly.fika.dto.review.response.ReviewDetailResponse;
+import com.wefly.fika.dto.spot.SpotMenuResponse;
+import com.wefly.fika.dto.spot.response.SpotDetailResponse;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 import com.wefly.fika.jwt.JwtService;
 import com.wefly.fika.repository.MemberRepository;
 import com.wefly.fika.repository.MemberSaveSpotRepository;
+import com.wefly.fika.repository.ReviewRepository;
 import com.wefly.fika.repository.SpotDataRepository;
+import com.wefly.fika.repository.SpotMenuRepository;
 import com.wefly.fika.service.ISpotDataService;
 
 import lombok.RequiredArgsConstructor;
@@ -32,6 +38,9 @@ public class SpotDataService implements ISpotDataService {
 	private final JwtService jwtService;
 	private final MemberSaveSpotRepository memberSaveSpotRepository;
 	private final MemberRepository memberRepository;
+	private final ReviewRepository reviewRepository;
+	private final SpotMenuRepository spotMenuRepository;
+
 
 	public List<SpotData> findSpotsByDramaName(String dramaName) {
 		return spotDataRepository.findAllByDramaName(dramaName);
@@ -105,12 +114,33 @@ public class SpotDataService implements ISpotDataService {
 	}
 
 	@Override
-	public void getSpotDataDetail(Long spotId) throws CustomException {
+	public SpotDetailResponse getSpotDataDetail(String accessToken, Long spotId) throws CustomException {
 		SpotData spotData = spotDataRepository.findById(spotId).orElseThrow(
 			() -> new CustomException(NO_SUCH_DATA_FOUND)
 		);
 
+		List<ReviewDetailResponse> reviewResponseList = spotData.getReviews().stream()
+			.map(o -> ReviewDetailResponse.builder()
+				.review(o)
+				.build())
+			.collect(Collectors.toList());
 
+		List<SpotMenuResponse> spotMenuList = spotMenuRepository.findBySpotDataId(spotData.getId()).stream()
+			.map(SpotMenu::toResponseDto)
+			.collect(Collectors.toList());
+
+		boolean isScrapped = false;
+		if (accessToken != null) {
+			Long memberId = jwtService.getMemberId(accessToken);
+			isScrapped = memberSaveSpotRepository.existsByMemberIdAndSpotDataId(memberId, spotId);
+		}
+
+		return SpotDetailResponse.builder()
+			.spotData(spotData)
+			.reviewList(reviewResponseList)
+			.spotMenuList(spotMenuList)
+			.isScrapped(isScrapped)
+			.build();
 
 	}
 

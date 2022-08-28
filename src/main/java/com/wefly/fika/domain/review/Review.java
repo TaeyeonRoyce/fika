@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import com.wefly.fika.domain.base.BaseTimeEntity;
 import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.member.Member;
+import com.wefly.fika.dto.review.response.ReviewDetailResponse;
 
 import lombok.AccessLevel;
 import lombok.Builder;

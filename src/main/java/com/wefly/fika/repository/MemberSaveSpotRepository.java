@@ -10,6 +10,7 @@ import com.wefly.fika.domain.member.MemberSaveSpot;
 public interface MemberSaveSpotRepository extends JpaRepository<MemberSaveSpot, Long> {
 
 	Optional<MemberSaveSpot> findByMemberIdAndSpotDataId(Long memberId, Long spotId);
+	boolean existsByMemberIdAndSpotDataId(Long memberId, Long spotId);
 
 	List<MemberSaveSpot> findByMemberId(Long memberId);
 }

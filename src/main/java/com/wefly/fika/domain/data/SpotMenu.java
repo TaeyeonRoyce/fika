@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.wefly.fika.dto.spot.SpotMenuResponse;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,7 +44,15 @@ public class SpotMenu {
 	private SpotData spotData;
 
 
+	public SpotMenuResponse toResponseDto() {
+		return SpotMenuResponse.builder()
+			.menuName(this.menuName)
+			.menuPrice(this.menuPrice)
+			.build();
+	}
 
+
+	//== 데이터 추가 시 실행 로직 ==//
 	public void updateSpotData(SpotData spotData) {
 		this.spotData = spotData;
 

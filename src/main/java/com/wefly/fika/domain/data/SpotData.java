@@ -123,6 +123,9 @@ public class SpotData {
 		this.hashTag = hashTag;
 	}
 
+
+	//== 데이터 추가 시 실행 로직 ==//
+
 	public void updateShortAddress() {
 		System.out.println(this.address);
 		if (this.address == null) {

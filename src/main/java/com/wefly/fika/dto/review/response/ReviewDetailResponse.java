@@ -1,5 +1,6 @@
 package com.wefly.fika.dto.review.response;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,9 +20,11 @@ public class ReviewDetailResponse {
 	private Long spotDataId;
 	private String spotDataTitle;
 	private int rate;
+	private String userNickname;
 	private String reviewContents;
 	private boolean isImageReview;
 	private List<String> imageUrls;
+	private LocalDate createAt;
 
 	@Builder
 	public ReviewDetailResponse(Review review) {
@@ -29,10 +32,12 @@ public class ReviewDetailResponse {
 		this.spotDataId = review.getSpotData().getId();
 		this.spotDataTitle = review.getSpotData().getSpotName();
 		this.rate = review.getRate();
+		this.userNickname = review.getCreateMember().getMemberNickname();
 		this.reviewContents = review.getReviewContents();
 		this.isImageReview = review.isImageReview();
 		this.imageUrls = review.getReviewImages().stream()
 			.map(ReviewImage::getImageUrl)
 			.collect(Collectors.toList());
+		this.createAt = review.getCreatedDateTime().toLocalDate();
 	}
 }

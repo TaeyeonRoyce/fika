@@ -22,6 +22,7 @@ import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.spot.Spot;
 import com.wefly.fika.dto.spot.SpotSaveDto;
+import com.wefly.fika.dto.spot.response.SpotDetailResponse;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 import com.wefly.fika.service.ISpotDataService;
 import com.wefly.fika.service.ISpotService;
@@ -93,8 +94,8 @@ public class SpotController {
 		@PathVariable String spotId
 	) {
 		try {
-			spotDataService.getSpotDataDetail(Long.parseLong(spotId));
-			return new ApiResponse<>(SPOT_CANCEL_SCRAPPED).toResponseEntity();
+			SpotDetailResponse response = spotDataService.getSpotDataDetail(accessToken, Long.parseLong(spotId));
+			return new ApiResponse<>(response).toResponseEntity();
 		} catch (CustomException e) {
 			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		} catch (NumberFormatException e) {
