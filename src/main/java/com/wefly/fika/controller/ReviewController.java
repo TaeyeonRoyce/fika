@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.review.Review;
+import com.wefly.fika.dto.review.ReviewReportDto;
 import com.wefly.fika.dto.review.ReviewSaveDto;
 import com.wefly.fika.dto.review.response.ReviewDetailResponse;
 import com.wefly.fika.service.IReviewService;
@@ -42,6 +43,21 @@ public class ReviewController {
 				.review(review)
 				.build();
 			return new ApiResponse<>(response).toResponseEntity();
+
+		} catch (CustomException e) {
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
+		}
+
+	}
+
+	@PostMapping("/report")
+	public ResponseEntity<ApiResponse> reportReview(
+		@RequestHeader("Access-Token") String accessToken,
+		@RequestBody ReviewReportDto reportDto
+	) {
+		try {
+			reviewService.reportReview(accessToken, reportDto);
+			return new ApiResponse<>("신고가 접수 되었습니다").toResponseEntity();
 
 		} catch (CustomException e) {
 			return new ApiResponse<>(e.getStatus()).toResponseEntity();

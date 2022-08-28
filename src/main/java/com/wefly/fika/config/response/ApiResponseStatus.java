@@ -32,6 +32,7 @@ public enum ApiResponseStatus {
 
 	NO_AUTHENTICATION(false, 4100, "해당 코스의 수정 권한이 없습니다", HttpStatus.UNAUTHORIZED),
 	LOCAGE_MUST_CONTAIN(false, 4101, "대표 로케지는 포함되어야 합니다", HttpStatus.BAD_REQUEST),
+	ALREADY_EXIST_REPORT(false, 4300, "해당 리뷰에 이미 신고가 접수된 상태입니다", HttpStatus.BAD_REQUEST),
 	OVER_FILE_UPLOAD_LIMIT(false, 4400, "업로드 파일은 10MB로 제한됩니다", HttpStatus.PAYLOAD_TOO_LARGE),
 	NO_SUCH_DATA_FOUND(false, 5000, "해당 값에 존재하는 데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR);
 

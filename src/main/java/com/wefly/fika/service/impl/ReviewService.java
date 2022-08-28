@@ -14,10 +14,13 @@ import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.domain.review.Review;
 import com.wefly.fika.domain.review.ReviewImage;
+import com.wefly.fika.domain.review.ReviewReport;
+import com.wefly.fika.dto.review.ReviewReportDto;
 import com.wefly.fika.dto.review.ReviewSaveDto;
 import com.wefly.fika.jwt.JwtService;
 import com.wefly.fika.repository.MemberRepository;
 import com.wefly.fika.repository.ReviewImageRepository;
+import com.wefly.fika.repository.ReviewReportRepository;
 import com.wefly.fika.repository.ReviewRepository;
 import com.wefly.fika.repository.SpotDataRepository;
 import com.wefly.fika.service.IReviewService;
@@ -35,6 +38,7 @@ public class ReviewService implements IReviewService {
 	private final MemberRepository memberRepository;
 
 	private final ReviewImageRepository reviewImageRepository;
+	private final ReviewReportRepository reviewReportRepository;
 
 	@Override
 	public Review saveReview(String accessToken, ReviewSaveDto saveDto) throws CustomException {
@@ -71,5 +75,29 @@ public class ReviewService implements IReviewService {
 		}
 
 		reviewImageRepository.saveAll(images);
+	}
+
+	@Override
+	public void reportReview(String accessToken, ReviewReportDto reportDto) throws CustomException {
+		Long memberId = jwtService.getMemberId(accessToken);
+		if (reviewReportRepository.existsByReviewIdAndReportMemberId(reportDto.getReviewId(), memberId)) {
+			throw new CustomException(ALREADY_EXIST_REPORT);
+		}
+		Member member = memberRepository.findById(memberId).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+
+		Review review = reviewRepository.findById(reportDto.getReviewId()).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+
+		ReviewReport report = ReviewReport.builder()
+			.reportMember(member)
+			.review(review)
+			.reportType(reportDto.getReportType())
+			.reportDetail(reportDto.getReportDetail())
+			.build();
+
+		reviewReportRepository.save(report);
 	}
 }

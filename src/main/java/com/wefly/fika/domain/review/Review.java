@@ -50,6 +50,10 @@ public class Review extends BaseTimeEntity {
 	@OneToMany(mappedBy = "review")
 	private List<ReviewImage> reviewImages = new ArrayList<>();
 
+	@OneToMany(mappedBy = "review")
+	private List<ReviewReport> reviewReports = new ArrayList<>();
+
+
 	@Builder
 	public Review(SpotData spotData, Member createMember, int rate, String reviewContents, boolean isImageReview) {
 		this.spotData = spotData;
