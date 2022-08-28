@@ -106,6 +106,7 @@ public class DramaController {
 
 	@GetMapping("/{dramaId}")
 	public ResponseEntity<ApiResponse> getDramaInfo(
+		@RequestHeader(value = "Access-Token", required = false) String accessToken,
 		@PathVariable String dramaId) {
 
 		if (dramaId == null) {
@@ -113,23 +114,7 @@ public class DramaController {
 		}
 
 		try {
-			Drama drama = dramaService.getDramaInfo(Long.parseLong(dramaId));
-
-			DramaInfoResponse response = DramaInfoResponse.builder()
-				.dramaTitle(drama.getDramaName())
-				.genre(drama.getGenre())
-				.thumbnailUrl(drama.getThumbnailUrl())
-				.spotDataList(drama.getSpotDataList()
-					.stream()
-					.map(SpotData::toSpotPreviewResponse)
-					.collect(Collectors.toList())
-				)
-				.courseList(drama.getCourseList()
-					.stream()
-					.map(Course::toCourseResponse)
-					.collect(Collectors.toList())
-				)
-				.build();
+			DramaInfoResponse response = dramaService.getDramaInfo(accessToken, Long.parseLong(dramaId));
 
 			return new ApiResponse<>(response).toResponseEntity();
 		} catch (NumberFormatException e) {

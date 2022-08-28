@@ -7,6 +7,7 @@ import com.wefly.fika.domain.actor.Actor;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaMemberLike;
 import com.wefly.fika.dto.drama.DramaSaveDto;
+import com.wefly.fika.dto.drama.response.DramaInfoResponse;
 
 public interface IDramaService {
 
@@ -23,6 +24,6 @@ public interface IDramaService {
 
 	DramaMemberLike toggleDramaLike(String accessToken, Long dramaId) throws CustomException;
 
-	Drama getDramaInfo(Long dramaId) throws CustomException;
+	DramaInfoResponse getDramaInfo(String accessToken, Long dramaId) throws CustomException;
 
 }
