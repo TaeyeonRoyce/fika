@@ -52,7 +52,7 @@ public class OAuthController {
 		} catch (NoSuchDataFound noSuchMember) {
 			return new ResponseEntity<>(
 				new ApiResponse<>(userEmail, SOCIAL_LOGIN_FIRST),
-				HttpStatus.TEMPORARY_REDIRECT
+				HttpStatus.OK
 			);
 		}
 	}
