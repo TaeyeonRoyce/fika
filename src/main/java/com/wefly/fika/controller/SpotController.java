@@ -77,7 +77,7 @@ public class SpotController {
 		}
 	}
 
-	@GetMapping("/my")
+	@GetMapping("/my/scrap")
 	public ResponseEntity<ApiResponse> getMySpots(
 		@RequestHeader("Access-Token") String accessToken
 	) {

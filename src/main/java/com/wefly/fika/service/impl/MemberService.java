@@ -55,10 +55,7 @@ public class MemberService implements IMemberService {
 	public String getAccessTokenByMember(Member memberByEmail) {
 		String memberAccessToken = jwtService.createMemberAccessToken(memberByEmail.getId(),
 			memberByEmail.getMemberEmail());
-		memberByEmail = Member.builder()
-			.memberEmail(memberByEmail.getMemberEmail())
-			.memberAccessToken(memberAccessToken)
-			.build();
+		memberByEmail.updateMemberAccessToken(memberAccessToken);
 		memberRepository.save(memberByEmail);
 		return memberAccessToken;
 	}
