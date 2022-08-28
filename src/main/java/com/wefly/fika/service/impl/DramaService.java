@@ -18,6 +18,7 @@ import com.wefly.fika.domain.drama.DramaMemberLike;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.dto.drama.DramaSaveDto;
 import com.wefly.fika.jwt.JwtService;
+import com.wefly.fika.repository.ActorRepository;
 import com.wefly.fika.repository.DramaActorRepository;
 import com.wefly.fika.repository.DramaMemberLikeRepository;
 import com.wefly.fika.repository.DramaRepository;
@@ -34,6 +35,7 @@ public class DramaService implements IDramaService {
 	private final JwtService jwtService;
 	private final ISpotDataService spotDataService;
 	private final DramaRepository dramaRepository;
+	private final ActorRepository actorRepository;
 	private final DramaActorRepository dramaActorRepository;
 	private final DramaMemberLikeRepository dramaMemberLikeRepository;
 
@@ -78,9 +80,17 @@ public class DramaService implements IDramaService {
 	}
 
 	@Override
-	public List<Drama> filterByActor(List<Drama> dramaList, Long actorId) {
-		Set<Drama> dramasByActor = dramaActorRepository.findAll().stream()
-			.filter(d -> d.getActor().getId().equals(actorId))
+	public List<Drama> filterByActor(List<Drama> dramaList, String actorName) throws CustomException {
+		// Set<Drama> dramasByActor = dramaActorRepository.findAll().stream()
+		// 	.filter(d -> d.getActor().getActorName().equals(actorName))
+		// 	.map(DramaActor::getDrama)
+		// 	.collect(Collectors.toSet());
+
+		Actor actor = actorRepository.findActorByActorName(actorName).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+
+		Set<Drama> dramasByActor = actor.getDramaActors().stream()
 			.map(DramaActor::getDrama)
 			.collect(Collectors.toSet());
 

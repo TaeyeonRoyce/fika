@@ -21,7 +21,7 @@ public interface ICourseService {
 
 	List<Course> getAllCourse();
 	List<Course> filterByDrama(List<Course> courseList, Long dramaId);
-	List<Course> filterByActor(List<Course> courseList, Long actorId);
+	List<Course> filterByActor(List<Course> courseList, String actorName) throws CustomException;
 
 	List<Course> filterBySpotCount(List<Course> courseList, int spotCount);
 

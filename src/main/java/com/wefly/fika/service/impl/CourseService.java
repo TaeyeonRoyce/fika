@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wefly.fika.config.response.CustomException;
+import com.wefly.fika.domain.actor.Actor;
 import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.drama.Drama;
@@ -25,6 +26,7 @@ import com.wefly.fika.dto.course.response.CourseInfoResponse;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 import com.wefly.fika.jwt.JwtService;
+import com.wefly.fika.repository.ActorRepository;
 import com.wefly.fika.repository.CourseRepository;
 import com.wefly.fika.repository.DramaActorRepository;
 import com.wefly.fika.repository.MemberRepository;
@@ -46,6 +48,7 @@ public class CourseService implements ICourseService {
 	private final MemberRepository memberRepository;
 
 	private final SpotDataRepository spotDataRepository;
+	private final ActorRepository actorRepository;
 	private final DramaActorRepository dramaActorRepository;
 	private final MemberSaveCourseRepository memberSaveCourseRepository;
 
@@ -95,10 +98,12 @@ public class CourseService implements ICourseService {
 	}
 
 	@Override
-	public List<Course> filterByActor(List<Course> courseList, Long actorId) {
-		Set<Drama> dramaSet = dramaActorRepository.findAll()
-			.stream()
-			.filter(o -> o.getActor().getId().equals(actorId))
+	public List<Course> filterByActor(List<Course> courseList, String actorName) throws CustomException {
+		Actor actor = actorRepository.findActorByActorName(actorName).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+
+		Set<Drama> dramaSet = actor.getDramaActors().stream()
 			.map(DramaActor::getDrama)
 			.collect(Collectors.toSet());
 

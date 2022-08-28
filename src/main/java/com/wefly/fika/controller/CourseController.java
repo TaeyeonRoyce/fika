@@ -69,7 +69,7 @@ public class CourseController {
 	public ResponseEntity<ApiResponse> getAllCourses(
 		@RequestHeader(value = "Access-Token", required = false) String accessToken,
 		@RequestParam(required = false) String dramaId,
-		@RequestParam(required = false) String actorId,
+		@RequestParam(required = false) String actor,
 		@RequestParam(required = false) String spots
 	) {
 		List<Course> courses = courseService.getAllCourse();
@@ -79,9 +79,13 @@ public class CourseController {
 			courses = courseService.filterByDrama(courses, Long.parseLong(dramaId));
 		}
 
-		if (actorId != null) {
-			log.debug("[ACTOR FILTER AVAILABLE] : ACTOR = {}", actorId);
-			courses = courseService.filterByActor(courses, Long.parseLong(actorId));
+		if (actor != null) {
+			log.debug("[ACTOR FILTER AVAILABLE] : ACTOR = {}", actor);
+			try {
+				courses = courseService.filterByActor(courses, actor);
+			} catch (CustomException e) {
+				new ApiResponse<>(e.getStatus()).toResponseEntity();
+			}
 		}
 
 		if (spots != null) {
@@ -159,7 +163,6 @@ public class CourseController {
 		}
 	}
 
-
 	@PatchMapping("/{courseId}/spots")
 	public ResponseEntity<ApiResponse> addSpotsToCourse(
 		@RequestHeader(value = "Access-Token") String accessToken,
@@ -218,5 +221,12 @@ public class CourseController {
 			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
 	}
+
+	// @GetMapping("/my")
+	// public ResponseEntity<ApiResponse> getMyCourse(
+	// 	@RequestHeader("Access-Token") String accessToken
+	// ) {
+	//
+	// }
 
 }

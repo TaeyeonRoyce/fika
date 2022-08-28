@@ -19,7 +19,7 @@ public interface IDramaService {
 	List<Drama> getAllDramas();
 
 	List<Drama> filterByGenre(List<Drama> dramaList, String genre);
-	List<Drama> filterByActor(List<Drama> dramaList, Long actorId);
+	List<Drama> filterByActor(List<Drama> dramaList, String actorName) throws CustomException;
 
 	DramaMemberLike toggleDramaLike(String accessToken, Long dramaId) throws CustomException;
 
