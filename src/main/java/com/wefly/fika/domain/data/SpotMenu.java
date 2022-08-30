@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "spot_menu", schema = "fikadb")
+@Table(name = "spot_menu")
 @Entity
 public class SpotMenu {
 

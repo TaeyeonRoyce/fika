@@ -10,20 +10,23 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonPropertyOrder({"isSuccess", "code", "message", "result"})
 public class ApiResponse<T> {
 
 	@JsonProperty("isSuccess")
-	private final Boolean isSuccess;
+	private Boolean isSuccess;
 
-	private final int code;
-	private final String message;
-	private final HttpStatus httpStatus;
+	private int code;
+	private String message;
+	private HttpStatus httpStatus;
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private T result;

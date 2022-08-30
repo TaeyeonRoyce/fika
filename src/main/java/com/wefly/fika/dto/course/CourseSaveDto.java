@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,4 +20,12 @@ public class CourseSaveDto {
 	private Long locageSpotId;
 
 	private List<Long> spotIdList;
+
+	@Builder
+	public CourseSaveDto(String courseTitle, String baseAddress, Long locageSpotId, List<Long> spotIdList) {
+		this.courseTitle = courseTitle;
+		this.baseAddress = baseAddress;
+		this.locageSpotId = locageSpotId;
+		this.spotIdList = spotIdList;
+	}
 }

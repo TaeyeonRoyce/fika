@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "drama_fika", schema = "fikadb")
+@Table(name = "drama_fika")
 @Entity
 public class Drama extends BaseTimeEntity {
 

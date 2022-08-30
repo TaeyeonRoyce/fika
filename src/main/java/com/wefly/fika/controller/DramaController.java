@@ -68,7 +68,7 @@ public class DramaController {
 
 		if (actor != null) {
 			try {
-				log.info("[ACTOR FILTER AVAILABLE] : ACTOR Id = {}", actor);
+				log.info("[ACTOR FILTER AVAILABLE] : ACTOR NAME = {}", actor);
 				dramas = dramaService.filterByActor(dramas, actor);
 			} catch (CustomException e) {
 				log.warn("[ERROR] : {}", e.getStatus().getMessage());

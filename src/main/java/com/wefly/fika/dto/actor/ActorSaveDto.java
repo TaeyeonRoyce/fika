@@ -17,6 +17,11 @@ public class ActorSaveDto {
 
 	private Long dramaId;
 
+	public ActorSaveDto(String actorName, Long dramaId) {
+		this.actorName = actorName;
+		this.dramaId = dramaId;
+	}
+
 	public Actor toEntity() {
 		return Actor.builder()
 			.actorName(this.actorName)

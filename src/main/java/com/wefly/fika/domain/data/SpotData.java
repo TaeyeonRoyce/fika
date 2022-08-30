@@ -31,7 +31,7 @@ import lombok.Getter;
 
 @Getter
 @Entity
-@Table(name = "spot_data_fika", schema = "fikadb")
+@Table(name = "spot_data_fika")
 public class SpotData {
 
 	@Id

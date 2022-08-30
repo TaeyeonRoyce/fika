@@ -127,49 +127,4 @@ class SpotDataServiceTest {
 		assertThat(member.getSaveSpots().size()).isEqualTo(1);
 	}
 
-	@Test
-	public void updateShortAddressOfNewSpot() {
-	    //given
-		List<SpotData> all = spotDataRepository.findAll();
-		//when
-		all.forEach(SpotData::updateShortAddress);
-		spotDataRepository.saveAll(all);
-	}
-
-	@Test
-	public void updateSpotDataDrama() {
-	    //given
-		Drama drama = dramaRepository.findById(1L).get();
-		drama.initSpotList();
-		//when
-		List<SpotData> all = spotDataRepository.findAll();
-		all.stream()
-			.filter(SpotData::isLocage)
-			.forEach(o -> o.updateDrama(drama));
-
-	    //then
-		spotDataRepository.saveAll(all);
-	}
-
-	@Test
-	public void updateSpotMenuSpot() {
-	    //given
-		List<SpotMenu> bySpotDataId = spotMenuRepository.findBySpotDataId(null);
-		//when
-
-		Map<Long, SpotData> spotDataMap = spotDataRepository.findAll().stream()
-			.collect(Collectors.toMap(SpotData::getId, spotData -> spotData));
-
-		for (SpotMenu spotMenu : bySpotDataId) {
-			SpotData spotData = spotDataMap.get(spotMenu.getSpotIdInfo());
-			spotMenu.updateSpotData(spotData);
-		}
-
-		spotMenuRepository.saveAll(bySpotDataId);
-	    //then
-	}
-
-
-
-
 }
