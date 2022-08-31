@@ -49,7 +49,7 @@ public class IndexController {
 		log.info("[GET MAIN PAGE]");
 		log.info("[GET MY COURSE]");
 		List<CoursePreviewResponse> myCourses = new ArrayList<>();
-		if (accessToken != null) {
+		if (!accessToken.isBlank()) {
 			myCourses = courseService.getMyCourses(accessToken)
 				.stream()
 				.map(Course::toCourseResponse)
@@ -74,7 +74,7 @@ public class IndexController {
 			.map(SpotData::toSpotPreviewResponse)
 			.collect(Collectors.toList());
 
-		if (accessToken != null) {
+		if (!accessToken.isBlank()) {
 			log.info("[LOGIN USER] : Apply scrap infos");
 			spotDataService.checkScrapped(spotsBySaved, accessToken);
 			courseService.checkScrapped(coursesSortBySaved, accessToken);

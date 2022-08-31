@@ -109,7 +109,7 @@ public class CourseController {
 			.map(Course::toCourseResponse)
 			.collect(Collectors.toList());
 
-		if (accessToken != null) {
+		if (!accessToken.isBlank()) {
 			log.info("[LOGIN USER] : Apply scrap infos");
 			courseService.checkScrapped(response, accessToken);
 		}
@@ -143,7 +143,7 @@ public class CourseController {
 				.baseAddress(course.getBaseAddress())
 				.build();
 
-			if (accessToken != null) {
+			if (!accessToken.isBlank()) {
 				log.info("[LOGIN USER] : Apply scrap infos");
 				spotDataService.checkScrapped(response.getSpotList(), accessToken);
 			}
@@ -163,9 +163,6 @@ public class CourseController {
 		@RequestHeader("Access-Token") String accessToken,
 		@PathVariable String courseId
 	) {
-		if (accessToken == null) {
-			return new ApiResponse<>(ACCESS_TOKEN_NULL).toResponseEntity();
-		}
 
 		log.info("[SCRAP COURSE] : Scrap single course");
 
@@ -242,7 +239,7 @@ public class CourseController {
 			Course course = courseService.getCourseInfo(Long.valueOf(courseId));
 
 			log.info("[COURSE] : {}", course.getCourseTitle());
-			if (accessToken != null) {
+			if (!accessToken.isBlank()) {
 				log.info("[LOGIN USER] : Apply scrap infos");
 				spotDataService.checkScrapped(course.getSortedSpotList(), accessToken);
 			}

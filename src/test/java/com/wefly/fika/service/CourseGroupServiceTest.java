@@ -130,7 +130,6 @@ class CourseGroupServiceTest {
 		//then
 		assertThat(all.get(0).getGroupName()).isEqualTo(updateGroupName);
 	}
-
 	// @Transactional
 	// @DisplayName("코스 그룹 삭제 테스트")
 	// @Test
