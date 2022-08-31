@@ -62,14 +62,9 @@ class CourseGroupServiceTest {
 		Drama dramaA = Drama.builder()
 			.dramaName("DramaA")
 			.build();
-		Course courseA = Course.builder()
-			.courseTitle("Course A")
-			.drama(dramaA)
-			.build();
 
 		Long id = memberRepository.save(member).getId();
 		dramaRepository.save(dramaA);
-		courseRepository.save(courseA);
 		String accessToken = jwtService.createMemberAccessToken(id, member.getMemberEmail());
 
 		CourseGroupSaveDto saveDto = CourseGroupSaveDto.builder()
@@ -101,14 +96,9 @@ class CourseGroupServiceTest {
 		Drama dramaA = Drama.builder()
 			.dramaName("DramaA")
 			.build();
-		Course courseA = Course.builder()
-			.courseTitle("Course A")
-			.drama(dramaA)
-			.build();
 
 		Long id = memberRepository.save(member).getId();
 		dramaRepository.save(dramaA);
-		courseRepository.save(courseA);
 		String accessToken = jwtService.createMemberAccessToken(id, member.getMemberEmail());
 
 		CourseGroup courseGroup = CourseGroup.builder()
@@ -146,14 +136,9 @@ class CourseGroupServiceTest {
 		Drama dramaA = Drama.builder()
 			.dramaName("DramaA")
 			.build();
-		Course courseA = Course.builder()
-			.courseTitle("Course A")
-			.drama(dramaA)
-			.build();
 
 		Long id = memberRepository.save(member).getId();
 		dramaRepository.save(dramaA);
-		courseRepository.save(courseA);
 		String accessToken = jwtService.createMemberAccessToken(id, member.getMemberEmail());
 
 		List<CourseGroup> courseGroups = new ArrayList<>();
