@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
@@ -16,6 +17,7 @@ import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.config.response.ApiResponseStatus;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.dto.member.MemberNicknameDto;
+import com.wefly.fika.jwt.JwtService;
 import com.wefly.fika.repository.MemberRepository;
 
 @DisplayName("회원 API 테스트")
@@ -23,6 +25,8 @@ class MemberControllerTest extends WebTest {
 
 	@Autowired
 	MemberRepository memberRepository;
+	@Autowired
+	JwtService jwtService;
 
 	@AfterEach
 	void cleanUp() {
@@ -61,5 +65,36 @@ class MemberControllerTest extends WebTest {
 		assertThat(result).isEqualTo(MEMBER_NICKNAME_DUPLICATE.getMessage());
 	}
 
+	@Test
+	public void deleteMemberTest() {
+	    //given
+		Member member = Member.builder()
+			.memberEmail("test@mail.com")
+			.memberNickname("memberA")
+			.build();
+
+		memberRepository.save(member);
+		String accessToken = jwtService.createMemberAccessToken(member.getId(), member.getMemberEmail());
+
+		String url = baseUrl + port + "/member/delete";
+
+	    //when
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Access-Token", accessToken);
+
+		ResponseEntity<ApiResponse<ApiResponseStatus>> responseEntity = restTemplate.exchange(
+			url,
+			HttpMethod.POST,
+			new HttpEntity<>(headers),
+			new ParameterizedTypeReference<ApiResponse<ApiResponseStatus>>() {
+			}
+		);
+
+		String result = responseEntity.getBody().getMessage();
+
+		//then
+		assertThat(result).isEqualTo(SUCCESS_DELETE_USER.getMessage());
+	}
+	
 
 }

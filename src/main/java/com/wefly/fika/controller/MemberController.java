@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wefly.fika.config.response.ApiResponse;
+import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.dto.member.MemberLoginDto;
 import com.wefly.fika.dto.member.MemberNicknameDto;
@@ -144,4 +146,15 @@ public class MemberController {
 		return new ApiResponse<>(socialMemberAccessToken).toResponseEntity();
 	}
 
+	@PostMapping("/delete")
+	public ResponseEntity<ApiResponse> deleteMember(
+		@RequestHeader("Access-Token") String accessToken
+	) {
+		try {
+			memberService.deleteMember(accessToken);
+			return new ApiResponse<>(SUCCESS_DELETE_USER).toResponseEntity();
+		} catch (CustomException e) {
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
+		}
+	}
 }

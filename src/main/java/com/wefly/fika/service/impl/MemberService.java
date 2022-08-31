@@ -99,4 +99,14 @@ public class MemberService implements IMemberService {
 		return memberAccessToken;
 	}
 
+	@Override
+	public void deleteMember(String accessToken) throws CustomException {
+		Long memberId = jwtService.getMemberId(accessToken);
+		Member member = memberRepository.findById(memberId).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+
+		memberRepository.delete(member);
+	}
+
 }

@@ -22,4 +22,6 @@ public interface IMemberService {
 	Member loginByPassword(MemberLoginDto requestDto) throws Exception;
 
 	String joinSocialMember(MemberPatchNicknameDto requestDto);
+
+	void deleteMember(String accessToken) throws CustomException;
 }

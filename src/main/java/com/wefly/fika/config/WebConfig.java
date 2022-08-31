@@ -25,7 +25,8 @@ public class WebConfig implements WebMvcConfigurer {
 			.addPathPatterns("/course/edit/{*courseId}")
 			.addPathPatterns("/spot/my/scrap")
 			.addPathPatterns("/course/my/scrap")
-			.addPathPatterns("/nav/mypage");
+			.addPathPatterns("/nav/mypage")
+			.addPathPatterns("/member/delete");
 	}
 
 }

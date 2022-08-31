@@ -9,6 +9,7 @@ public enum ApiResponseStatus {
 
 	SUCCESS(true, 1000, "요청에 성공하셨습니다", HttpStatus.OK),
 	SOCIAL_LOGIN_FIRST(true, 1002, "최초 로그인 회원입니다", HttpStatus.OK),
+	SUCCESS_DELETE_USER(true, 1003, "회원 탈퇴가 성공적으로 이루어졌습니다", HttpStatus.OK),
 
 	COURSE_SCRAPPED(true, 1010, "해당 코스를 스크랩 하였습니다", HttpStatus.OK),
 
