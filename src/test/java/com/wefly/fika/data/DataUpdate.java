@@ -43,6 +43,7 @@ public class DataUpdate {
 		List<SpotData> all = spotDataRepository.findAll();
 		//when
 		all.forEach(SpotData::updateShortAddress);
+		spotDataRepository.saveAll(all);
 	}
 
 	@DisplayName("장소 데이터 추가시 드라마 매핑")

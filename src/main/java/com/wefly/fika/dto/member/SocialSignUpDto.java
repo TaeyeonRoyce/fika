@@ -1,7 +1,5 @@
 package com.wefly.fika.dto.member;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import com.wefly.fika.domain.member.Member;
 
 import lombok.AccessLevel;
@@ -10,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberPatchNicknameDto {
+public class SocialSignUpDto {
 	private String nickname;
 	private String email;
 

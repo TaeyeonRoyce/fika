@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wefly.fika.config.TokenNullable;
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.course.Course;
@@ -84,6 +85,7 @@ public class DramaController {
 	}
 
 
+	@TokenNullable
 	@GetMapping("/{dramaId}")
 	public ResponseEntity<ApiResponse> getDramaInfo(
 		@RequestHeader(value = "Access-Token", required = false) String accessToken,

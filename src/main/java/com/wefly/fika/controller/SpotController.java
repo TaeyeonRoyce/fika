@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wefly.fika.config.TokenNullable;
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.spot.Spot;
@@ -42,10 +43,6 @@ public class SpotController {
 		@RequestHeader("Access-Token") String accessToken,
 		@PathVariable String spotId
 	) {
-		if (accessToken == null) {
-			return new ApiResponse<>(ACCESS_TOKEN_NULL).toResponseEntity();
-		}
-
 		try {
 			log.info("[SCRAP SPOT] : Scrap single spot");
 			boolean isScrapAdded = spotDataService.scrapSpot(Long.parseLong(spotId), accessToken);
@@ -78,6 +75,7 @@ public class SpotController {
 
 	}
 
+	@TokenNullable
 	@GetMapping("/detail/{spotId}")
 	public ResponseEntity<ApiResponse> getSpotDetail(
 		@RequestHeader(value = "Access-Token", required = false) String accessToken,

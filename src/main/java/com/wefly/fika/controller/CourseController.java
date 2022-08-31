@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wefly.fika.config.TokenNullable;
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.course.Course;
@@ -72,6 +73,7 @@ public class CourseController {
 		}
 	}
 
+	@TokenNullable
 	@GetMapping("/all")
 	public ResponseEntity<ApiResponse> getAllCourses(
 		@RequestHeader(value = "Access-Token", required = false) String accessToken,
@@ -115,6 +117,7 @@ public class CourseController {
 		return new ApiResponse<>(response).toResponseEntity();
 	}
 
+	@TokenNullable
 	@GetMapping("/{courseId}")
 	public ResponseEntity<ApiResponse> getCourseInfo(
 		@RequestHeader(value = "Access-Token", required = false) String accessToken,
@@ -228,6 +231,7 @@ public class CourseController {
 		}
 	}
 
+	@TokenNullable
 	@GetMapping("/detail/{courseId}")
 	public ResponseEntity<ApiResponse> getCourseDetail(
 		@RequestHeader(value = "Access-Token", required = false) String accessToken,
@@ -238,15 +242,18 @@ public class CourseController {
 			Course course = courseService.getCourseInfo(Long.valueOf(courseId));
 
 			log.info("[COURSE] : {}", course.getCourseTitle());
-			if (accessToken != null) {
-				log.info("[LOGIN USER] : Apply scrap infos");
-				spotDataService.checkScrapped(course.getSortedSpotList(), accessToken);
-			}
-
+			List<SpotPreviewResponse> sortedSpotList = course.getSortedSpotList();
 			CourseDetailResponse response = CourseDetailResponse.builder()
 				.course(course)
-				.spotList(course.getSortedSpotList())
+				.spotList(sortedSpotList)
 				.build();
+
+			if (accessToken != null) {
+				log.info("[LOGIN USER] : Apply scrap infos");
+				sortedSpotList.add(response.getCourseLocage());
+				spotDataService.checkScrapped(sortedSpotList, accessToken);
+			}
+
 
 			return new ApiResponse<>(response).toResponseEntity();
 		} catch (NumberFormatException e) {

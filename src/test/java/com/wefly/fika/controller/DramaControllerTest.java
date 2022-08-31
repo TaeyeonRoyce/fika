@@ -10,20 +10,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 import com.wefly.fika.config.response.ApiResponse;
-import com.wefly.fika.domain.actor.Actor;
 import com.wefly.fika.domain.drama.Drama;
-import com.wefly.fika.domain.drama.DramaActor;
 import com.wefly.fika.dto.actor.ActorSaveDto;
 import com.wefly.fika.dto.drama.DramaPreviewResponse;
 import com.wefly.fika.repository.ActorRepository;
 import com.wefly.fika.repository.DramaActorRepository;
 import com.wefly.fika.repository.DramaRepository;
 import com.wefly.fika.service.impl.ActorService;
-
 
 @DisplayName("드라마 API 테스트")
 class DramaControllerTest extends WebTest {
@@ -39,7 +37,6 @@ class DramaControllerTest extends WebTest {
 
 	@Autowired
 	private DramaActorRepository dramaActorRepository;
-
 
 	@AfterEach
 	void deleteData() {
@@ -63,13 +60,13 @@ class DramaControllerTest extends WebTest {
 
 		String url = baseUrl + port + "/drama/all";
 
-		ParameterizedTypeReference<ApiResponse<List<DramaPreviewResponse>>> typeRef =
-			new ParameterizedTypeReference<>() {
-			};
-
-		//when
-		ResponseEntity<ApiResponse<List<DramaPreviewResponse>>> responseEntity = restTemplate.exchange(url,
-			HttpMethod.GET, null, typeRef);
+		ResponseEntity<ApiResponse<List<DramaPreviewResponse>>> responseEntity =
+			restTemplate.exchange(
+				url,
+				HttpMethod.GET,
+				new HttpEntity<>(null),
+				new ParameterizedTypeReference<ApiResponse<List<DramaPreviewResponse>>>(){}
+			);
 
 		List<DramaPreviewResponse> result = responseEntity.getBody().getResult();
 
@@ -105,12 +102,14 @@ class DramaControllerTest extends WebTest {
 
 		String url = baseUrl + port + "/drama/all?genre=" + dramaGenre;
 
-		ParameterizedTypeReference<ApiResponse<List<DramaPreviewResponse>>> typeRef =
-			new ParameterizedTypeReference<>() {
-			};
 		//when
-		ResponseEntity<ApiResponse<List<DramaPreviewResponse>>> responseEntity = restTemplate.exchange(url,
-			HttpMethod.GET, null, typeRef);
+		ResponseEntity<ApiResponse<List<DramaPreviewResponse>>> responseEntity =
+			restTemplate.exchange(
+				url,
+				HttpMethod.GET,
+				new HttpEntity<>(null),
+				new ParameterizedTypeReference<ApiResponse<List<DramaPreviewResponse>>>(){}
+			);
 
 		List<DramaPreviewResponse> result = responseEntity.getBody().getResult();
 
@@ -145,15 +144,15 @@ class DramaControllerTest extends WebTest {
 		ActorSaveDto saveDto = new ActorSaveDto(actorName, drama.getId());
 		actorService.saveActor(saveDto);
 
-
 		String url = baseUrl + port + "/drama/all?actor=" + actorName;
 
-		ParameterizedTypeReference<ApiResponse<List<DramaPreviewResponse>>> typeRef =
-			new ParameterizedTypeReference<>() {
-			};
-		//when
-		ResponseEntity<ApiResponse<List<DramaPreviewResponse>>> responseEntity = restTemplate.exchange(url,
-			HttpMethod.GET, null, typeRef);
+		ResponseEntity<ApiResponse<List<DramaPreviewResponse>>> responseEntity =
+			restTemplate.exchange(
+				url,
+				HttpMethod.GET,
+				new HttpEntity<>(null),
+				new ParameterizedTypeReference<ApiResponse<List<DramaPreviewResponse>>>(){}
+			);
 
 		List<DramaPreviewResponse> result = responseEntity.getBody().getResult();
 
