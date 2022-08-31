@@ -4,7 +4,7 @@ import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.dto.member.MemberLoginDto;
 import com.wefly.fika.dto.member.MemberNicknameDto;
-import com.wefly.fika.dto.member.MemberPatchNicknameDto;
+import com.wefly.fika.dto.member.SocialSignUpDto;
 import com.wefly.fika.dto.member.MemberSignUpDto;
 import com.wefly.fika.exception.NoSuchDataFound;
 
@@ -21,7 +21,9 @@ public interface IMemberService {
 
 	Member loginByPassword(MemberLoginDto requestDto) throws Exception;
 
-	String joinSocialMember(MemberPatchNicknameDto requestDto);
+	String joinSocialMember(SocialSignUpDto requestDto);
 
 	void deleteMember(String accessToken) throws CustomException;
+
+	void updateMemberNickname(String accessToken, MemberNicknameDto requestDto) throws CustomException;
 }

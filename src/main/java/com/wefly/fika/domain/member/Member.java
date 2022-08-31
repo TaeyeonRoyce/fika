@@ -66,4 +66,8 @@ public class Member extends BaseTimeEntity {
 	public void deleteSaveSpot(MemberSaveSpot spot) {
 		saveSpots.remove(spot);
 	}
+
+	public void updateMemberNickname(String memberNickname) {
+		this.memberNickname = memberNickname;
+	}
 }

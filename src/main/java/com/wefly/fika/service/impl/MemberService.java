@@ -6,11 +6,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wefly.fika.config.response.ApiResponseStatus;
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.dto.member.MemberLoginDto;
-import com.wefly.fika.dto.member.MemberPatchNicknameDto;
+import com.wefly.fika.dto.member.MemberNicknameDto;
+import com.wefly.fika.dto.member.SocialSignUpDto;
 import com.wefly.fika.dto.member.MemberSignUpDto;
 import com.wefly.fika.exception.NoSuchDataFound;
 import com.wefly.fika.jwt.JwtService;
@@ -87,7 +87,7 @@ public class MemberService implements IMemberService {
 	}
 
 	@Override
-	public String joinSocialMember(MemberPatchNicknameDto requestDto) {
+	public String joinSocialMember(SocialSignUpDto requestDto) {
 		Member member = memberRepository.save(requestDto.toEntity());
 		String memberAccessToken = jwtService.createMemberAccessToken(
 			member.getId(), member.getMemberEmail()
@@ -108,5 +108,17 @@ public class MemberService implements IMemberService {
 
 		memberRepository.delete(member);
 	}
+
+	@Override
+	public void updateMemberNickname(String accessToken, MemberNicknameDto requestDto) throws CustomException {
+		Long memberId = jwtService.getMemberId(accessToken);
+		Member member = memberRepository.findById(memberId).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+
+		member.updateMemberNickname(requestDto.getNickname());
+		memberRepository.save(member);
+	}
+
 
 }

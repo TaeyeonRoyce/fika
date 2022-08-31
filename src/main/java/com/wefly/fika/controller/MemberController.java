@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wefly.fika.config.response.ApiResponse;
@@ -21,7 +20,7 @@ import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.dto.member.MemberLoginDto;
 import com.wefly.fika.dto.member.MemberNicknameDto;
-import com.wefly.fika.dto.member.MemberPatchNicknameDto;
+import com.wefly.fika.dto.member.SocialSignUpDto;
 import com.wefly.fika.dto.member.MemberSignUpDto;
 import com.wefly.fika.dto.member.MemberSignUpResponse;
 import com.wefly.fika.service.IMemberService;
@@ -125,7 +124,7 @@ public class MemberController {
 
 	@PostMapping("/social")
 	public ResponseEntity<ApiResponse> signUpSocial(
-		@RequestBody MemberPatchNicknameDto requestDto) {
+		@RequestBody SocialSignUpDto requestDto) {
 		if (requestDto.getNickname() == null || requestDto.getEmail() == null) {
 			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
 		}
@@ -151,8 +150,23 @@ public class MemberController {
 		@RequestHeader("Access-Token") String accessToken
 	) {
 		try {
+			log.info("[DELETE MEMBER]");
 			memberService.deleteMember(accessToken);
 			return new ApiResponse<>(SUCCESS_DELETE_USER).toResponseEntity();
+		} catch (CustomException e) {
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
+		}
+	}
+
+	@PatchMapping("/nickname")
+	public ResponseEntity<ApiResponse> updateMemberNickname(
+		@RequestHeader("Access-Token") String accessToken,
+		@RequestBody MemberNicknameDto requestDto
+	) {
+		try {
+			log.info("[UPDATE MEMBER NICKNAME] : change to {}", requestDto.getNickname());
+			memberService.updateMemberNickname(accessToken, requestDto);
+			return new ApiResponse<>(SUCCESS_UPDATE_NICKNAME).toResponseEntity();
 		} catch (CustomException e) {
 			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
