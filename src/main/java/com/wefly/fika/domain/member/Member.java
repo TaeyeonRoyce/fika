@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.wefly.fika.domain.base.BaseTimeEntity;
+import com.wefly.fika.domain.course.CourseGroup;
 import com.wefly.fika.domain.drama.DramaMemberLike;
 
 import lombok.AccessLevel;
@@ -38,14 +39,14 @@ public class Member extends BaseTimeEntity {
 	private String memberNickname;
 	private String memberPassword;
 
-	@OneToMany(mappedBy = "member")
-	private List<DramaMemberLike> likeDramas = new ArrayList<>();
-
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private List<MemberSaveSpot> saveSpots = new ArrayList<>();
 
 	@OneToMany(mappedBy = "member")
 	private List<MemberSaveCourse> saveCourses = new ArrayList<>();
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	private List<CourseGroup> courseGroups = new ArrayList<>();
 
 	@Builder
 	public Member(String memberEmail, String memberAccessToken, String memberNickname, String memberPassword) {

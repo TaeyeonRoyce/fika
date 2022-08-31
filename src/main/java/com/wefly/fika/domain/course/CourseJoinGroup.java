@@ -1,4 +1,4 @@
-package com.wefly.fika.domain.drama;
+package com.wefly.fika.domain.course;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.wefly.fika.domain.member.Member;
+import com.wefly.fika.domain.base.BaseTimeEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,36 +19,26 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class DramaMemberLike {
+public class CourseJoinGroup extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "drama_member_like_id")
+	@Column(name = "course_join_group_id")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "drama_id")
-	private Drama drama;
+	@JoinColumn(name = "course_group_id")
+	private CourseGroup courseGroup;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id")
-	private Member member;
-
-	private boolean likeDrama;
+	@JoinColumn(name = "course_id")
+	private Course course;
 
 	@Builder
-	public DramaMemberLike(Drama drama, Member member, boolean likeDrama) {
-		this.drama = drama;
-		this.member = member;
-		this.likeDrama = likeDrama;
-	}
+	public CourseJoinGroup(CourseGroup courseGroup, Course course) {
+		this.courseGroup = courseGroup;
+		this.course = course;
 
-	public void toggleLikeInfo() {
-		if (this.likeDrama) {
-			this.likeDrama = false;
-			return;
-		}
-
-		this.likeDrama = true;
+		this.courseGroup.getCourseJoinGroups().add(this);
 	}
 }

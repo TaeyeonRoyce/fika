@@ -42,9 +42,9 @@ public class JwtInterceptor implements HandlerInterceptor {
 		response.setCharacterEncoding("UTF-8");
 
 		if (handlerMethod.getMethodAnnotation(TokenNullable.class) != null
-			&& accessToken == null) {
+			&& (accessToken == null || accessToken.isBlank())) {
 			return true;
-		} else if (accessToken == null) { //AccessToken이 존재하지 않은 경우
+		} else if (accessToken == null || accessToken.isBlank()) { //AccessToken이 존재하지 않은 경우
 			log.warn("[JWT TOKEN EXCEPTION] : Token is not found");
 			response.setStatus(401);
 			getResponseMessage(response, ACCESS_TOKEN_NULL);
