@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wefly.fika.config.TokenNullable;
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.course.Course;
@@ -40,6 +41,7 @@ public class IndexController {
 	private final ICourseService courseService;
 	private final ISpotDataService spotDataService;
 
+	@TokenNullable
 	@GetMapping("/main")
 	public ResponseEntity<ApiResponse> getMainPage(
 		@RequestHeader(value = "Access-Token", required = false) String accessToken

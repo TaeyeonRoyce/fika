@@ -32,7 +32,7 @@ public class JwtService {
 			.claim("memberId", id)
 			.claim("memberEmail", email)
 			.setIssuedAt(dateUtil.toDate(now))
-			.setExpiration(dateUtil.toDate(now.plusDays(7)))
+			.setExpiration(dateUtil.toDate(now.plusDays(30)))
 			.signWith(SignatureAlgorithm.HS256, JWT_SECRET_KEY)
 			.compact();
 	}

@@ -9,9 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wefly.fika.config.TokenNullable;
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.config.response.ApiResponseStatus;
 
@@ -29,14 +31,20 @@ public class JwtInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws
 		Exception {
-		log.debug("[Access Token Interceptor]");
+		log.info("[REQUEST URL] : {}", request.getRequestURL());
+		log.info("[Access Token Interceptor]");
 		String accessToken = request.getHeader("Access-Token");
-		log.debug("[Access Token] : {}", accessToken);
+		log.info("[Access Token] : {}", accessToken);
+
+		HandlerMethod handlerMethod = (HandlerMethod)handler;
 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 
-		if (accessToken == null) { //AccessToken이 존재하지 않은 경우
+		if (handlerMethod.getMethodAnnotation(TokenNullable.class) != null
+			&& accessToken == null) {
+			return true;
+		} else if (accessToken == null) { //AccessToken이 존재하지 않은 경우
 			log.warn("[JWT TOKEN EXCEPTION] : Token is not found");
 			response.setStatus(401);
 			getResponseMessage(response, ACCESS_TOKEN_NULL);
