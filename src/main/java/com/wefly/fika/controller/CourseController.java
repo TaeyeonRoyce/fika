@@ -242,15 +242,18 @@ public class CourseController {
 			Course course = courseService.getCourseInfo(Long.valueOf(courseId));
 
 			log.info("[COURSE] : {}", course.getCourseTitle());
-			if (accessToken != null) {
-				log.info("[LOGIN USER] : Apply scrap infos");
-				spotDataService.checkScrapped(course.getSortedSpotList(), accessToken);
-			}
-
+			List<SpotPreviewResponse> sortedSpotList = course.getSortedSpotList();
 			CourseDetailResponse response = CourseDetailResponse.builder()
 				.course(course)
-				.spotList(course.getSortedSpotList())
+				.spotList(sortedSpotList)
 				.build();
+
+			if (accessToken != null) {
+				log.info("[LOGIN USER] : Apply scrap infos");
+				sortedSpotList.add(response.getCourseLocage());
+				spotDataService.checkScrapped(sortedSpotList, accessToken);
+			}
+
 
 			return new ApiResponse<>(response).toResponseEntity();
 		} catch (NumberFormatException e) {
