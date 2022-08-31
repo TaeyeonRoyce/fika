@@ -32,7 +32,10 @@ public class WebConfig implements WebMvcConfigurer {
 			.addPathPatterns("/course/all**")
 			.addPathPatterns("/course/{*courseId}")
 			.addPathPatterns("/course/detail/{*courseId}")
-			.addPathPatterns("/spot/detail/{*spotId}");
+			.addPathPatterns("/spot/detail/{*spotId}")
+			.addPathPatterns("/course/my")
+			.addPathPatterns("/group/my")
+			.excludePathPatterns("/drama/all");
 	}
 
 }

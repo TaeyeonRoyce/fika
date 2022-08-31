@@ -15,6 +15,7 @@ public class CourseSaveDto {
 
 	private String courseTitle;
 	private String baseAddress;
+	private Long courseGroupId;
 
 	@NotNull
 	private Long locageSpotId;
@@ -22,9 +23,11 @@ public class CourseSaveDto {
 	private List<Long> spotIdList;
 
 	@Builder
-	public CourseSaveDto(String courseTitle, String baseAddress, Long locageSpotId, List<Long> spotIdList) {
+	public CourseSaveDto(String courseTitle, String baseAddress, Long courseGroupId, Long locageSpotId,
+		List<Long> spotIdList) {
 		this.courseTitle = courseTitle;
 		this.baseAddress = baseAddress;
+		this.courseGroupId = courseGroupId;
 		this.locageSpotId = locageSpotId;
 		this.spotIdList = spotIdList;
 	}

@@ -36,4 +36,6 @@ public interface ICourseService {
 	CourseInfoResponse editCourse(String accessToken, Long courseId, CourseEditDto editDto) throws CustomException;
 
 	List<CoursePreviewResponse> getSavedCourse(String accessToken);
+
+	void getMyCourseWithGroups(String accessToken);
 }

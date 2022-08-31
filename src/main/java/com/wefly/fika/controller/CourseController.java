@@ -260,15 +260,24 @@ public class CourseController {
 	}
 
 	@GetMapping("/my/scrap")
-	public ResponseEntity<ApiResponse> getMyCourse(
+	public ResponseEntity<ApiResponse> getMyScarpCourse(
 		@RequestHeader("Access-Token") String accessToken
 	) {
-		log.info("[GET MY COURSE] : Get user scrapped course");
+		log.info("[GET MY SCRAP COURSE] : Get user scrapped course");
 		List<CoursePreviewResponse> response = courseService.getSavedCourse(accessToken);
 		response.forEach(o -> o.setScrapped(true));
 
 		log.info("[SCRAPPED COURSE COUNT] : {}", response.size());
 		return new ApiResponse<>(response).toResponseEntity();
+	}
+
+	@GetMapping("/my")
+	public ResponseEntity<ApiResponse> getMyCourse(
+		@RequestHeader("Access-Token") String accessToken
+	) {
+		log.info("[GET MY COURSE] : Get user course");
+		courseService.getMyCourseWithGroups(accessToken);
+		return null;
 	}
 
 }

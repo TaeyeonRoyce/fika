@@ -52,7 +52,7 @@ public class SpotData {
 	@Column(name = "category")
 	private String category;
 
-	@Column(name = "operation_time_kr")
+	@Column(name = "operation_time_jp")
 	private String timeOpened;
 
 	@Column(name = "address_jp")
@@ -85,14 +85,6 @@ public class SpotData {
 	@OneToMany(mappedBy = "spotData", cascade = CascadeType.ALL)
 	private List<SpotMenu> spotMenuList = new ArrayList<>();
 
-	public void updateToLocage(Drama drama, String quote, String hashTag) {
-		this.isLocage = true;
-		this.drama = drama;
-		this.hashTag = hashTag;
-
-		drama.getSpotDataList().add(this);
-	}
-
 	public SpotPreviewResponse toSpotPreviewResponse() {
 		return SpotPreviewResponse.builder()
 			.spotId(this.id)
@@ -121,6 +113,13 @@ public class SpotData {
 	}
 	public void setHashTag(String hashTag) {
 		this.hashTag = hashTag;
+	}
+
+	public void updateToLocage(Drama drama) {
+		this.isLocage = true;
+		this.drama = drama;
+
+		drama.getSpotDataList().add(this);
 	}
 
 

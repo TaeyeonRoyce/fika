@@ -41,19 +41,6 @@ public class DramaController {
 
 	private final IDramaService dramaService;
 
-	@PostMapping("/auth")
-	public ResponseEntity<ApiResponse> saveDrama(
-		@Valid @RequestBody DramaSaveDto saveDto,
-		BindingResult bindingResult
-	) {
-		if (bindingResult.hasErrors()) {
-			return new ApiResponse<>(REQUEST_FIELD_NULL).toResponseEntity();
-		}
-
-		Drama drama = dramaService.saveDrama(saveDto);
-		return new ApiResponse<>(drama.getDramaName()).toResponseEntity();
-	}
-
 	@GetMapping("/all")
 	public ResponseEntity<ApiResponse> getAllDramas(
 		@RequestParam(required = false) String genre,

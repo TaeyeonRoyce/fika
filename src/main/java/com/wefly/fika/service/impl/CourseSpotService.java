@@ -58,7 +58,7 @@ public class CourseSpotService implements ICourseSpotService {
 		}
 
 		courseSpotRepository.saveAll(saveList);
-		course.update();
+		course.updateCourseSpotNumber();
 
 		return saveList.size();
 	}
@@ -81,7 +81,7 @@ public class CourseSpotService implements ICourseSpotService {
 		}
 
 		courseSpotRepository.saveAll(saveList);
-		course.update();
+		course.updateCourseSpotNumber();
 
 		return saveList.size();
 	}
@@ -106,7 +106,7 @@ public class CourseSpotService implements ICourseSpotService {
 		}
 
 		courseSpotRepository.saveAll(saveList);
-		course.update();
+		course.updateCourseSpotNumber();
 
 		return saveList.size();
 	}

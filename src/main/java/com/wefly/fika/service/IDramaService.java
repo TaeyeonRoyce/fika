@@ -11,8 +11,6 @@ import com.wefly.fika.dto.drama.response.DramaInfoResponse;
 
 public interface IDramaService {
 
-	Drama saveDrama(DramaSaveDto saveDto);
-
 	Drama getDramaByTitle(String dramaTitle) throws CustomException;
 
 	void mapDramaActor(Drama drama, Actor actor);

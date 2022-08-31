@@ -52,6 +52,10 @@ public class Course extends BaseTimeEntity {
 	@JoinColumn(name = "locage_id")
 	private SpotData locage;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "course_group_id")
+	private CourseGroup courseGroup;
+
 	private String baseAddress;
 	private int courseSpotNumber;
 	private int savedCount;
@@ -60,7 +64,7 @@ public class Course extends BaseTimeEntity {
 
 	@Builder
 	public Course(String courseTitle, Member creatMember, Drama drama, String baseAddress, int courseSpotNumber,
-		int savedCount, SpotData locage) {
+		int savedCount, SpotData locage, CourseGroup courseGroup) {
 		this.courseTitle = courseTitle;
 		this.creatMember = creatMember;
 		this.drama = drama;
@@ -68,11 +72,13 @@ public class Course extends BaseTimeEntity {
 		this.courseSpotNumber = courseSpotNumber;
 		this.savedCount = savedCount;
 		this.locage = locage;
+		this.courseGroup = courseGroup;
 
+		courseGroup.getCourseList().add(this);
 		drama.getCourseList().add(this);
 	}
 
-	public void update() {
+	public void updateCourseSpotNumber() {
 		this.courseSpotNumber = spotList.size();
 	}
 

@@ -46,19 +46,6 @@ public class DramaService implements IDramaService {
 	private final DramaMemberLikeRepository dramaMemberLikeRepository;
 
 	@Override
-	public Drama saveDrama(DramaSaveDto saveDto) {
-		List<SpotData> locageSpots = spotDataService.findSpotsByDramaName(saveDto.getTitle());
-		Drama drama = saveDto.toEntity();
-		dramaRepository.save(drama);
-
-		locageSpots.forEach(
-			o -> o.updateToLocage(drama, "test", "#test #hash #string")
-		);
-
-		return drama;
-	}
-
-	@Override
 	public Drama getDramaByTitle(String dramaTitle) throws CustomException {
 		return dramaRepository.findDramaByDramaName(dramaTitle)
 			.orElseThrow(() -> new CustomException(NO_SUCH_DATA_FOUND));

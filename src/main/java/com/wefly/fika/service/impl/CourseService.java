@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.actor.Actor;
 import com.wefly.fika.domain.course.Course;
+import com.wefly.fika.domain.course.CourseGroup;
 import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaActor;
@@ -28,6 +29,7 @@ import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 import com.wefly.fika.jwt.JwtService;
 import com.wefly.fika.repository.ActorRepository;
+import com.wefly.fika.repository.CourseGroupRepository;
 import com.wefly.fika.repository.CourseRepository;
 import com.wefly.fika.repository.DramaActorRepository;
 import com.wefly.fika.repository.MemberRepository;
@@ -52,7 +54,7 @@ public class CourseService implements ICourseService {
 
 	private final SpotDataRepository spotDataRepository;
 	private final ActorRepository actorRepository;
-	private final DramaActorRepository dramaActorRepository;
+	private final CourseGroupRepository courseGroupRepository;
 	private final MemberSaveCourseRepository memberSaveCourseRepository;
 
 	@Override
@@ -62,6 +64,9 @@ public class CourseService implements ICourseService {
 			() -> new CustomException(NO_SUCH_DATA_FOUND)
 		);
 		SpotData locage = spotDataRepository.findById(saveDto.getLocageSpotId()).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+		CourseGroup courseGroup = courseGroupRepository.findById(saveDto.getCourseGroupId()).orElseThrow(
 			() -> new CustomException(NO_SUCH_DATA_FOUND)
 		);
 
@@ -78,7 +83,9 @@ public class CourseService implements ICourseService {
 			.creatMember(createMember)
 			.drama(locage.getDrama())
 			.locage(locage)
+			.courseGroup(courseGroup)
 			.build();
+
 		return courseRepository.save(course);
 	}
 
@@ -235,5 +242,10 @@ public class CourseService implements ICourseService {
 			.map(MemberSaveCourse::getCourse)
 			.map(Course::toCourseResponse)
 			.collect(Collectors.toList());
+	}
+
+	@Override
+	public void getMyCourseWithGroups(String accessToken) {
+
 	}
 }

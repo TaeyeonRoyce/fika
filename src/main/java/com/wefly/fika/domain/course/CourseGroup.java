@@ -3,6 +3,7 @@ package com.wefly.fika.domain.course;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +16,7 @@ import javax.persistence.OneToMany;
 
 import com.wefly.fika.domain.base.BaseTimeEntity;
 import com.wefly.fika.domain.member.Member;
+import com.wefly.fika.dto.course.CourseGroupPreviewResponse;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -36,8 +38,8 @@ public class CourseGroup extends BaseTimeEntity {
 
 	private String groupName;
 
-	@OneToMany(mappedBy = "courseGroup", fetch = FetchType.EAGER)
-	private List<CourseJoinGroup> courseJoinGroups = new ArrayList<>();
+	@OneToMany(mappedBy = "courseGroup")
+	private List<Course> courseList = new ArrayList<>();
 
 	@Builder
 	public CourseGroup(Member member, String groupName) {
@@ -45,6 +47,13 @@ public class CourseGroup extends BaseTimeEntity {
 		this.groupName = groupName;
 
 		member.getCourseGroups().add(this);
+	}
+
+	public CourseGroupPreviewResponse toPreviewResponse() {
+		return CourseGroupPreviewResponse.builder()
+			.courseGroupId(this.id)
+			.courseGroupName(this.groupName)
+			.build();
 	}
 
 	public void updateName(String updateCourseGroupName) {
