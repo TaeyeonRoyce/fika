@@ -134,8 +134,8 @@ public class SpotData {
 		if (this.address.equals("オンライン開催")) {
 			return;
 		}
-		String[] s = this.address.split("区");
-		this.shortAddress = s[0] + "区";
+		String[] s = this.address.split("ル");
+		this.shortAddress = s[0] + "ル";
 	}
 
 	public void updateDrama(Drama drama) {

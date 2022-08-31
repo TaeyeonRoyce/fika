@@ -57,6 +57,7 @@ public class MemberController {
 		return new ApiResponse<>(true).toResponseEntity();
 	}
 
+	@Deprecated
 	@GetMapping("/valid/email")
 	public ResponseEntity<ApiResponse> checkEmail(@RequestParam String email) {
 		if (email == null) {
@@ -68,6 +69,7 @@ public class MemberController {
 		return new ApiResponse<>(validEmail).toResponseEntity();
 	}
 
+	@Deprecated
 	@PostMapping
 	public ResponseEntity<ApiResponse> memberSingUp(
 		@Valid @RequestBody MemberSignUpDto saveDto,
@@ -97,6 +99,7 @@ public class MemberController {
 		return new ApiResponse<>(response).toResponseEntity();
 	}
 
+	@Deprecated
 	@PostMapping("/login")
 	public ResponseEntity<ApiResponse> memberLogin(
 		@Valid @RequestBody MemberLoginDto loginDto,
