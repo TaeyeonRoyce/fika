@@ -122,6 +122,10 @@ public class SpotData {
 		drama.getSpotDataList().add(this);
 	}
 
+	public void setSpotName(String spotName) {
+		this.spotName = spotName;
+	}
+
 
 	//== 데이터 추가 시 실행 로직 ==//
 

@@ -82,7 +82,7 @@ public class Course extends BaseTimeEntity {
 		this.courseSpotNumber = spotList.size();
 	}
 
-	public CoursePreviewResponse toCourseResponse() {
+	public CoursePreviewResponse toPreviewResponse() {
 		List<String> spotTitleList = spotList.stream()
 			.map(s -> s.getSpotData().getSpotName())
 			.collect(Collectors.toList());

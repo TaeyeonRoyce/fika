@@ -34,6 +34,7 @@ import com.wefly.fika.repository.DramaRepository;
 import com.wefly.fika.repository.MemberRepository;
 import com.wefly.fika.service.ICourseGroupService;
 
+@DisplayName("코스 그룹 API 테스트")
 class CourseGroupControllerTest extends WebTest {
 
 	@Autowired

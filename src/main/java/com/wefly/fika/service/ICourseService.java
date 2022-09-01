@@ -7,6 +7,7 @@ import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.dto.course.CourseEditDto;
 import com.wefly.fika.dto.course.CourseSaveDto;
+import com.wefly.fika.dto.course.response.CourseGroupListResponse;
 import com.wefly.fika.dto.course.response.CourseInfoResponse;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
@@ -37,5 +38,5 @@ public interface ICourseService {
 
 	List<CoursePreviewResponse> getSavedCourse(String accessToken);
 
-	void getMyCourseWithGroups(String accessToken);
+	List<CourseGroupListResponse> getMyCourseWithGroups(String accessToken);
 }

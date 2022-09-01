@@ -48,10 +48,10 @@ public class Drama extends BaseTimeEntity {
 	@OneToMany(mappedBy = "drama", cascade = CascadeType.ALL)
 	private List<Scene> scenes = new ArrayList<>();
 
-	@OneToMany(mappedBy = "drama", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "drama")
 	private List<SpotData> spotDataList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "drama", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "drama")
 	private List<Course> courseList = new ArrayList<>();
 
 	@Builder

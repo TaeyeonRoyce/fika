@@ -21,9 +21,9 @@ import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaActor;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.domain.member.MemberSaveCourse;
-import com.wefly.fika.domain.member.MemberSaveSpot;
 import com.wefly.fika.dto.course.CourseEditDto;
 import com.wefly.fika.dto.course.CourseSaveDto;
+import com.wefly.fika.dto.course.response.CourseGroupListResponse;
 import com.wefly.fika.dto.course.response.CourseInfoResponse;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
@@ -31,7 +31,6 @@ import com.wefly.fika.jwt.JwtService;
 import com.wefly.fika.repository.ActorRepository;
 import com.wefly.fika.repository.CourseGroupRepository;
 import com.wefly.fika.repository.CourseRepository;
-import com.wefly.fika.repository.DramaActorRepository;
 import com.wefly.fika.repository.MemberRepository;
 import com.wefly.fika.repository.MemberSaveCourseRepository;
 import com.wefly.fika.repository.SpotDataRepository;
@@ -240,12 +239,16 @@ public class CourseService implements ICourseService {
 
 		return savedSpots.stream()
 			.map(MemberSaveCourse::getCourse)
-			.map(Course::toCourseResponse)
+			.map(Course::toPreviewResponse)
 			.collect(Collectors.toList());
 	}
 
 	@Override
-	public void getMyCourseWithGroups(String accessToken) {
-
+	public List<CourseGroupListResponse> getMyCourseWithGroups(String accessToken) {
+		Long memberId = jwtService.getMemberId(accessToken);
+		List<CourseGroup> courseGroups = courseGroupRepository.findByMemberId(memberId);
+		return courseGroups.stream()
+			.map(CourseGroup::toListResponse)
+			.collect(Collectors.toList());
 	}
 }

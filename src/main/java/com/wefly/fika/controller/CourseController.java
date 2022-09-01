@@ -27,6 +27,7 @@ import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.dto.course.CourseEditDto;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CourseDetailResponse;
+import com.wefly.fika.dto.course.response.CourseGroupListResponse;
 import com.wefly.fika.dto.course.response.CourseInfoResponse;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
 import com.wefly.fika.dto.spot.SpotIdListDto;
@@ -106,7 +107,7 @@ public class CourseController {
 		}
 
 		List<CoursePreviewResponse> response = courses.stream()
-			.map(Course::toCourseResponse)
+			.map(Course::toPreviewResponse)
 			.collect(Collectors.toList());
 
 		if (!accessToken.isBlank()) {
@@ -279,8 +280,8 @@ public class CourseController {
 		@RequestHeader("Access-Token") String accessToken
 	) {
 		log.info("[GET MY COURSE] : Get user course");
-		courseService.getMyCourseWithGroups(accessToken);
-		return null;
+		List<CourseGroupListResponse> response = courseService.getMyCourseWithGroups(accessToken);
+		return new ApiResponse<>(response).toResponseEntity();
 	}
 
 }

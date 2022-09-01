@@ -18,7 +18,6 @@ import com.wefly.fika.domain.drama.DramaActor;
 import com.wefly.fika.domain.drama.DramaMemberLike;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
-import com.wefly.fika.dto.drama.DramaSaveDto;
 import com.wefly.fika.dto.drama.response.DramaInfoResponse;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 import com.wefly.fika.jwt.JwtService;
@@ -120,7 +119,7 @@ public class DramaService implements IDramaService {
 
 		List<CoursePreviewResponse> courseResponse = drama.getCourseList()
 			.stream()
-			.map(Course::toCourseResponse)
+			.map(Course::toPreviewResponse)
 			.collect(Collectors.toList());
 		if (accessToken != null) {
 			spotDataService.checkScrapped(spotResponse, accessToken);

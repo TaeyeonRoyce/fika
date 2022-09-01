@@ -22,7 +22,6 @@ public class CoursePreviewResponse {
 	private boolean isScrapped;
 
 	@Builder
-
 	public CoursePreviewResponse(Long courseId, String locageImageUrl, String courseTitle, String dramaTitle,
 		String baseAddress, List<String> spotTitleList, int courseSavedCount) {
 		this.courseId = courseId;

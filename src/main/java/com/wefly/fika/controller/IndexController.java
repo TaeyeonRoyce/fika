@@ -52,7 +52,7 @@ public class IndexController {
 		if (!accessToken.isBlank()) {
 			myCourses = courseService.getMyCourses(accessToken)
 				.stream()
-				.map(Course::toCourseResponse)
+				.map(Course::toPreviewResponse)
 				.collect(Collectors.toList());
 		}
 
@@ -65,7 +65,7 @@ public class IndexController {
 		log.info("[GET COURSES ORDER BY SCRAPPED COUNT DESCENDING]");
 		List<CoursePreviewResponse> coursesSortBySaved = courseService.getCoursesSortBySaved()
 			.stream()
-			.map(Course::toCourseResponse)
+			.map(Course::toPreviewResponse)
 			.collect(Collectors.toList());
 
 		log.info("[GET SPOTS ORDER BY SCRAPPED COUNT DESCENDING]");
