@@ -9,6 +9,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -138,7 +139,6 @@ class MemberControllerTest extends WebTest {
 
 		List<Member> all = memberRepository.findAll();
 		assertThat(all.get(0).getMemberNickname()).isEqualTo(updateNickname);
-
 	}
 
 }

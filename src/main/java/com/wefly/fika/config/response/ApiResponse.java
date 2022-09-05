@@ -26,6 +26,8 @@ public class ApiResponse<T> {
 
 	private int code;
 	private String message;
+
+	//FIXME : http status line 에서도 중복으로 표현됨
 	private HttpStatus httpStatus;
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)

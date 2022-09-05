@@ -2,6 +2,7 @@ package com.wefly.fika.service;
 
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.member.Member;
+import com.wefly.fika.dto.member.DemoTesterLoginDto;
 import com.wefly.fika.dto.member.MemberLoginDto;
 import com.wefly.fika.dto.member.MemberNicknameDto;
 import com.wefly.fika.dto.member.SocialSignUpDto;
@@ -26,4 +27,11 @@ public interface IMemberService {
 	void deleteMember(String accessToken) throws CustomException;
 
 	void updateMemberNickname(String accessToken, MemberNicknameDto requestDto) throws CustomException;
+
+	//FIXME : tester 계정에 대한 책임까지 짊어져야 하는가..?
+	boolean checkTesterCode(DemoTesterLoginDto requestDto);
+
+	String getTesterAccessToken() throws CustomException;
+
+
 }

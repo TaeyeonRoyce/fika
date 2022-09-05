@@ -33,7 +33,8 @@ class JwtInterceptorTest extends WebTest {
 			restTemplate.exchange(
 				tokenNullableUrl,
 				HttpMethod.GET, new HttpEntity<>(headers),
-				new ParameterizedTypeReference<ApiResponse<ApiResponseStatus>>() {}
+				new ParameterizedTypeReference<ApiResponse<ApiResponseStatus>>() {
+				}
 			);
 
 		String message = responseEntity.getBody().getMessage();
