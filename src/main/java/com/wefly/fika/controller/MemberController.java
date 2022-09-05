@@ -4,6 +4,7 @@ import static com.wefly.fika.config.response.ApiResponseStatus.*;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.member.Member;
+import com.wefly.fika.dto.member.DemoTesterLoginDto;
 import com.wefly.fika.dto.member.MemberLoginDto;
 import com.wefly.fika.dto.member.MemberNicknameDto;
 import com.wefly.fika.dto.member.SocialSignUpDto;
@@ -36,6 +38,26 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 
 	private final IMemberService memberService;
+
+
+	@PostMapping("/demo/tester")
+	public ResponseEntity<ApiResponse> loginTester(
+		@RequestBody DemoTesterLoginDto requestDto
+	) {
+		if (!memberService.checkTesterCode(requestDto)) {
+			log.warn("[INVALID EMAIL] : {}", requestDto.getTesterCode());
+			return new ApiResponse<>(NOT_VALID_TESTER_CODE).toResponseEntity();
+		}
+
+		log.info("[TESTER LOGIN] : {}", requestDto.getTesterCode());
+		try {
+			String testerAccessToken = memberService.getTesterAccessToken();
+			return new ApiResponse<>(testerAccessToken).toResponseEntity();
+		} catch (CustomException e) {
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
+		}
+
+	}
 
 	@PostMapping("/valid/nickname")
 	public ResponseEntity<ApiResponse> checkNickname(

@@ -2,12 +2,14 @@ package com.wefly.fika.service.impl;
 
 import static com.wefly.fika.config.response.ApiResponseStatus.*;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.member.Member;
+import com.wefly.fika.dto.member.DemoTesterLoginDto;
 import com.wefly.fika.dto.member.MemberLoginDto;
 import com.wefly.fika.dto.member.MemberNicknameDto;
 import com.wefly.fika.dto.member.SocialSignUpDto;
@@ -28,6 +30,12 @@ public class MemberService implements IMemberService {
 	private final BCryptPasswordEncoder encoder;
 
 	private final MemberRepository memberRepository;
+
+	@Value("${demo.code}")
+	private String demoAccessCode;
+
+	@Value("${demo.uid}")
+	private String demoTesterEmail;
 
 	@Override
 	public Member getMemberByToken(String accessToken) throws CustomException {
@@ -118,6 +126,22 @@ public class MemberService implements IMemberService {
 
 		member.updateMemberNickname(requestDto.getNickname());
 		memberRepository.save(member);
+	}
+
+	public boolean checkTesterCode(DemoTesterLoginDto requestDto) {
+		if (requestDto.getTesterCode().equals(demoAccessCode)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public String getTesterAccessToken() throws CustomException {
+		Member member = memberRepository.findByMemberEmail(demoTesterEmail).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+
+		return member.getMemberAccessToken();
 	}
 
 

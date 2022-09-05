@@ -31,6 +31,7 @@ public enum ApiResponseStatus {
 	MEMBER_NICKNAME_DUPLICATE(false, 4024, "이미 존재하는 닉네임 입니다", HttpStatus.BAD_REQUEST),
 	MEMBER_EMAIL_DUPLICATE(false, 4025, "이미 가입되어 있는 이메일 입니다", HttpStatus.BAD_REQUEST),
 	NOT_NICKNAME_REGEX(false, 4026, "닉네임 형식에 맞지 않습니다", HttpStatus.BAD_REQUEST),
+	NOT_VALID_TESTER_CODE(false, 4027, "유효하지 않는 테스터 코드입니다", HttpStatus.BAD_REQUEST),
 	LOGIN_REQUEST_ERROR(false, 4040, "로그인에 실패하였습니다", HttpStatus.BAD_REQUEST),
 	NOT_VALID_FORMAT(false, 4026, "요청 형식이 잘 못 되었습니다", HttpStatus.BAD_REQUEST),
 
