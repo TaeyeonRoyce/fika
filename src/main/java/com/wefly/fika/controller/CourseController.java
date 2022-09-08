@@ -24,6 +24,8 @@ import com.wefly.fika.config.TokenNullable;
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.course.Course;
+import com.wefly.fika.domain.course.CourseSpot;
+import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.dto.course.CourseEditDto;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CourseDetailResponse;
@@ -282,6 +284,28 @@ public class CourseController {
 		log.info("[GET MY COURSE] : Get user course");
 		List<CourseGroupListResponse> response = courseService.getMyCourseWithGroups(accessToken);
 		return new ApiResponse<>(response).toResponseEntity();
+	}
+
+	@GetMapping("/{courseId}/reviews")
+	public ResponseEntity<ApiResponse> getCourseSpotsWithReviewInfo(
+		@RequestHeader("Access-Token") String accessToken,
+		@PathVariable("courseId") Long courseId
+	){
+		try {
+			log.info("[GET COURSE SPOTS WITH REVIEW INFO]");
+			Course courseInfo = courseService.getCourseInfo(courseId);
+			List<SpotPreviewResponse> spotDataList = courseInfo.getSpotList().stream()
+				.map(CourseSpot::getSpotData)
+				.map(SpotData::toSpotPreviewResponse)
+				.collect(Collectors.toList());
+
+			spotDataService.checkScrapped(spotDataList, accessToken);
+			spotDataService.checkReviewPosted(spotDataList, accessToken);
+
+			return new ApiResponse<>(spotDataList).toResponseEntity();
+		} catch (CustomException e) {
+			return new ApiResponse<>(e.getStatus().getMessage()).toResponseEntity();
+		}
 	}
 
 }

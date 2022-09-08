@@ -15,6 +15,7 @@ import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.data.SpotMenu;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.domain.member.MemberSaveSpot;
+import com.wefly.fika.domain.review.Review;
 import com.wefly.fika.dto.review.response.ReviewDetailResponse;
 import com.wefly.fika.dto.spot.SpotMenuResponse;
 import com.wefly.fika.dto.spot.response.SpotDetailResponse;
@@ -143,5 +144,22 @@ public class SpotDataService implements ISpotDataService {
 			.build();
 
 	}
+
+	@Override
+	public List<SpotPreviewResponse> checkReviewPosted(List<SpotPreviewResponse> spotDataList, String accessToken) {
+		Long memberId = jwtService.getMemberId(accessToken);
+		Map<Long, Review> memberSpotMap = reviewRepository.findByCreateMemberId(memberId).stream()
+			.collect(Collectors.toMap(
+				s -> s.getSpotData().getId(),
+				review -> review
+			));
+
+		for (SpotPreviewResponse spot : spotDataList) {
+			spot.setReviewPosted(memberSpotMap.containsKey(spot.getSpotId()));
+		}
+
+		return spotDataList;
+	}
+
 
 }
