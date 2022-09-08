@@ -286,6 +286,7 @@ public class CourseController {
 		return new ApiResponse<>(response).toResponseEntity();
 	}
 
+	//TODO : test 추가
 	@GetMapping("/{courseId}/reviews")
 	public ResponseEntity<ApiResponse> getCourseSpotsWithReviewInfo(
 		@RequestHeader("Access-Token") String accessToken,
