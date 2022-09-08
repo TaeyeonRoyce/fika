@@ -1,7 +1,6 @@
 package com.wefly.fika.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.data.SpotData;
@@ -23,4 +22,6 @@ public interface ISpotDataService {
 	List<SpotPreviewResponse> getSavedSpots(String accessToken);
 
 	SpotDetailResponse getSpotDataDetail(String accessToken, Long spotId) throws CustomException;
+
+	List<SpotPreviewResponse> checkReviewPosted(List<SpotPreviewResponse> spotDataList, String accessToken);
 }

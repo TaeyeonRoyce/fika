@@ -19,6 +19,7 @@ import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.review.Review;
 import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 
+import lombok.Builder;
 import lombok.Getter;
 
 /*
@@ -84,6 +85,28 @@ public class SpotData {
 
 	@OneToMany(mappedBy = "spotData", cascade = CascadeType.ALL)
 	private List<SpotMenu> spotMenuList = new ArrayList<>();
+
+	@Builder
+	public SpotData(String dramaName, String spotName, String sceneDescribe, String shortAddress, String image,
+		String category, String timeOpened, String address, Double longitude, Double latitude, String phoneNumber,
+		boolean isLocage, String scriptImage, int savedCount, String hashTag, Drama drama) {
+		this.dramaName = dramaName;
+		this.spotName = spotName;
+		this.sceneDescribe = sceneDescribe;
+		this.shortAddress = shortAddress;
+		this.image = image;
+		this.category = category;
+		this.timeOpened = timeOpened;
+		this.address = address;
+		this.longitude = longitude;
+		this.latitude = latitude;
+		this.phoneNumber = phoneNumber;
+		this.isLocage = isLocage;
+		this.scriptImage = scriptImage;
+		this.savedCount = savedCount;
+		this.hashTag = hashTag;
+		this.drama = drama;
+	}
 
 	public SpotPreviewResponse toSpotPreviewResponse() {
 		return SpotPreviewResponse.builder()

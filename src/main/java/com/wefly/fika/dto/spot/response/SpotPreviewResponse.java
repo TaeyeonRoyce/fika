@@ -18,6 +18,7 @@ public class SpotPreviewResponse {
 	private double mapX;
 	private double mapY;
 	private boolean scrapped;
+	private boolean reviewPosted;
 
 	@Builder
 	public SpotPreviewResponse(Long spotId, String spotImageUrl, String shortAddress, String type, String spotTitle,
@@ -35,5 +36,9 @@ public class SpotPreviewResponse {
 
 	public void setScrapped(boolean isScrapped) {
 		this.scrapped = isScrapped;
+	}
+
+	public void setReviewPosted(boolean reviewPosted) {
+		this.reviewPosted = reviewPosted;
 	}
 }

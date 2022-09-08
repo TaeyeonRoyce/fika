@@ -90,10 +90,12 @@ class CourseControllerTest extends WebTest {
 			.groupName(courseGroupName)
 			.build();
 
-		SpotData spotDataA = new SpotData();
+		SpotData spotDataA = SpotData.builder()
+			.build();
 		spotDataA.setSpotName(spotDataAName);
 
-		SpotData spotDataB = new SpotData();
+		SpotData spotDataB = SpotData.builder()
+			.build();
 		spotDataB.setSpotName(spotDataBName);
 
 		Drama drama = Drama.builder()
