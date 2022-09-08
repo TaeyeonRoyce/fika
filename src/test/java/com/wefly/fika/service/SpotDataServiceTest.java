@@ -58,14 +58,17 @@ class SpotDataServiceTest {
 			.memberEmail("test@mail.com")
 			.build();
 
-		SpotData spotDataA = SpotData.builder()
-			.longitude(10.12341)
-			.latitude(10.1234)
-			.build();
-		SpotData spotDataB = SpotData.builder()
-			.longitude(10.12341)
-			.latitude(10.1234)
-			.build();
+		SpotData spotDataA = new SpotData();
+		spotDataA.setAxis(
+			10.123,
+			42.14
+		);
+		SpotData spotDataB = new SpotData();
+		spotDataB.setAxis(
+			10.123,
+			42.14
+		);
+
 
 		List<SpotData> spotDataList = new ArrayList<>();
 		spotDataList.add(spotDataA);

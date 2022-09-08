@@ -2,6 +2,7 @@ package com.wefly.fika.service.impl;
 
 import static com.wefly.fika.config.response.ApiResponseStatus.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -247,8 +248,20 @@ public class CourseService implements ICourseService {
 	public List<CourseGroupListResponse> getMyCourseWithGroups(String accessToken) {
 		Long memberId = jwtService.getMemberId(accessToken);
 		List<CourseGroup> courseGroups = courseGroupRepository.findByMemberId(memberId);
-		return courseGroups.stream()
-			.map(CourseGroup::toListResponse)
-			.collect(Collectors.toList());
+
+		List<CourseGroupListResponse> responses = new ArrayList<>();
+		for (CourseGroup courseGroup : courseGroups) {
+			CourseGroupListResponse response = CourseGroupListResponse.builder()
+				.groupId(courseGroup.getId())
+				.groupName(courseGroup.getGroupName())
+				.coursePreviewList(courseGroup.getCourseList().stream()
+					.map(Course::toPreviewResponse)
+					.collect(Collectors.toList()))
+				.build();
+
+			responses.add(response);
+		}
+
+		return responses;
 	}
 }
