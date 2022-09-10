@@ -122,4 +122,8 @@ public class Course extends BaseTimeEntity {
 	public void updateCourseTitle(String courseTitle) {
 		this.courseTitle = courseTitle;
 	}
+	public void updateCourseGroup(CourseGroup courseGroup) {
+		this.courseGroup = courseGroup;
+		courseGroup.getCourseList().add(this);
+	}
 }

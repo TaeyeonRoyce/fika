@@ -14,13 +14,14 @@ public enum ApiResponseStatus {
 	SUCCESS_SAVE_COURSE_GROUP(true, 1005, "그룹이 생성 되었습니다", HttpStatus.OK),
 	SUCCESS_UPDATE_COURSE_GROUP(true, 1006, "그룹 이름이 변경 되었습니다", HttpStatus.OK),
 	SUCCESS_DELETE_COURSE_GROUP(true, 1007, "그룹이 삭제 되었습니다", HttpStatus.OK),
+	SUCCESS_MOVE_COURSE_GROUP(true, 1008, "코스 그룹이 변경되었습니다", HttpStatus.OK),
 
 	COURSE_SCRAPPED(true, 1010, "해당 코스를 스크랩 하였습니다", HttpStatus.OK),
 
 	COURSE_CANCEL_SCRAPPED(true, 1011, "해당 코스의 스크랩을 해제하였습니다", HttpStatus.OK),
 	SPOT_SCRAPPED(true, 1012, "해당 장소를 담았습니다", HttpStatus.OK),
 	SPOT_CANCEL_SCRAPPED(true, 1013, "해당 장소 담기 취소", HttpStatus.OK),
-	REVIEW_DELETE_SUCCESS(true, 1020, "해당 리뷰가 삭제되었습니다", HttpStatus.OK),
+	SUCCESS_REVIEW_DELETE(true, 1020, "해당 리뷰가 삭제되었습니다", HttpStatus.OK),
 
 	ACCESS_TOKEN_NULL(false, 4000, "Access Token이 없습니다", HttpStatus.UNAUTHORIZED),
 	ACCESS_TOKEN_INVALID(false, 4001, "Access Token이 유효하지 않습니다", HttpStatus.CONFLICT),
