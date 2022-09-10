@@ -3,6 +3,7 @@ package com.wefly.fika.domain.review;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,6 +18,7 @@ import javax.persistence.OneToOne;
 import com.wefly.fika.domain.base.BaseTimeEntity;
 import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.member.Member;
+import com.wefly.fika.dto.review.ReviewEditDto;
 import com.wefly.fika.dto.review.response.ReviewDetailResponse;
 
 import lombok.AccessLevel;
@@ -47,10 +49,10 @@ public class Review extends BaseTimeEntity {
 	private String reviewContents;
 	private boolean isImageReview;
 
-	@OneToMany(mappedBy = "review")
+	@OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
 	private List<ReviewImage> reviewImages = new ArrayList<>();
 
-	@OneToMany(mappedBy = "review")
+	@OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
 	private List<ReviewReport> reviewReports = new ArrayList<>();
 
 
@@ -63,5 +65,11 @@ public class Review extends BaseTimeEntity {
 		this.isImageReview = isImageReview;
 
 		spotData.getReviews().add(this);
+	}
+
+	public void updateByEditDto(ReviewEditDto editDto) {
+		this.rate = editDto.getRate();
+		this.reviewContents = editDto.getReviewContents();
+		this.isImageReview = editDto.getIsImageReview();
 	}
 }
