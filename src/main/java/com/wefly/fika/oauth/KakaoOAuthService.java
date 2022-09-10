@@ -31,4 +31,19 @@ public class KakaoOAuthService {
 		log.info("[USER KAKAO EMAIL] : {}", email);
 		return email;
 	}
+
+	public String requestToGoogle(String accessToken) throws WebClientResponseException {
+		String result = WebClient.builder()
+			.baseUrl("https://openidconnect.googleapis.com/v1/userinfo?access_token=" + accessToken)
+			.build()
+			.post()
+			.retrieve()
+			.bodyToMono(String.class)
+			.block();
+
+		log.info("[USER INFO FROM KAKAO] : {}", result);
+		String email = kakaoInfoParser.getEmailFromAttribute(result);
+		log.info("[USER KAKAO EMAIL] : {}", email);
+		return email;
+	}
 }

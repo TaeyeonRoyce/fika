@@ -61,4 +61,38 @@ public class OAuthController {
 			);
 		}
 	}
+
+	@PostMapping("/login/google")
+	public ResponseEntity<ApiResponse> loginByGoogle(
+		@RequestHeader(value = "Access-Token") String accessToken
+	) {
+		if (accessToken.isEmpty()) {
+			return new ApiResponse<>(ACCESS_TOKEN_INVALID).toResponseEntity();
+		}
+
+		log.info("[ACCESS TOKEN] : {}", accessToken);
+
+		String userEmail = null;
+		try {
+			userEmail = oAuthService.requestToKakao(accessToken);
+			Member member = memberService.getMemberByEmail(userEmail);
+			String token = memberService.getAccessTokenByMember(member);
+
+			log.info("[USER LOGIN] : {}", member.getMemberNickname());
+
+			return new ResponseEntity<>(new ApiResponse<>(token), HttpStatus.OK);
+		} catch (WebClientResponseException e) {
+			log.warn("[INVALID KAKAO ACCESS TOKEN] : {}", accessToken);
+			return new ResponseEntity<>(
+				new ApiResponse<>(ACCESS_TOKEN_INVALID),
+				HttpStatus.UNAUTHORIZED
+			);
+		} catch (NoSuchDataFound noSuchMember) {
+			log.warn("[SIGN UP REQUIRED] : {}", userEmail);
+			return new ResponseEntity<>(
+				new ApiResponse<>(userEmail, SOCIAL_LOGIN_FIRST),
+				HttpStatus.OK
+			);
+		}
+	}
 }
