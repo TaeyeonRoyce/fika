@@ -20,6 +20,7 @@ public enum ApiResponseStatus {
 	COURSE_CANCEL_SCRAPPED(true, 1011, "해당 코스의 스크랩을 해제하였습니다", HttpStatus.OK),
 	SPOT_SCRAPPED(true, 1012, "해당 장소를 담았습니다", HttpStatus.OK),
 	SPOT_CANCEL_SCRAPPED(true, 1013, "해당 장소 담기 취소", HttpStatus.OK),
+	REVIEW_DELETE_SUCCESS(true, 1020, "해당 리뷰가 삭제되었습니다", HttpStatus.OK),
 
 	ACCESS_TOKEN_NULL(false, 4000, "Access Token이 없습니다", HttpStatus.UNAUTHORIZED),
 	ACCESS_TOKEN_INVALID(false, 4001, "Access Token이 유효하지 않습니다", HttpStatus.CONFLICT),

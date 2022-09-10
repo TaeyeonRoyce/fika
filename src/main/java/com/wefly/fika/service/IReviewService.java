@@ -21,4 +21,5 @@ public interface IReviewService {
 	Review getReviewDetail(Long reviewId) throws CustomException;
 
 	Review editReview(String accessToken, ReviewEditDto editDto, Long reviewId) throws CustomException;
+	Long deleteReview(String accessToken, Long reviewId) throws CustomException;
 }

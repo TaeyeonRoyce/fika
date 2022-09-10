@@ -1,6 +1,9 @@
 package com.wefly.fika.controller;
 
+import static com.wefly.fika.config.response.ApiResponseStatus.*;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -107,6 +110,23 @@ public class ReviewController {
 				.build();
 
 			return new ApiResponse<>(response).toResponseEntity();
+
+		} catch (CustomException e) {
+			log.warn("[ERROR] : {}", e.getStatus().getMessage());
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
+		}
+	}
+
+	@DeleteMapping("/{reviewId}")
+	public ResponseEntity<ApiResponse> deleteReview(
+		@RequestHeader("Access-Token") String accessToken,
+		@PathVariable Long reviewId
+	) {
+		try {
+			log.info("[DELETE REVIEW] : Delete review");
+			Long deleteReviewId = reviewService.deleteReview(accessToken, reviewId);
+
+			return new ApiResponse<>(deleteReviewId, REVIEW_DELETE_SUCCESS).toResponseEntity();
 
 		} catch (CustomException e) {
 			log.warn("[ERROR] : {}", e.getStatus().getMessage());

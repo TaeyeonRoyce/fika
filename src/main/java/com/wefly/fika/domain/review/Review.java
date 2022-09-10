@@ -3,6 +3,7 @@ package com.wefly.fika.domain.review;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -48,10 +49,10 @@ public class Review extends BaseTimeEntity {
 	private String reviewContents;
 	private boolean isImageReview;
 
-	@OneToMany(mappedBy = "review")
+	@OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
 	private List<ReviewImage> reviewImages = new ArrayList<>();
 
-	@OneToMany(mappedBy = "review")
+	@OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
 	private List<ReviewReport> reviewReports = new ArrayList<>();
 
 
