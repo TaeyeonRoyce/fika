@@ -40,12 +40,12 @@ public class SpotData {
 	@Column(name = "spot_data_fika_id")
 	private Long id;
 
-	@Column(name = "drama_name_kr")
+	@Column(name = "drama_name_jp")
 	private String dramaName;
-	@Column(name = "spot_name_kr")
+	@Column(name = "spot_name_jp")
 	private String spotName;
 
-	@Column(name = "scene_describe_kr")
+	@Column(name = "scene_describe_jp")
 	private String sceneDescribe;
 	private String shortAddress;
 	@Column(name = "url")
@@ -73,7 +73,7 @@ public class SpotData {
 	private String scriptImage;
 	private int savedCount;
 
-	@Column(name = "hashtag_kr")
+	@Column(name = "hashtag_jp")
 	private String hashTag;
 
 	@ManyToOne(fetch = FetchType.LAZY)

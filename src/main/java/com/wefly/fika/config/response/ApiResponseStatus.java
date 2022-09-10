@@ -20,6 +20,7 @@ public enum ApiResponseStatus {
 	COURSE_CANCEL_SCRAPPED(true, 1011, "해당 코스의 스크랩을 해제하였습니다", HttpStatus.OK),
 	SPOT_SCRAPPED(true, 1012, "해당 장소를 담았습니다", HttpStatus.OK),
 	SPOT_CANCEL_SCRAPPED(true, 1013, "해당 장소 담기 취소", HttpStatus.OK),
+	REVIEW_DELETE_SUCCESS(true, 1020, "해당 리뷰가 삭제되었습니다", HttpStatus.OK),
 
 	ACCESS_TOKEN_NULL(false, 4000, "Access Token이 없습니다", HttpStatus.UNAUTHORIZED),
 	ACCESS_TOKEN_INVALID(false, 4001, "Access Token이 유효하지 않습니다", HttpStatus.CONFLICT),
@@ -41,6 +42,7 @@ public enum ApiResponseStatus {
 	COURSE_GROUP_NOT_EMPTY(false, 4200, "그룹에 존재하는 코스가 있어 삭제할 수 없습니다", HttpStatus.BAD_REQUEST),
 	ALREADY_EXIST_REPORT(false, 4300, "해당 리뷰에 이미 신고가 접수된 상태입니다", HttpStatus.BAD_REQUEST),
 	OVER_FILE_UPLOAD_LIMIT(false, 4400, "업로드 파일은 10MB로 제한됩니다", HttpStatus.PAYLOAD_TOO_LARGE),
+	REMOVE_IMAGE_FAIL(false, 4401, "이미지 삭제에 실패했습니다", HttpStatus.INTERNAL_SERVER_ERROR),
 	NO_SUCH_DATA_FOUND(false, 5000, "해당 값에 존재하는 데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR);
 
 	private final boolean isSuccess;

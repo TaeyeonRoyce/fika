@@ -73,7 +73,8 @@ public class ImageUploadService {
 		}
 	}
 
-	public void remove(String fileName) throws Exception {
+	public void remove(String imageUrl) throws Exception {
+		String fileName = imageUrl.split(bucketHost)[1];
 		amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
 	}
 }
