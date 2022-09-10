@@ -16,4 +16,6 @@ public interface IReviewService {
 	void saveReviewImages(Review review, List<String> imageUrls);
 
 	void reportReview(String accessToken, ReviewReportDto reportDto) throws CustomException;
+
+	Review getReviewDetail(Long reviewId) throws CustomException;
 }

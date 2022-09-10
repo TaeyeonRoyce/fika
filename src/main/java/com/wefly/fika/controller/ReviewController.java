@@ -1,7 +1,11 @@
 package com.wefly.fika.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,6 +71,25 @@ public class ReviewController {
 			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
 
+	}
+
+
+	@GetMapping("/{reviewId}/detail")
+	public ResponseEntity<ApiResponse> getReviewDetail(
+		@PathVariable Long reviewId
+	) {
+		try {
+			log.info("[GET REVIEW DETAIL] : Get Review Detail");
+			Review review = reviewService.getReviewDetail(reviewId);
+			ReviewDetailResponse response = ReviewDetailResponse.builder()
+				.review(review)
+				.build();
+			return new ApiResponse<>(response).toResponseEntity();
+
+		} catch (CustomException e) {
+			log.warn("[ERROR] : {}", e.getStatus().getMessage());
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
+		}
 	}
 
 }

@@ -17,6 +17,7 @@ import com.wefly.fika.domain.review.ReviewImage;
 import com.wefly.fika.domain.review.ReviewReport;
 import com.wefly.fika.dto.review.ReviewReportDto;
 import com.wefly.fika.dto.review.ReviewSaveDto;
+import com.wefly.fika.dto.spot.response.SpotPreviewResponse;
 import com.wefly.fika.jwt.JwtService;
 import com.wefly.fika.repository.MemberRepository;
 import com.wefly.fika.repository.ReviewImageRepository;
@@ -99,5 +100,14 @@ public class ReviewService implements IReviewService {
 			.build();
 
 		reviewReportRepository.save(report);
+	}
+
+	@Override
+	public Review getReviewDetail(Long reviewId) throws CustomException {
+		Review review = reviewRepository.findById(reviewId).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+
+		return review;
 	}
 }
