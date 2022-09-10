@@ -41,6 +41,7 @@ public enum ApiResponseStatus {
 	COURSE_GROUP_NOT_EMPTY(false, 4200, "그룹에 존재하는 코스가 있어 삭제할 수 없습니다", HttpStatus.BAD_REQUEST),
 	ALREADY_EXIST_REPORT(false, 4300, "해당 리뷰에 이미 신고가 접수된 상태입니다", HttpStatus.BAD_REQUEST),
 	OVER_FILE_UPLOAD_LIMIT(false, 4400, "업로드 파일은 10MB로 제한됩니다", HttpStatus.PAYLOAD_TOO_LARGE),
+	REMOVE_IMAGE_FAIL(false, 4401, "이미지 삭제에 실패했습니다", HttpStatus.INTERNAL_SERVER_ERROR),
 	NO_SUCH_DATA_FOUND(false, 5000, "해당 값에 존재하는 데이터가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR);
 
 	private final boolean isSuccess;

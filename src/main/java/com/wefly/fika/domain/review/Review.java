@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import com.wefly.fika.domain.base.BaseTimeEntity;
 import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.member.Member;
+import com.wefly.fika.dto.review.ReviewEditDto;
 import com.wefly.fika.dto.review.response.ReviewDetailResponse;
 
 import lombok.AccessLevel;
@@ -63,5 +64,11 @@ public class Review extends BaseTimeEntity {
 		this.isImageReview = isImageReview;
 
 		spotData.getReviews().add(this);
+	}
+
+	public void updateByEditDto(ReviewEditDto editDto) {
+		this.rate = editDto.getRate();
+		this.reviewContents = editDto.getReviewContents();
+		this.isImageReview = editDto.getIsImageReview();
 	}
 }

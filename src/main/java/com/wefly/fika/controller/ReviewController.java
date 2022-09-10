@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wefly.fika.config.response.ApiResponse;
 import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.review.Review;
+import com.wefly.fika.dto.review.ReviewEditDto;
 import com.wefly.fika.dto.review.ReviewReportDto;
 import com.wefly.fika.dto.review.ReviewSaveDto;
 import com.wefly.fika.dto.review.response.ReviewDetailResponse;
@@ -79,11 +80,32 @@ public class ReviewController {
 		@PathVariable Long reviewId
 	) {
 		try {
-			log.info("[GET REVIEW DETAIL] : Get Review Detail");
+			log.info("[GET REVIEW DETAIL] : Get review detail");
 			Review review = reviewService.getReviewDetail(reviewId);
 			ReviewDetailResponse response = ReviewDetailResponse.builder()
 				.review(review)
 				.build();
+			return new ApiResponse<>(response).toResponseEntity();
+
+		} catch (CustomException e) {
+			log.warn("[ERROR] : {}", e.getStatus().getMessage());
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
+		}
+	}
+
+	@PutMapping("/{reviewId}")
+	public ResponseEntity<ApiResponse> editReview(
+		@RequestHeader("Access-Token") String accessToken,
+		@RequestBody ReviewEditDto editDto,
+		@PathVariable Long reviewId
+	) {
+		try {
+			log.info("[EDIT REVIEW] : Edit review");
+			Review review = reviewService.editReview(accessToken, editDto, reviewId);
+			ReviewDetailResponse response = ReviewDetailResponse.builder()
+				.review(review)
+				.build();
+
 			return new ApiResponse<>(response).toResponseEntity();
 
 		} catch (CustomException e) {
