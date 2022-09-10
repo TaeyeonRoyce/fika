@@ -27,6 +27,8 @@ import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.course.CourseSpot;
 import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.dto.course.CourseEditDto;
+import com.wefly.fika.dto.course.CourseGroupMoveDto;
+import com.wefly.fika.dto.course.CourseGroupPreviewResponse;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CourseDetailResponse;
 import com.wefly.fika.dto.course.response.CourseGroupListResponse;
@@ -254,7 +256,6 @@ public class CourseController {
 				spotDataService.checkScrapped(sortedSpotList, accessToken);
 			}
 
-
 			return new ApiResponse<>(response).toResponseEntity();
 		} catch (NumberFormatException e) {
 			log.warn("[ERROR] : {}", e.getMessage());
@@ -286,12 +287,11 @@ public class CourseController {
 		return new ApiResponse<>(response).toResponseEntity();
 	}
 
-	//TODO : test 추가
 	@GetMapping("/{courseId}/reviews")
 	public ResponseEntity<ApiResponse> getCourseSpotsWithReviewInfo(
 		@RequestHeader("Access-Token") String accessToken,
 		@PathVariable("courseId") Long courseId
-	){
+	) {
 		try {
 			log.info("[GET COURSE SPOTS WITH REVIEW INFO]");
 			Course courseInfo = courseService.getCourseInfo(courseId);
@@ -304,6 +304,23 @@ public class CourseController {
 			spotDataService.checkReviewPosted(spotDataList, accessToken);
 
 			return new ApiResponse<>(spotDataList).toResponseEntity();
+		} catch (CustomException e) {
+			return new ApiResponse<>(e.getStatus().getMessage()).toResponseEntity();
+		}
+	}
+
+	@PatchMapping("/move/group")
+	public ResponseEntity<ApiResponse> moveCourseGroup(
+		@RequestHeader("Access-Token") String accessToken,
+		@RequestBody CourseGroupMoveDto moveDto
+	) {
+
+		try {
+			log.info("[MOVE COURSE GROUP] : Move course group");
+			courseService.editCourseGroup(accessToken, moveDto);
+
+
+			return new ApiResponse<>(moveDto.getCourseGroupId(), SUCCESS_MOVE_COURSE_GROUP).toResponseEntity();
 		} catch (CustomException e) {
 			return new ApiResponse<>(e.getStatus().getMessage()).toResponseEntity();
 		}

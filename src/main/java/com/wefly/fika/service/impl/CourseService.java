@@ -23,6 +23,7 @@ import com.wefly.fika.domain.drama.DramaActor;
 import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.domain.member.MemberSaveCourse;
 import com.wefly.fika.dto.course.CourseEditDto;
+import com.wefly.fika.dto.course.CourseGroupMoveDto;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CourseGroupListResponse;
 import com.wefly.fika.dto.course.response.CourseInfoResponse;
@@ -263,5 +264,27 @@ public class CourseService implements ICourseService {
 		}
 
 		return responses;
+	}
+
+	@Override
+	public void editCourseGroup(String accessToken, CourseGroupMoveDto moveDto) throws CustomException {
+		Long memberId = jwtService.getMemberId(accessToken);
+		Course course = courseRepository.findById(moveDto.getCourseId()).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+
+		if (!course.getCreatMember().getId().equals(memberId)) {
+			throw new CustomException(NO_AUTHENTICATION);
+		}
+
+
+		CourseGroup fromCourseGroup = course.getCourseGroup();
+		fromCourseGroup.getCourseList().remove(course);
+
+		CourseGroup toCourseGroup = courseGroupRepository.findById(moveDto.getCourseGroupId()).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+
+		course.updateCourseGroup(toCourseGroup);
 	}
 }
