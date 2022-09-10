@@ -5,7 +5,6 @@ import static com.wefly.fika.config.response.ApiResponseStatus.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -126,7 +125,7 @@ public class ReviewController {
 			log.info("[DELETE REVIEW] : Delete review");
 			Long deleteReviewId = reviewService.deleteReview(accessToken, reviewId);
 
-			return new ApiResponse<>(deleteReviewId, REVIEW_DELETE_SUCCESS).toResponseEntity();
+			return new ApiResponse<>(deleteReviewId, SUCCESS_REVIEW_DELETE).toResponseEntity();
 
 		} catch (CustomException e) {
 			log.warn("[ERROR] : {}", e.getStatus().getMessage());
