@@ -14,4 +14,6 @@ public interface MemberSaveCourseRepository extends JpaRepository<MemberSaveCour
 	boolean existsByMemberIdAndCourseId(Long memberId, Long courseId);
 
 	List<MemberSaveCourse> findByMemberId(Long memberId);
+
+	void deleteByCourseId(Long courseId);
 }

@@ -42,4 +42,6 @@ public interface ICourseService {
 	List<CourseGroupListResponse> getMyCourseWithGroups(String accessToken);
 
 	void editCourseGroup(String accessToken, CourseGroupMoveDto moveDto) throws CustomException;
+
+	Long deleteCourse(String accessToken, Long parseLong) throws CustomException;
 }

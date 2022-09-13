@@ -9,7 +9,9 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -323,6 +325,25 @@ public class CourseController {
 			return new ApiResponse<>(moveDto.getCourseGroupId(), SUCCESS_MOVE_COURSE_GROUP).toResponseEntity();
 		} catch (CustomException e) {
 			return new ApiResponse<>(e.getStatus().getMessage()).toResponseEntity();
+		}
+	}
+
+	@DeleteMapping("/{courseId}")
+	public ResponseEntity<ApiResponse> deleteCourse(
+		@RequestHeader("Access-Token") String accessToken,
+		@PathVariable String courseId
+	) {
+		log.info("[DELETE COURSE] : Delete course by course id");
+
+		try {
+			Long deleteCourseId = courseService.deleteCourse(accessToken, Long.parseLong(courseId));
+			return new ApiResponse<>(deleteCourseId, SUCCESS_COURSE_DELETE).toResponseEntity();
+		} catch (NumberFormatException e) {
+			log.warn("[ERROR] : {}", e.getMessage());
+			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
+		} catch (CustomException e) {
+			log.warn("[ERROR] : {}", e.getStatus().getMessage());
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
 		}
 	}
 

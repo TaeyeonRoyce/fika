@@ -287,4 +287,24 @@ public class CourseService implements ICourseService {
 
 		course.updateCourseGroup(toCourseGroup);
 	}
+
+	@Override
+	public Long deleteCourse(String accessToken, Long courseId) throws CustomException {
+		Long memberId = jwtService.getMemberId(accessToken);
+		Course course = courseRepository.findById(courseId).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+
+		if (!course.getCreatMember().getId().equals(memberId)) {
+			throw new CustomException(NO_AUTHENTICATION);
+		}
+		course.getDrama().getCourseList().remove(course);
+		course.getCourseGroup().getCourseList().remove(course);
+		memberSaveCourseRepository.deleteByCourseId(courseId);
+
+		courseRepository.delete(course);
+
+
+		return courseId;
+	}
 }
