@@ -30,10 +30,10 @@ public class SpotMenu {
 	@Column(name = "spot_id_info")
 	private Long spotIdInfo;
 
-	@Column(name = "spot_name_kr")
+	@Column(name = "spot_name_jp")
 	private String spotName;
 
-	@Column(name = "menu_name_kr")
+	@Column(name = "menu_name_jp")
 	private String menuName;
 
 	@Column(name = "menu_price")

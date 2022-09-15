@@ -35,11 +35,11 @@ public class Drama extends BaseTimeEntity {
 	@Column(name = "drama_id")
 	private Long id;
 
-	@Column(name = "drama_name_kr")
+	@Column(name = "drama_name_jp")
 	private String dramaName;
 	@Column(name = "poster_image_kr")
 	private String thumbnailUrl;
-	@Column(name = "genre_kr")
+	@Column(name = "genre_jp")
 	private String genre;
 
 	@OneToMany(mappedBy = "drama", cascade = CascadeType.ALL)

@@ -119,6 +119,7 @@ public class DramaService implements IDramaService {
 
 		List<CoursePreviewResponse> courseResponse = drama.getCourseList()
 			.stream()
+			.filter(course -> course.getCreatMember().getId().equals(1L))
 			.map(Course::toPreviewResponse)
 			.collect(Collectors.toList());
 		if (accessToken != null) {
