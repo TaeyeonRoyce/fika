@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class KakaoOAuthService {
+public class OAuthService {
 
 	private final KakaoInfoParser kakaoInfoParser;
 
@@ -31,4 +31,5 @@ public class KakaoOAuthService {
 		log.info("[USER KAKAO EMAIL] : {}", email);
 		return email;
 	}
+
 }
