@@ -76,10 +76,14 @@ public class CourseService implements ICourseService {
 			throw new CustomException(LOCAGE_MUST_CONTAIN);
 		}
 
+		Course baseCourse = courseRepository.findById(saveDto.getBaseCourseId()).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+
 		Course course = Course.builder()
-			.courseTitle(saveDto.getCourseTitle())
+			.courseTitle(baseCourse.getCourseTitle())
 			.courseSpotNumber(0)
-			.baseAddress(saveDto.getBaseAddress())
+			.baseAddress(baseCourse.getBaseAddress())
 			.savedCount(0)
 			.creatMember(createMember)
 			.drama(locage.getDrama())

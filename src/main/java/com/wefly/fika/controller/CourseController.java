@@ -68,11 +68,10 @@ public class CourseController {
 		}
 
 		try {
-			log.info("[SAVE COURSE] : Save new course {}", saveDto.getCourseTitle());
+			log.info("[SAVE COURSE] : Save new course {}", saveDto.getLocageSpotId());
 			Course course = courseService.saveCourse(accessToken, saveDto);
-			int savedSpots = courseSpotService.addSpotsToCourse(course, saveDto);
-
-			return new ApiResponse<>(savedSpots).toResponseEntity();
+			courseSpotService.addSpotsToCourse(course, saveDto);
+			return new ApiResponse<>(course.getId()).toResponseEntity();
 
 		} catch (CustomException e) {
 			log.warn("[ERROR] : {}", e.getStatus().getMessage());

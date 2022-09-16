@@ -13,8 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CourseSaveDto {
 
-	private String courseTitle;
-	private String baseAddress;
+	private Long baseCourseId;
 	private Long courseGroupId;
 
 	@NotNull
@@ -23,10 +22,9 @@ public class CourseSaveDto {
 	private List<Long> spotIdList;
 
 	@Builder
-	public CourseSaveDto(String courseTitle, String baseAddress, Long courseGroupId, Long locageSpotId,
+	public CourseSaveDto(Long baseCourseId, Long courseGroupId, Long locageSpotId,
 		List<Long> spotIdList) {
-		this.courseTitle = courseTitle;
-		this.baseAddress = baseAddress;
+		this.baseCourseId = baseCourseId;
 		this.courseGroupId = courseGroupId;
 		this.locageSpotId = locageSpotId;
 		this.spotIdList = spotIdList;
