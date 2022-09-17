@@ -85,7 +85,6 @@ class CourseServiceTest {
 
 		CourseSaveDto saveDto = CourseSaveDto.builder()
 			.locageSpotId(spotId)
-			.courseTitle(courseName)
 			.courseGroupId(courseGroupId)
 			.build();
 

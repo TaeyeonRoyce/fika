@@ -18,6 +18,7 @@ public class CourseDetailResponse {
 
 	private Long courseId;
 	private String courseTitle;
+	private String courseCreateMember;
 	private Long dramaId;
 	private String locageSceneDescribe;
 	private String hashTag;
@@ -33,6 +34,7 @@ public class CourseDetailResponse {
 
 		this.courseId = course.getId();
 		this.courseTitle = course.getCourseTitle();
+		this.courseCreateMember = course.getCreatMember().getMemberNickname();
 		this.dramaId = course.getDrama().getId();
 		this.locageSceneDescribe = locage.getSceneDescribe();
 		this.hashTag = locage.getHashTag();
