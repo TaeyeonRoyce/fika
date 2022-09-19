@@ -44,4 +44,6 @@ public interface ICourseService {
 	void editCourseGroup(String accessToken, CourseGroupMoveDto moveDto) throws CustomException;
 
 	Long deleteCourse(String accessToken, Long parseLong) throws CustomException;
+
+	List<String> getCourseImagesByCourse(String accessToken, Course course) throws CustomException;
 }

@@ -33,6 +33,7 @@ import com.wefly.fika.dto.course.CourseGroupMoveDto;
 import com.wefly.fika.dto.course.CourseGroupPreviewResponse;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CourseDetailResponse;
+import com.wefly.fika.dto.course.response.CourseEditInfoResponse;
 import com.wefly.fika.dto.course.response.CourseGroupListResponse;
 import com.wefly.fika.dto.course.response.CourseInfoResponse;
 import com.wefly.fika.dto.course.response.CoursePreviewResponse;
@@ -337,6 +338,33 @@ public class CourseController {
 		try {
 			Long deleteCourseId = courseService.deleteCourse(accessToken, Long.parseLong(courseId));
 			return new ApiResponse<>(deleteCourseId, SUCCESS_COURSE_DELETE).toResponseEntity();
+		} catch (NumberFormatException e) {
+			log.warn("[ERROR] : {}", e.getMessage());
+			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
+		} catch (CustomException e) {
+			log.warn("[ERROR] : {}", e.getStatus().getMessage());
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
+		}
+	}
+
+	@GetMapping("/{courseId}/edit/info")
+	public ResponseEntity<ApiResponse> getCourseEditInfo(
+		@RequestHeader("Access-Token") String accessToken,
+		@PathVariable String courseId
+	) {
+		log.info("[GET COURSE EDIT INFO] : Get course info when user wants to edit");
+
+		try {
+			Course course = courseService.getCourseInfo(Long.valueOf(courseId));
+			List<String> courseImages = courseService.getCourseImagesByCourse(accessToken, course);
+
+			CourseEditInfoResponse response = CourseEditInfoResponse.builder()
+				.courseId(course.getId())
+				.courseTitle(course.getCourseTitle())
+				.images(courseImages)
+				.build();
+
+			return new ApiResponse<>(response).toResponseEntity();
 		} catch (NumberFormatException e) {
 			log.warn("[ERROR] : {}", e.getMessage());
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();

@@ -17,6 +17,7 @@ import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.actor.Actor;
 import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.course.CourseGroup;
+import com.wefly.fika.domain.course.CourseSpot;
 import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaActor;
@@ -310,5 +311,22 @@ public class CourseService implements ICourseService {
 
 
 		return courseId;
+	}
+
+	@Override
+	public List<String> getCourseImagesByCourse(String accessToken, Course course) throws CustomException {
+		Long memberId = jwtService.getMemberId(accessToken);
+		if (!memberId.equals(course.getCreatMember().getId())) {
+			throw new CustomException(NO_AUTHENTICATION);
+		}
+
+		List<String> images = new ArrayList<>();
+		course.getSpotList().stream()
+			.map(CourseSpot::getSpotData)
+			.filter(SpotData::isLocage)
+			.map(SpotData::getImage)
+			.forEach(images::add);
+
+		return images;
 	}
 }
