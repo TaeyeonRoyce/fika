@@ -24,6 +24,8 @@ public enum ApiResponseStatus {
 	SUCCESS_REVIEW_DELETE(true, 1020, "해당 리뷰가 삭제되었습니다", HttpStatus.OK),
 	SUCCESS_COURSE_DELETE(true, 1021, "해당 코스가 삭제되었습니다", HttpStatus.OK),
 
+	SUCCESS_COURSE_INFO_EDIT(true, 1022, "해당 코스의 이름과 대표 이미지가 변경되었습니다", HttpStatus.OK),
+
 	ACCESS_TOKEN_NULL(false, 4000, "Access Token이 없습니다", HttpStatus.UNAUTHORIZED),
 	ACCESS_TOKEN_INVALID(false, 4001, "Access Token이 유효하지 않습니다", HttpStatus.CONFLICT),
 	ACCESS_TOKEN_EXPIRED(false, 4002, "Access Token이 만료되었습니다", HttpStatus.UNAUTHORIZED),

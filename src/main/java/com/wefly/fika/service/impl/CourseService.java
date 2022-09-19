@@ -25,6 +25,7 @@ import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.domain.member.MemberSaveCourse;
 import com.wefly.fika.dto.course.CourseEditDto;
 import com.wefly.fika.dto.course.CourseGroupMoveDto;
+import com.wefly.fika.dto.course.CourseInfoEditDto;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CourseGroupListResponse;
 import com.wefly.fika.dto.course.response.CourseInfoResponse;
@@ -334,5 +335,22 @@ public class CourseService implements ICourseService {
 			.forEach(images::add);
 
 		return images;
+	}
+
+	@Override
+	public Long editCourseInfo(String accessToken, CourseInfoEditDto editDto) throws CustomException {
+		Long memberId = jwtService.getMemberId(accessToken);
+		Course course = courseRepository.findById(editDto.getCourseId()).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+
+		if (!memberId.equals(course.getCreatMember().getId())) {
+			throw new CustomException(NO_AUTHENTICATION);
+		}
+
+		course.updateCourseTitle(editDto.getCourseTitle());
+		course.updateThumbnail(editDto.getThumbnail());
+
+		return course.getId();
 	}
 }

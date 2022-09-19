@@ -31,6 +31,7 @@ import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.dto.course.CourseEditDto;
 import com.wefly.fika.dto.course.CourseGroupMoveDto;
 import com.wefly.fika.dto.course.CourseGroupPreviewResponse;
+import com.wefly.fika.dto.course.CourseInfoEditDto;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CourseDetailResponse;
 import com.wefly.fika.dto.course.response.CourseEditInfoResponse;
@@ -365,6 +366,26 @@ public class CourseController {
 				.build();
 
 			return new ApiResponse<>(response).toResponseEntity();
+		} catch (NumberFormatException e) {
+			log.warn("[ERROR] : {}", e.getMessage());
+			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
+		} catch (CustomException e) {
+			log.warn("[ERROR] : {}", e.getStatus().getMessage());
+			return new ApiResponse<>(e.getStatus()).toResponseEntity();
+		}
+	}
+
+	@PatchMapping("/{courseId}/edit/info")
+	public ResponseEntity<ApiResponse> editCourseInfo(
+		@RequestHeader("Access-Token") String accessToken,
+		@RequestBody CourseInfoEditDto courseInfoEditDto
+	) {
+		log.info("[EDIT COURSE INFO] : Edit course title and thumbnail");
+
+		try {
+			Long courseId = courseService.editCourseInfo(accessToken, courseInfoEditDto);
+
+			return new ApiResponse<>(courseId, SUCCESS_COURSE_INFO_EDIT).toResponseEntity();
 		} catch (NumberFormatException e) {
 			log.warn("[ERROR] : {}", e.getMessage());
 			return new ApiResponse<>(NOT_VALID_FORMAT).toResponseEntity();
