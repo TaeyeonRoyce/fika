@@ -59,6 +59,7 @@ public class Course extends BaseTimeEntity {
 	private String baseAddress;
 	private int courseSpotNumber;
 	private int savedCount;
+	private String thumbnail;
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	private List<CourseSpot> spotList = new ArrayList<>();
 
@@ -73,6 +74,7 @@ public class Course extends BaseTimeEntity {
 		this.savedCount = savedCount;
 		this.locage = locage;
 		this.courseGroup = courseGroup;
+		this.thumbnail = locage.getImage();
 
 		courseGroup.getCourseList().add(this);
 		drama.getCourseList().add(this);
@@ -92,7 +94,7 @@ public class Course extends BaseTimeEntity {
 			.courseId(this.id)
 			.courseSavedCount(this.savedCount)
 			.baseAddress(this.baseAddress)
-			.locageImageUrl(this.spotList.get(0).getSpotData().getImage())
+			.locageImageUrl(this.thumbnail)
 			.courseTitle(this.courseTitle)
 			.dramaTitle(this.drama.getDramaName())
 			.spotTitleList(spotTitleList)
@@ -125,5 +127,9 @@ public class Course extends BaseTimeEntity {
 	public void updateCourseGroup(CourseGroup courseGroup) {
 		this.courseGroup = courseGroup;
 		courseGroup.getCourseList().add(this);
+	}
+
+	public void updateThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
 	}
 }

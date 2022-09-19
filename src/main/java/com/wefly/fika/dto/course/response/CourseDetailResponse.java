@@ -38,7 +38,7 @@ public class CourseDetailResponse {
 		this.dramaId = course.getDrama().getId();
 		this.locageSceneDescribe = locage.getSceneDescribe();
 		this.hashTag = locage.getHashTag();
-		this.locageSceneImageUrl = locage.getImage();
+		this.locageSceneImageUrl = course.getThumbnail();
 		this.dramaTitle = course.getDrama().getDramaName();
 		this.baseAddress = course.getBaseAddress();
 		this.courseLocage = locage.toSpotPreviewResponse();

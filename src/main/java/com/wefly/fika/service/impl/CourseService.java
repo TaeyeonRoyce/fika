@@ -17,6 +17,7 @@ import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.actor.Actor;
 import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.domain.course.CourseGroup;
+import com.wefly.fika.domain.course.CourseSpot;
 import com.wefly.fika.domain.data.SpotData;
 import com.wefly.fika.domain.drama.Drama;
 import com.wefly.fika.domain.drama.DramaActor;
@@ -24,6 +25,7 @@ import com.wefly.fika.domain.member.Member;
 import com.wefly.fika.domain.member.MemberSaveCourse;
 import com.wefly.fika.dto.course.CourseEditDto;
 import com.wefly.fika.dto.course.CourseGroupMoveDto;
+import com.wefly.fika.dto.course.CourseInfoEditDto;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CourseGroupListResponse;
 import com.wefly.fika.dto.course.response.CourseInfoResponse;
@@ -310,5 +312,45 @@ public class CourseService implements ICourseService {
 
 
 		return courseId;
+	}
+
+	@Override
+	public List<String> getCourseImagesByCourse(String accessToken, Course course) throws CustomException {
+		Long memberId = jwtService.getMemberId(accessToken);
+		if (!memberId.equals(course.getCreatMember().getId())) {
+			throw new CustomException(NO_AUTHENTICATION);
+		}
+
+		List<String> images = new ArrayList<>();
+		String thumbnail = course.getThumbnail();
+		String locageImage = course.getLocage().getImage();
+		if (!thumbnail.equals(locageImage)) {
+			images.add(thumbnail);
+		}
+
+		course.getSpotList().stream()
+			.map(CourseSpot::getSpotData)
+			.filter(SpotData::isLocage)
+			.map(SpotData::getImage)
+			.forEach(images::add);
+
+		return images;
+	}
+
+	@Override
+	public Long editCourseInfo(String accessToken, CourseInfoEditDto editDto) throws CustomException {
+		Long memberId = jwtService.getMemberId(accessToken);
+		Course course = courseRepository.findById(editDto.getCourseId()).orElseThrow(
+			() -> new CustomException(NO_SUCH_DATA_FOUND)
+		);
+
+		if (!memberId.equals(course.getCreatMember().getId())) {
+			throw new CustomException(NO_AUTHENTICATION);
+		}
+
+		course.updateCourseTitle(editDto.getCourseTitle());
+		course.updateThumbnail(editDto.getThumbnail());
+
+		return course.getId();
 	}
 }

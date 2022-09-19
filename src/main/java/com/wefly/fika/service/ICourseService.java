@@ -7,6 +7,7 @@ import com.wefly.fika.config.response.CustomException;
 import com.wefly.fika.domain.course.Course;
 import com.wefly.fika.dto.course.CourseEditDto;
 import com.wefly.fika.dto.course.CourseGroupMoveDto;
+import com.wefly.fika.dto.course.CourseInfoEditDto;
 import com.wefly.fika.dto.course.CourseSaveDto;
 import com.wefly.fika.dto.course.response.CourseGroupListResponse;
 import com.wefly.fika.dto.course.response.CourseInfoResponse;
@@ -44,4 +45,8 @@ public interface ICourseService {
 	void editCourseGroup(String accessToken, CourseGroupMoveDto moveDto) throws CustomException;
 
 	Long deleteCourse(String accessToken, Long parseLong) throws CustomException;
+
+	List<String> getCourseImagesByCourse(String accessToken, Course course) throws CustomException;
+
+	Long editCourseInfo(String accessToken, CourseInfoEditDto editDto) throws CustomException;
 }
