@@ -321,6 +321,12 @@ public class CourseService implements ICourseService {
 		}
 
 		List<String> images = new ArrayList<>();
+		String thumbnail = course.getThumbnail();
+		String locageImage = course.getLocage().getImage();
+		if (!thumbnail.equals(locageImage)) {
+			images.add(thumbnail);
+		}
+
 		course.getSpotList().stream()
 			.map(CourseSpot::getSpotData)
 			.filter(SpotData::isLocage)
