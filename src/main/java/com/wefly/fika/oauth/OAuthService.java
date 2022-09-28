@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class OAuthService {
 
-	private final OAuthResponseParser kakaoInfoParser;
+	private final OAuthResponseParser oAuthResponseParser;
 
 	public String requestToKakao(String accessToken) throws WebClientResponseException {
 		String result = WebClient.builder()
@@ -27,7 +27,7 @@ public class OAuthService {
 			.block();
 
 		log.info("[USER INFO FROM KAKAO] : {}", result);
-		String email = kakaoInfoParser.getEmailFromAttribute(result);
+		String email = oAuthResponseParser.getEmailFromAttribute(result);
 		log.info("[USER KAKAO EMAIL] : {}", email);
 		return email;
 	}
@@ -43,7 +43,7 @@ public class OAuthService {
 			.block();
 
 		log.info("[USER INFO FROM LINE] : {}", result);
-		String email = kakaoInfoParser.getEmailFromAttribute(result);
+		String email = oAuthResponseParser.getUserIdFromAttribute(result);
 		log.info("[USER LINE EMAIL] : {}", email);
 		return email;
 	}

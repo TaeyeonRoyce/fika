@@ -1,5 +1,6 @@
 package com.wefly.fika.utils;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,5 +20,14 @@ public class OAuthResponseParser {
 		}
 
 		return m.group(1);
+	}
+
+	public String getUserIdFromAttribute(String attributes) {
+		String[] split = attributes.split(":");
+		System.out.println(Arrays.toString(split));
+
+		String[] userId = split[1].split("\"");
+		System.out.println(Arrays.toString(userId));
+		return userId[1].trim();
 	}
 }

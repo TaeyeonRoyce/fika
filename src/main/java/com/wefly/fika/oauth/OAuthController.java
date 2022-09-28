@@ -111,12 +111,12 @@ public class OAuthController {
 			log.info("[USER LOGIN] : {}", member.getMemberNickname());
 
 			return new ResponseEntity<>(new ApiResponse<>(token), HttpStatus.OK);
-		} catch (WebClientResponseException e) {
-			log.warn("[INVALID LINE ACCESS TOKEN] : {}", accessToken);
-			return new ResponseEntity<>(
-				new ApiResponse<>(ACCESS_TOKEN_INVALID),
-				HttpStatus.UNAUTHORIZED
-			);
+		// } catch (WebClientResponseException e) {
+		// 	log.warn("[INVALID LINE ACCESS TOKEN] : {}", accessToken);
+		// 	return new ResponseEntity<>(
+		// 		new ApiResponse<>(ACCESS_TOKEN_INVALID),
+		// 		HttpStatus.UNAUTHORIZED
+		// 	);
 		} catch (NoSuchDataFound noSuchMember) {
 			log.warn("[SIGN UP REQUIRED] : {}", userEmail);
 			return new ResponseEntity<>(
