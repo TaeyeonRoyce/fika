@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
-import com.wefly.fika.utils.KakaoInfoParser;
+import com.wefly.fika.utils.OAuthResponseParser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class OAuthService {
 
-	private final KakaoInfoParser kakaoInfoParser;
+	private final OAuthResponseParser kakaoInfoParser;
 
 	public String requestToKakao(String accessToken) throws WebClientResponseException {
 		String result = WebClient.builder()
@@ -29,6 +29,22 @@ public class OAuthService {
 		log.info("[USER INFO FROM KAKAO] : {}", result);
 		String email = kakaoInfoParser.getEmailFromAttribute(result);
 		log.info("[USER KAKAO EMAIL] : {}", email);
+		return email;
+	}
+
+	public String requestToLine(String accessToken) throws WebClientResponseException {
+		String result = WebClient.builder()
+			.baseUrl("https://api.line.me/oauth2/v2.1/userinfo")
+			.defaultHeader("Authorization", "Bearer " + accessToken)
+			.build()
+			.get()
+			.retrieve()
+			.bodyToMono(String.class)
+			.block();
+
+		log.info("[USER INFO FROM LINE] : {}", result);
+		String email = kakaoInfoParser.getEmailFromAttribute(result);
+		log.info("[USER LINE EMAIL] : {}", email);
 		return email;
 	}
 
