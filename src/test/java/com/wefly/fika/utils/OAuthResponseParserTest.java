@@ -4,12 +4,12 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class KakaoInfoParserTest {
+class OAuthResponseParserTest {
 
 	@Test
 	public void parseEmailFromAttributeTest() {
 	    //given
-		KakaoInfoParser kakaoInfoParser = new KakaoInfoParser();
+		OAuthResponseParser kakaoInfoParser = new OAuthResponseParser();
 
 		String attribute = "{\n"
 			+ "\t\t\t\"id\":2345896274,\n"

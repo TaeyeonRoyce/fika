@@ -4,6 +4,7 @@ import static com.wefly.fika.config.response.ApiResponseStatus.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -86,6 +87,40 @@ public class OAuthController {
 			log.warn("[SIGN UP REQUIRED] : {}", googleRequestEmail);
 			return new ResponseEntity<>(
 				new ApiResponse<>(googleRequestEmail, SOCIAL_LOGIN_FIRST),
+				HttpStatus.OK
+			);
+		}
+	}
+
+	@GetMapping("/login/line")
+	public ResponseEntity<ApiResponse> loginByLine(
+		@RequestHeader(value = "Access-Token") String accessToken
+	) {
+		if (accessToken.isEmpty()) {
+			return new ApiResponse<>(ACCESS_TOKEN_NULL).toResponseEntity();
+		}
+
+		log.info("[ACCESS TOKEN] : {}", accessToken);
+
+		String userEmail = null;
+		try {
+			userEmail = oAuthService.requestToLine(accessToken);
+			Member member = memberService.getMemberByEmail(userEmail);
+			String token = memberService.getAccessTokenByMember(member);
+
+			log.info("[USER LOGIN] : {}", member.getMemberNickname());
+
+			return new ResponseEntity<>(new ApiResponse<>(token), HttpStatus.OK);
+		} catch (WebClientResponseException e) {
+			log.warn("[INVALID LINE ACCESS TOKEN] : {}", accessToken);
+			return new ResponseEntity<>(
+				new ApiResponse<>(ACCESS_TOKEN_INVALID),
+				HttpStatus.UNAUTHORIZED
+			);
+		} catch (NoSuchDataFound noSuchMember) {
+			log.warn("[SIGN UP REQUIRED] : {}", userEmail);
+			return new ResponseEntity<>(
+				new ApiResponse<>(userEmail, SOCIAL_LOGIN_FIRST),
 				HttpStatus.OK
 			);
 		}
